@@ -1,47 +1,64 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { Booking } from '@/data/mockData';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
+import type { Tables } from '@/integrations/supabase/types';
+
+type Booking = Tables<'bookings'>;
 
 interface BookingContextType {
   bookings: Booking[];
-  addBooking: (booking: Omit<Booking, 'id'>) => void;
-  updateBookingStatus: (id: string, status: Booking['status']) => void;
-  rateBooking: (id: string, rating: number, review: string) => void;
+  loading: boolean;
+  addBooking: (booking: { customer_id: string; customer_name: string; karigar_id: string; karigar_name: string; skill: string; date: string; time: string; description?: string }) => Promise<void>;
+  updateBookingStatus: (id: string, status: string) => Promise<void>;
+  rateBooking: (id: string, rating: number, review: string, karigarId: string, customerName: string) => Promise<void>;
+  refetch: () => void;
 }
 
 const BookingContext = createContext<BookingContextType | undefined>(undefined);
 
-const initialBookings: Booking[] = [
-  {
-    id: 'b1', customerId: 'c1', customerName: 'Priya Mehta', karigarId: 'k1', karigarName: 'Ramesh Kumar',
-    skill: 'Electrician', date: '2026-03-05', time: '10:00 AM', status: 'pending', description: 'Need to fix short circuit in kitchen',
-  },
-  {
-    id: 'b2', customerId: 'c2', customerName: 'Rahul Gupta', karigarId: 'k1', karigarName: 'Ramesh Kumar',
-    skill: 'Electrician', date: '2026-03-06', time: '2:00 PM', status: 'accepted', description: 'Install new fan and light',
-  },
-  {
-    id: 'b3', customerId: 'c3', customerName: 'Anita Joshi', karigarId: 'k1', karigarName: 'Ramesh Kumar',
-    skill: 'Electrician', date: '2026-02-20', time: '11:00 AM', status: 'completed', description: 'Wiring repair', rating: 5, review: 'Great work!',
-  },
-];
-
 export const BookingProvider = ({ children }: { children: ReactNode }) => {
-  const [bookings, setBookings] = useState<Booking[]>(initialBookings);
+  const { user } = useAuth();
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const addBooking = (booking: Omit<Booking, 'id'>) => {
-    setBookings(prev => [...prev, { ...booking, id: `b_${Date.now()}` }]);
+  const fetchBookings = useCallback(async () => {
+    if (!user) { setBookings([]); return; }
+    setLoading(true);
+    const { data } = await supabase.from('bookings').select('*').order('created_at', { ascending: false });
+    setBookings(data || []);
+    setLoading(false);
+  }, [user]);
+
+  useEffect(() => { fetchBookings(); }, [fetchBookings]);
+
+  const addBooking = async (booking: { customer_id: string; customer_name: string; karigar_id: string; karigar_name: string; skill: string; date: string; time: string; description?: string }) => {
+    await supabase.from('bookings').insert({ ...booking, status: 'pending' });
+    fetchBookings();
   };
 
-  const updateBookingStatus = (id: string, status: Booking['status']) => {
-    setBookings(prev => prev.map(b => b.id === id ? { ...b, status } : b));
+  const updateBookingStatus = async (id: string, status: string) => {
+    await supabase.from('bookings').update({ status }).eq('id', id);
+    fetchBookings();
   };
 
-  const rateBooking = (id: string, rating: number, review: string) => {
-    setBookings(prev => prev.map(b => b.id === id ? { ...b, rating, review } : b));
+  const rateBooking = async (id: string, rating: number, review: string, karigarId: string, customerName: string) => {
+    // Update booking
+    await supabase.from('bookings').update({ rating, review }).eq('id', id);
+    // Insert review (triggers auto-update of karigar stats)
+    if (user?.authUser) {
+      await supabase.from('reviews').insert({
+        customer_id: user.authUser.id,
+        customer_name: customerName,
+        karigar_id: karigarId,
+        rating,
+        text: review,
+      });
+    }
+    fetchBookings();
   };
 
   return (
-    <BookingContext.Provider value={{ bookings, addBooking, updateBookingStatus, rateBooking }}>
+    <BookingContext.Provider value={{ bookings, loading, addBooking, updateBookingStatus, rateBooking, refetch: fetchBookings }}>
       {children}
     </BookingContext.Provider>
   );

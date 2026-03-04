@@ -7,7 +7,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 
 const statusColor: Record<string, string> = {
@@ -20,15 +19,15 @@ const statusColor: Record<string, string> = {
 const MyBookings = () => {
   const { user } = useAuth();
   const { bookings, rateBooking } = useBookings();
-  const [ratingDialog, setRatingDialog] = useState<string | null>(null);
+  const [ratingDialog, setRatingDialog] = useState<{ id: string; karigarId: string } | null>(null);
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
 
-  const myBookings = bookings.filter(b => b.customerId === (user?.customer?.id || 'c1'));
+  const myBookings = bookings.filter(b => b.customer_id === user?.authUser?.id);
 
-  const handleRate = () => {
-    if (!ratingDialog || rating === 0) return;
-    rateBooking(ratingDialog, rating, review);
+  const handleRate = async () => {
+    if (!ratingDialog || rating === 0 || !user?.profile) return;
+    await rateBooking(ratingDialog.id, rating, review, ratingDialog.karigarId, user.profile.name);
     toast.success('Rating submitted!');
     setRatingDialog(null);
     setRating(0);
@@ -48,11 +47,11 @@ const MyBookings = () => {
               <div key={b.id} className="rounded-xl border border-border bg-card p-4 shadow-card animate-fade-in" style={{ animationDelay: `${i * 80}ms` }}>
                 <div className="flex items-start justify-between">
                   <div>
-                    <h3 className="font-semibold text-foreground">{b.karigarName}</h3>
+                    <h3 className="font-semibold text-foreground">{b.karigar_name}</h3>
                     <p className="text-sm text-primary">{b.skill}</p>
                     <p className="mt-1 text-sm text-muted-foreground">{b.date} · {b.time}</p>
                   </div>
-                  <span className={`rounded-full border px-3 py-1 text-xs font-medium capitalize ${statusColor[b.status]}`}>{b.status}</span>
+                  <span className={`rounded-full border px-3 py-1 text-xs font-medium capitalize ${statusColor[b.status] || ''}`}>{b.status}</span>
                 </div>
                 {b.rating && (
                   <div className="mt-2 flex items-center gap-2">
@@ -61,7 +60,7 @@ const MyBookings = () => {
                   </div>
                 )}
                 {b.status === 'completed' && !b.rating && (
-                  <Button size="sm" variant="outline" className="mt-3" onClick={() => setRatingDialog(b.id)}>Rate Service</Button>
+                  <Button size="sm" variant="outline" className="mt-3" onClick={() => setRatingDialog({ id: b.id, karigarId: b.karigar_id })}>Rate Service</Button>
                 )}
               </div>
             ))}

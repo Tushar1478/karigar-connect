@@ -3,40 +3,38 @@ import StarRating from '@/components/StarRating';
 import { useBookings } from '@/contexts/BookingContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { CheckCircle, XCircle, Clock, IndianRupee, Star, Briefcase } from 'lucide-react';
 import { toast } from 'sonner';
 
 const KarigarDashboard = () => {
   const { user } = useAuth();
   const { bookings, updateBookingStatus } = useBookings();
-  const karigarId = user?.karigar?.id || 'k1';
+  const karigar = user?.karigar;
 
-  const myBookings = bookings.filter(b => b.karigarId === karigarId);
+  const myBookings = bookings.filter(b => b.karigar_id === karigar?.id);
   const pending = myBookings.filter(b => b.status === 'pending');
   const accepted = myBookings.filter(b => b.status === 'accepted');
   const completed = myBookings.filter(b => b.status === 'completed');
-  const totalEarnings = completed.length * (user?.karigar?.price || 300);
-  const avgRating = completed.filter(b => b.rating).reduce((sum, b) => sum + (b.rating || 0), 0) / (completed.filter(b => b.rating).length || 1);
 
-  const handleAccept = (id: string) => { updateBookingStatus(id, 'accepted'); toast.success('Booking accepted!'); };
-  const handleReject = (id: string) => { updateBookingStatus(id, 'rejected'); toast.info('Booking rejected.'); };
-  const handleComplete = (id: string) => { updateBookingStatus(id, 'completed'); toast.success('Job marked as completed!'); };
+  const handleAccept = async (id: string) => { await updateBookingStatus(id, 'accepted'); toast.success('Booking accepted!'); };
+  const handleReject = async (id: string) => { await updateBookingStatus(id, 'rejected'); toast.info('Booking rejected.'); };
+  const handleComplete = async (id: string) => { await updateBookingStatus(id, 'completed'); toast.success('Job marked as completed!'); };
+
+  if (!karigar) return <div className="flex min-h-screen items-center justify-center"><p>Loading dashboard...</p></div>;
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
       <main className="container mx-auto px-4 py-6">
-        <h1 className="mb-2 text-2xl font-bold text-foreground animate-fade-in">Welcome, {user?.karigar?.name || 'Karigar'}!</h1>
-        <p className="mb-6 text-muted-foreground">{user?.karigar?.skill} · {user?.karigar?.location}</p>
+        <h1 className="mb-2 text-2xl font-bold text-foreground animate-fade-in">Welcome, {karigar.name}!</h1>
+        <p className="mb-6 text-muted-foreground">{karigar.skill} · {karigar.location}</p>
 
-        {/* Stats */}
         <div className="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-4 animate-fade-in" style={{ animationDelay: '100ms' }}>
           {[
-            { icon: Briefcase, label: 'Completed', value: completed.length, color: 'text-success' },
+            { icon: Briefcase, label: 'Completed', value: karigar.completed_jobs, color: 'text-success' },
             { icon: Clock, label: 'Pending', value: pending.length, color: 'text-warning' },
-            { icon: IndianRupee, label: 'Earnings', value: `₹${totalEarnings}`, color: 'text-primary' },
-            { icon: Star, label: 'Rating', value: avgRating.toFixed(1), color: 'text-accent' },
+            { icon: IndianRupee, label: 'Earnings', value: `₹${karigar.total_earnings}`, color: 'text-primary' },
+            { icon: Star, label: 'Rating', value: Number(karigar.rating).toFixed(1), color: 'text-accent' },
           ].map(s => (
             <div key={s.label} className="rounded-xl border border-border bg-card p-4 text-center shadow-card">
               <s.icon className={`mx-auto mb-2 h-6 w-6 ${s.color}`} />
@@ -46,7 +44,6 @@ const KarigarDashboard = () => {
           ))}
         </div>
 
-        {/* Incoming Requests */}
         <section className="mb-8">
           <h2 className="mb-4 text-lg font-bold text-foreground">Incoming Requests</h2>
           {pending.length === 0 ? (
@@ -57,7 +54,7 @@ const KarigarDashboard = () => {
                 <div key={b.id} className="rounded-xl border border-border bg-card p-4 shadow-card">
                   <div className="flex items-start justify-between">
                     <div>
-                      <h3 className="font-semibold text-foreground">{b.customerName}</h3>
+                      <h3 className="font-semibold text-foreground">{b.customer_name}</h3>
                       <p className="text-sm text-muted-foreground">{b.description}</p>
                       <p className="mt-1 text-sm text-muted-foreground">{b.date} · {b.time}</p>
                     </div>
@@ -72,7 +69,6 @@ const KarigarDashboard = () => {
           )}
         </section>
 
-        {/* Upcoming Jobs */}
         <section className="mb-8">
           <h2 className="mb-4 text-lg font-bold text-foreground">Upcoming Jobs</h2>
           {accepted.length === 0 ? (
@@ -83,7 +79,7 @@ const KarigarDashboard = () => {
                 <div key={b.id} className="rounded-xl border border-border bg-card p-4 shadow-card">
                   <div className="flex items-start justify-between">
                     <div>
-                      <h3 className="font-semibold text-foreground">{b.customerName}</h3>
+                      <h3 className="font-semibold text-foreground">{b.customer_name}</h3>
                       <p className="text-sm text-muted-foreground">{b.date} · {b.time}</p>
                     </div>
                     <Button size="sm" variant="outline" onClick={() => handleComplete(b.id)}>Mark Complete</Button>
@@ -94,7 +90,6 @@ const KarigarDashboard = () => {
           )}
         </section>
 
-        {/* Completed */}
         <section>
           <h2 className="mb-4 text-lg font-bold text-foreground">Completed Jobs</h2>
           {completed.length === 0 ? (
@@ -105,7 +100,7 @@ const KarigarDashboard = () => {
                 <div key={b.id} className="rounded-xl border border-border bg-card p-4 shadow-card">
                   <div className="flex items-start justify-between">
                     <div>
-                      <h3 className="font-semibold text-foreground">{b.customerName}</h3>
+                      <h3 className="font-semibold text-foreground">{b.customer_name}</h3>
                       <p className="text-sm text-muted-foreground">{b.date}</p>
                     </div>
                     {b.rating && <StarRating rating={b.rating} size={14} />}
