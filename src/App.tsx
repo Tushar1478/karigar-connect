@@ -3,24 +3,42 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { BookingProvider } from "@/contexts/BookingContext";
+import Landing from "./pages/Landing";
+import Login from "./pages/Login";
+import { SignupCustomer, SignupKarigar } from "./pages/Signup";
+import CustomerDashboard from "./pages/CustomerDashboard";
+import KarigarProfile from "./pages/KarigarProfile";
+import MyBookings from "./pages/MyBookings";
+import KarigarDashboard from "./pages/KarigarDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <AuthProvider>
+      <BookingProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Landing />} />
+              <Route path="/login/:role" element={<Login />} />
+              <Route path="/signup/customer" element={<SignupCustomer />} />
+              <Route path="/signup/karigar" element={<SignupKarigar />} />
+              <Route path="/customer" element={<CustomerDashboard />} />
+              <Route path="/karigar/:id" element={<KarigarProfile />} />
+              <Route path="/my-bookings" element={<MyBookings />} />
+              <Route path="/karigar-dashboard" element={<KarigarDashboard />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </BookingProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 
