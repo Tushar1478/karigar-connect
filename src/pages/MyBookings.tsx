@@ -1,0 +1,89 @@
+import { useState } from 'react';
+import Header from '@/components/Header';
+import StarRating from '@/components/StarRating';
+import StarRatingInput from '@/components/StarRatingInput';
+import { useBookings } from '@/contexts/BookingContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Badge } from '@/components/ui/badge';
+import { toast } from 'sonner';
+
+const statusColor: Record<string, string> = {
+  pending: 'bg-warning/15 text-warning border-warning/30',
+  accepted: 'bg-info/15 text-info border-info/30',
+  completed: 'bg-success/15 text-success border-success/30',
+  rejected: 'bg-destructive/15 text-destructive border-destructive/30',
+};
+
+const MyBookings = () => {
+  const { user } = useAuth();
+  const { bookings, rateBooking } = useBookings();
+  const [ratingDialog, setRatingDialog] = useState<string | null>(null);
+  const [rating, setRating] = useState(0);
+  const [review, setReview] = useState('');
+
+  const myBookings = bookings.filter(b => b.customerId === (user?.customer?.id || 'c1'));
+
+  const handleRate = () => {
+    if (!ratingDialog || rating === 0) return;
+    rateBooking(ratingDialog, rating, review);
+    toast.success('Rating submitted!');
+    setRatingDialog(null);
+    setRating(0);
+    setReview('');
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Header />
+      <main className="container mx-auto px-4 py-6">
+        <h1 className="mb-6 text-2xl font-bold text-foreground animate-fade-in">My Bookings</h1>
+        {myBookings.length === 0 ? (
+          <p className="py-12 text-center text-muted-foreground">No bookings yet.</p>
+        ) : (
+          <div className="space-y-4">
+            {myBookings.map((b, i) => (
+              <div key={b.id} className="rounded-xl border border-border bg-card p-4 shadow-card animate-fade-in" style={{ animationDelay: `${i * 80}ms` }}>
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="font-semibold text-foreground">{b.karigarName}</h3>
+                    <p className="text-sm text-primary">{b.skill}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{b.date} · {b.time}</p>
+                  </div>
+                  <span className={`rounded-full border px-3 py-1 text-xs font-medium capitalize ${statusColor[b.status]}`}>{b.status}</span>
+                </div>
+                {b.rating && (
+                  <div className="mt-2 flex items-center gap-2">
+                    <StarRating rating={b.rating} size={14} />
+                    <span className="text-xs text-muted-foreground">{b.review}</span>
+                  </div>
+                )}
+                {b.status === 'completed' && !b.rating && (
+                  <Button size="sm" variant="outline" className="mt-3" onClick={() => setRatingDialog(b.id)}>Rate Service</Button>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        <Dialog open={!!ratingDialog} onOpenChange={() => setRatingDialog(null)}>
+          <DialogContent>
+            <DialogHeader><DialogTitle>Rate this service</DialogTitle></DialogHeader>
+            <div className="flex flex-col items-center gap-4">
+              <StarRatingInput value={rating} onChange={setRating} />
+              <Textarea placeholder="Write a review (optional)" value={review} onChange={e => setReview(e.target.value)} />
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setRatingDialog(null)}>Cancel</Button>
+              <Button onClick={handleRate} disabled={rating === 0}>Submit</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </main>
+    </div>
+  );
+};
+
+export default MyBookings;
