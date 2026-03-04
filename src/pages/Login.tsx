@@ -4,18 +4,28 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { toast } from 'sonner';
 
 const Login = () => {
-  const { role } = useParams<{ role: 'customer' | 'karigar' }>();
+  const { role } = useParams<{ role: string }>();
   const { login } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    login(role as 'customer' | 'karigar', email);
-    navigate(role === 'customer' ? '/customer' : '/karigar-dashboard');
+    setLoading(true);
+    const result = await login(email, password);
+    setLoading(false);
+    if (result.error) {
+      toast.error(result.error);
+    } else {
+      // Auth state change will set user, then navigate
+      toast.success('Logged in!');
+      navigate(role === 'customer' ? '/customer' : '/karigar-dashboard');
+    }
   };
 
   return (
@@ -37,7 +47,7 @@ const Login = () => {
             <Label htmlFor="password">Password</Label>
             <Input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" required />
           </div>
-          <Button type="submit" className="w-full">Login</Button>
+          <Button type="submit" className="w-full" disabled={loading}>{loading ? 'Logging in...' : 'Login'}</Button>
           <p className="text-center text-sm text-muted-foreground">
             Don't have an account?{' '}
             <button type="button" onClick={() => navigate(`/signup/${role}`)} className="font-semibold text-primary hover:underline">Sign up</button>

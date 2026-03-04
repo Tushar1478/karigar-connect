@@ -9,10 +9,12 @@ const Header = () => {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     navigate('/');
   };
+
+  const displayName = user?.profile?.name || 'User';
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-card/80 backdrop-blur-lg">
@@ -40,7 +42,7 @@ const Header = () => {
             <div className="hidden items-center gap-3 md:flex">
               <div className="flex items-center gap-2 rounded-full bg-secondary px-3 py-1.5">
                 <User className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-medium text-foreground">{user?.role === 'customer' ? user.customer?.name : user?.karigar?.name}</span>
+                <span className="text-sm font-medium text-foreground">{displayName}</span>
               </div>
               <Button variant="ghost" size="sm" onClick={handleLogout}>
                 <LogOut className="mr-1 h-4 w-4" /> Logout
