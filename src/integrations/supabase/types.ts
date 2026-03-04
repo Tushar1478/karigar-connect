@@ -14,7 +14,199 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      bookings: {
+        Row: {
+          created_at: string
+          customer_id: string
+          customer_name: string
+          date: string
+          description: string | null
+          id: string
+          karigar_id: string
+          karigar_name: string
+          rating: number | null
+          review: string | null
+          skill: string
+          status: string
+          time: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          customer_name: string
+          date: string
+          description?: string | null
+          id?: string
+          karigar_id: string
+          karigar_name: string
+          rating?: number | null
+          review?: string | null
+          skill: string
+          status?: string
+          time: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          customer_name?: string
+          date?: string
+          description?: string | null
+          id?: string
+          karigar_id?: string
+          karigar_name?: string
+          rating?: number | null
+          review?: string | null
+          skill?: string
+          status?: string
+          time?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_karigar_id_fkey"
+            columns: ["karigar_id"]
+            isOneToOne: false
+            referencedRelation: "karigars"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      karigars: {
+        Row: {
+          completed_jobs: number
+          created_at: string
+          description: string
+          email: string
+          experience: number
+          id: string
+          location: string
+          name: string
+          phone: string
+          photo: string
+          price: number
+          rating: number
+          review_count: number
+          skill: string
+          total_earnings: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_jobs?: number
+          created_at?: string
+          description?: string
+          email: string
+          experience?: number
+          id?: string
+          location?: string
+          name: string
+          phone?: string
+          photo?: string
+          price?: number
+          rating?: number
+          review_count?: number
+          skill: string
+          total_earnings?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_jobs?: number
+          created_at?: string
+          description?: string
+          email?: string
+          experience?: number
+          id?: string
+          location?: string
+          name?: string
+          phone?: string
+          photo?: string
+          price?: number
+          rating?: number
+          review_count?: number
+          skill?: string
+          total_earnings?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          location: string
+          name: string
+          phone: string
+          role: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          location?: string
+          name: string
+          phone?: string
+          role: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          location?: string
+          name?: string
+          phone?: string
+          role?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      reviews: {
+        Row: {
+          created_at: string
+          customer_id: string
+          customer_name: string
+          id: string
+          karigar_id: string
+          rating: number
+          text: string
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          customer_name: string
+          id?: string
+          karigar_id: string
+          rating: number
+          text?: string
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          customer_name?: string
+          id?: string
+          karigar_id?: string
+          rating?: number
+          text?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_karigar_id_fkey"
+            columns: ["karigar_id"]
+            isOneToOne: false
+            referencedRelation: "karigars"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
