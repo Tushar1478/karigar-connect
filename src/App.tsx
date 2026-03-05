@@ -35,6 +35,8 @@ const App = () => (
               <Route path="/karigar/:id" element={<KarigarProfile />} />
               <Route path="/my-bookings" element={<MyBookings />} />
               <Route path="/karigar-dashboard" element={<KarigarDashboard />} />
+              <Route path="/karigar-profile-edit" element={<KarigarProfileEdit />} />
+              <Route path="/customer-profile" element={<CustomerProfile />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

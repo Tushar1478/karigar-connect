@@ -1,4 +1,4 @@
-import { CheckCircle, Circle, Truck, Wrench, Send } from 'lucide-react';
+import { CheckCircle, Circle, Truck, Send } from 'lucide-react';
 
 const STAGES = [
   { key: 'pending', label: 'Request Sent', icon: Send },

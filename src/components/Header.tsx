@@ -65,10 +65,14 @@ const Header = () => {
               <>
                 <button onClick={() => { navigate('/customer'); setMobileOpen(false); }} className="text-left text-sm font-medium">Home</button>
                 <button onClick={() => { navigate('/my-bookings'); setMobileOpen(false); }} className="text-left text-sm font-medium">My Bookings</button>
+                <button onClick={() => { navigate('/customer-profile'); setMobileOpen(false); }} className="text-left text-sm font-medium">Profile</button>
               </>
             )}
             {user?.role === 'karigar' && (
-              <button onClick={() => { navigate('/karigar-dashboard'); setMobileOpen(false); }} className="text-left text-sm font-medium">Dashboard</button>
+              <>
+                <button onClick={() => { navigate('/karigar-dashboard'); setMobileOpen(false); }} className="text-left text-sm font-medium">Dashboard</button>
+                <button onClick={() => { navigate('/karigar-profile-edit'); setMobileOpen(false); }} className="text-left text-sm font-medium">My Profile</button>
+              </>
             )}
             <Button variant="ghost" size="sm" onClick={handleLogout} className="w-fit">
               <LogOut className="mr-1 h-4 w-4" /> Logout

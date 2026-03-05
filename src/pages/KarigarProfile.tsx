@@ -100,6 +100,22 @@ const KarigarProfile = () => {
             <Button className="mt-4 w-full" size="lg" onClick={() => setBookingOpen(true)}>Book Service</Button>
           )}
 
+          {/* Portfolio Gallery */}
+          {portfolioImages.length > 0 && (
+            <div className="mt-6">
+              <h2 className="mb-4 text-lg font-bold text-foreground">Previous Work</h2>
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {portfolioImages.map(img => (
+                  <div key={img.id} className="overflow-hidden rounded-xl border border-border">
+                    <img src={img.image_url} alt="Portfolio work" className="aspect-square w-full object-cover" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+            <Button className="mt-4 w-full" size="lg" onClick={() => setBookingOpen(true)}>Book Service</Button>
+          )}
+
           <div className="mt-6">
             <h2 className="mb-4 text-lg font-bold text-foreground">Customer Reviews</h2>
             {reviews.length === 0 ? (
