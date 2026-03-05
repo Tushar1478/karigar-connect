@@ -21,6 +21,7 @@ const KarigarProfile = () => {
   const { addBooking } = useBookings();
   const [karigar, setKarigar] = useState<Tables<'karigars'> | null>(null);
   const [reviews, setReviews] = useState<Tables<'reviews'>[]>([]);
+  const [portfolioImages, setPortfolioImages] = useState<{ id: string; image_url: string }[]>([]);
   const [bookingOpen, setBookingOpen] = useState(false);
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
