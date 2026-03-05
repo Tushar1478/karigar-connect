@@ -30,7 +30,7 @@ const CustomerDashboard = () => {
   }, []);
 
   const filtered = useMemo(() => {
-    let list = karigars;
+    let list = karigars.filter(k => (k as any).availability !== 'offline');
     if (search) list = list.filter(k => k.name.toLowerCase().includes(search.toLowerCase()) || k.skill.toLowerCase().includes(search.toLowerCase()));
     if (skillFilter !== 'all') list = list.filter(k => k.skill === skillFilter);
     if (ratingFilter !== 'all') list = list.filter(k => Number(k.rating) >= Number(ratingFilter));

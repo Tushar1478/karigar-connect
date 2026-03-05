@@ -2,6 +2,8 @@ import { useState } from 'react';
 import Header from '@/components/Header';
 import StarRating from '@/components/StarRating';
 import StarRatingInput from '@/components/StarRatingInput';
+import BookingStatusTracker from '@/components/BookingStatusTracker';
+import BookingChat from '@/components/BookingChat';
 import { useBookings } from '@/contexts/BookingContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -12,6 +14,8 @@ import { toast } from 'sonner';
 const statusColor: Record<string, string> = {
   pending: 'bg-warning/15 text-warning border-warning/30',
   accepted: 'bg-info/15 text-info border-info/30',
+  on_the_way: 'bg-info/15 text-info border-info/30',
+  in_progress: 'bg-primary/15 text-primary border-primary/30',
   completed: 'bg-success/15 text-success border-success/30',
   rejected: 'bg-destructive/15 text-destructive border-destructive/30',
 };
@@ -22,6 +26,7 @@ const MyBookings = () => {
   const [ratingDialog, setRatingDialog] = useState<{ id: string; karigarId: string } | null>(null);
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
+  const [expandedChat, setExpandedChat] = useState<string | null>(null);
 
   const myBookings = bookings.filter(b => b.customer_id === user?.authUser?.id);
 
@@ -33,6 +38,8 @@ const MyBookings = () => {
     setRating(0);
     setReview('');
   };
+
+  const chatStatuses = ['accepted', 'on_the_way', 'in_progress', 'completed'];
 
   return (
     <div className="min-h-screen bg-background">
@@ -51,8 +58,17 @@ const MyBookings = () => {
                     <p className="text-sm text-primary">{b.skill}</p>
                     <p className="mt-1 text-sm text-muted-foreground">{b.date} · {b.time}</p>
                   </div>
-                  <span className={`rounded-full border px-3 py-1 text-xs font-medium capitalize ${statusColor[b.status] || ''}`}>{b.status}</span>
+                  <span className={`rounded-full border px-3 py-1 text-xs font-medium capitalize ${statusColor[b.status] || ''}`}>
+                    {b.status.replace('_', ' ')}
+                  </span>
                 </div>
+
+                {b.status !== 'rejected' && (
+                  <div className="mt-3">
+                    <BookingStatusTracker status={b.status} />
+                  </div>
+                )}
+
                 {b.rating && (
                   <div className="mt-2 flex items-center gap-2">
                     <StarRating rating={b.rating} size={14} />
@@ -61,6 +77,19 @@ const MyBookings = () => {
                 )}
                 {b.status === 'completed' && !b.rating && (
                   <Button size="sm" variant="outline" className="mt-3" onClick={() => setRatingDialog({ id: b.id, karigarId: b.karigar_id })}>Rate Service</Button>
+                )}
+
+                {chatStatuses.includes(b.status) && (
+                  <div className="mt-3">
+                    {expandedChat === b.id ? (
+                      <>
+                        <Button size="sm" variant="ghost" className="mb-2" onClick={() => setExpandedChat(null)}>Hide Chat</Button>
+                        <BookingChat bookingId={b.id} />
+                      </>
+                    ) : (
+                      <Button size="sm" variant="outline" onClick={() => setExpandedChat(b.id)}>Open Chat</Button>
+                    )}
+                  </div>
                 )}
               </div>
             ))}

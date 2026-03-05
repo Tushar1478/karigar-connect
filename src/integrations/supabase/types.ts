@@ -75,9 +75,11 @@ export type Database = {
       }
       karigars: {
         Row: {
+          availability: string
           completed_jobs: number
           created_at: string
           description: string
+          distance: number
           email: string
           experience: number
           id: string
@@ -94,9 +96,11 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          availability?: string
           completed_jobs?: number
           created_at?: string
           description?: string
+          distance?: number
           email: string
           experience?: number
           id?: string
@@ -113,9 +117,11 @@ export type Database = {
           user_id: string
         }
         Update: {
+          availability?: string
           completed_jobs?: number
           created_at?: string
           description?: string
+          distance?: number
           email?: string
           experience?: number
           id?: string
@@ -132,6 +138,41 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      messages: {
+        Row: {
+          booking_id: string
+          created_at: string
+          id: string
+          sender_id: string
+          sender_name: string
+          text: string
+        }
+        Insert: {
+          booking_id: string
+          created_at?: string
+          id?: string
+          sender_id: string
+          sender_name: string
+          text: string
+        }
+        Update: {
+          booking_id?: string
+          created_at?: string
+          id?: string
+          sender_id?: string
+          sender_name?: string
+          text?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
