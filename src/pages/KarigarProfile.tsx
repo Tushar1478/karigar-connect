@@ -21,6 +21,7 @@ const KarigarProfile = () => {
   const { addBooking } = useBookings();
   const [karigar, setKarigar] = useState<Tables<'karigars'> | null>(null);
   const [reviews, setReviews] = useState<Tables<'reviews'>[]>([]);
+  const [portfolioImages, setPortfolioImages] = useState<{ id: string; image_url: string }[]>([]);
   const [bookingOpen, setBookingOpen] = useState(false);
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
@@ -29,14 +30,16 @@ const KarigarProfile = () => {
   const distance = karigar ? (Number((karigar as any).distance) || (Math.random() * 4 + 0.3).toFixed(1)) : '0';
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetchData = async () => {
       const { data: k } = await supabase.from('karigars').select('*').eq('id', id!).single();
       setKarigar(k);
       const { data: r } = await supabase.from('reviews').select('*').eq('karigar_id', id!).order('created_at', { ascending: false });
       setReviews(r || []);
+      const { data: p } = await supabase.from('portfolio_images').select('*').eq('karigar_id', id!).order('created_at', { ascending: false });
+      setPortfolioImages(p || []);
       setLoading(false);
     };
-    fetch();
+    fetchData();
   }, [id]);
 
   if (loading) return <div className="flex min-h-screen items-center justify-center"><p>Loading...</p></div>;
@@ -95,6 +98,20 @@ const KarigarProfile = () => {
 
           {user?.role === 'customer' && (
             <Button className="mt-4 w-full" size="lg" onClick={() => setBookingOpen(true)}>Book Service</Button>
+          )}
+
+          {/* Portfolio Gallery */}
+          {portfolioImages.length > 0 && (
+            <div className="mt-6">
+              <h2 className="mb-4 text-lg font-bold text-foreground">Previous Work</h2>
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {portfolioImages.map(img => (
+                  <div key={img.id} className="overflow-hidden rounded-xl border border-border">
+                    <img src={img.image_url} alt="Portfolio work" className="aspect-square w-full object-cover" />
+                  </div>
+                ))}
+              </div>
+            </div>
           )}
 
           <div className="mt-6">

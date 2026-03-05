@@ -12,6 +12,8 @@ import CustomerDashboard from "./pages/CustomerDashboard";
 import KarigarProfile from "./pages/KarigarProfile";
 import MyBookings from "./pages/MyBookings";
 import KarigarDashboard from "./pages/KarigarDashboard";
+import KarigarProfileEdit from "./pages/KarigarProfileEdit";
+import CustomerProfile from "./pages/CustomerProfile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +35,8 @@ const App = () => (
               <Route path="/karigar/:id" element={<KarigarProfile />} />
               <Route path="/my-bookings" element={<MyBookings />} />
               <Route path="/karigar-dashboard" element={<KarigarDashboard />} />
+              <Route path="/karigar-profile-edit" element={<KarigarProfileEdit />} />
+              <Route path="/customer-profile" element={<CustomerProfile />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
