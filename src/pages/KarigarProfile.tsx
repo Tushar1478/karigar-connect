@@ -113,8 +113,6 @@ const KarigarProfile = () => {
               </div>
             </div>
           )}
-            <Button className="mt-4 w-full" size="lg" onClick={() => setBookingOpen(true)}>Book Service</Button>
-          )}
 
           <div className="mt-6">
             <h2 className="mb-4 text-lg font-bold text-foreground">Customer Reviews</h2>
