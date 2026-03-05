@@ -12,6 +12,8 @@ import CustomerDashboard from "./pages/CustomerDashboard";
 import KarigarProfile from "./pages/KarigarProfile";
 import MyBookings from "./pages/MyBookings";
 import KarigarDashboard from "./pages/KarigarDashboard";
+import KarigarProfileEdit from "./pages/KarigarProfileEdit";
+import CustomerProfile from "./pages/CustomerProfile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
