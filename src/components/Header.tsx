@@ -33,10 +33,14 @@ const Header = () => {
                 <>
                   <button onClick={() => navigate('/customer')} className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">Home</button>
                   <button onClick={() => navigate('/my-bookings')} className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">My Bookings</button>
+                  <button onClick={() => navigate('/customer-profile')} className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">Profile</button>
                 </>
               )}
               {user?.role === 'karigar' && (
-                <button onClick={() => navigate('/karigar-dashboard')} className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">Dashboard</button>
+                <>
+                  <button onClick={() => navigate('/karigar-dashboard')} className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">Dashboard</button>
+                  <button onClick={() => navigate('/karigar-profile-edit')} className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">My Profile</button>
+                </>
               )}
             </nav>
             <div className="hidden items-center gap-3 md:flex">
