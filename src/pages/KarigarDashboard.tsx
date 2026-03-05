@@ -116,10 +116,7 @@ const KarigarDashboard = () => {
                         <Button size="sm" variant="outline" onClick={() => handleStatusChange(b.id, 'on_the_way')} className="gap-1"><Truck className="h-4 w-4" />On Way</Button>
                       )}
                       {b.status === 'on_the_way' && (
-                        <Button size="sm" variant="outline" onClick={() => handleStatusChange(b.id, 'in_progress')} className="gap-1"><Wrench className="h-4 w-4" />Start Work</Button>
-                      )}
-                      {b.status === 'in_progress' && (
-                        <Button size="sm" onClick={() => handleStatusChange(b.id, 'completed')}>Mark Complete</Button>
+                        <Button size="sm" onClick={() => handleStatusChange(b.id, 'completed')} className="gap-1"><CheckCircle className="h-4 w-4" />Mark Complete</Button>
                       )}
                     </div>
                   </div>
