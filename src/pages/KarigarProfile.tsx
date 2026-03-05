@@ -30,14 +30,16 @@ const KarigarProfile = () => {
   const distance = karigar ? (Number((karigar as any).distance) || (Math.random() * 4 + 0.3).toFixed(1)) : '0';
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetchData = async () => {
       const { data: k } = await supabase.from('karigars').select('*').eq('id', id!).single();
       setKarigar(k);
       const { data: r } = await supabase.from('reviews').select('*').eq('karigar_id', id!).order('created_at', { ascending: false });
       setReviews(r || []);
+      const { data: p } = await supabase.from('portfolio_images').select('*').eq('karigar_id', id!).order('created_at', { ascending: false });
+      setPortfolioImages(p || []);
       setLoading(false);
     };
-    fetch();
+    fetchData();
   }, [id]);
 
   if (loading) return <div className="flex min-h-screen items-center justify-center"><p>Loading...</p></div>;
