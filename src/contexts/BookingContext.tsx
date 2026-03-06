@@ -49,7 +49,11 @@ export const BookingProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const updateBookingStatus = async (id: string, status: string) => {
-    await supabase.from('bookings').update({ status }).eq('id', id);
+    const { error } = await supabase.from('bookings').update({ status }).eq('id', id);
+    if (error) {
+      console.error('Failed to update booking status:', error);
+      return;
+    }
     fetchBookings();
   };
 
