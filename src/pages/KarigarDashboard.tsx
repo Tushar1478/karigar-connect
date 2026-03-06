@@ -111,12 +111,12 @@ const KarigarDashboard = () => {
                       <p className="text-sm text-muted-foreground">{b.date} · {b.time}</p>
                       <p className="mt-1 text-xs font-medium capitalize text-info">{b.status.replace('_', ' ')}</p>
                     </div>
-                    <div className="flex gap-2">
+                     <div className="flex flex-col gap-2 items-end">
                       {b.status === 'accepted' && (
-                        <Button size="sm" variant="outline" onClick={() => handleStatusChange(b.id, 'on_the_way')} className="gap-1"><Truck className="h-4 w-4" />On Way</Button>
+                        <Button size="sm" variant="outline" onClick={() => handleStatusChange(b.id, 'on_the_way')} className="gap-1 bg-info/10 border-info/30 text-info hover:bg-info/20"><Truck className="h-4 w-4" />Set On The Way</Button>
                       )}
                       {b.status === 'on_the_way' && (
-                        <Button size="sm" onClick={() => handleStatusChange(b.id, 'completed')} className="gap-1"><CheckCircle className="h-4 w-4" />Mark Complete</Button>
+                        <Button size="sm" onClick={() => handleStatusChange(b.id, 'completed')} className="gap-1 bg-success text-success-foreground hover:bg-success/90"><CheckCircle className="h-4 w-4" />Mark Job Completed</Button>
                       )}
                     </div>
                   </div>
