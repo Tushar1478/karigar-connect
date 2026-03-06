@@ -15,8 +15,8 @@ const Landing = () => {
       <header className="border-b border-border bg-card/80 backdrop-blur-lg">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg gradient-primary">
-              <span className="text-lg font-bold text-primary-foreground">K</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg ">
+              <img src='/icon.png' alt='KarigarHub Logo' />
             </div>
             <span className="text-xl font-bold text-foreground">KarigarHub</span>
           </div>
