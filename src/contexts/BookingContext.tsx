@@ -31,6 +31,18 @@ export const BookingProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => { fetchBookings(); }, [fetchBookings]);
 
+  // Realtime subscription for live status updates
+  useEffect(() => {
+    if (!user) return;
+    const channel = supabase
+      .channel('bookings-realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'bookings' }, () => {
+        fetchBookings();
+      })
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [user, fetchBookings]);
+
   const addBooking = async (booking: { customer_id: string; customer_name: string; karigar_id: string; karigar_name: string; skill: string; date: string; time: string; description?: string }) => {
     await supabase.from('bookings').insert({ ...booking, status: 'pending' });
     fetchBookings();
