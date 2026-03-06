@@ -7,7 +7,7 @@ import { useBookings } from '@/contexts/BookingContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { CheckCircle, XCircle, Clock, IndianRupee, Star, Briefcase, Truck } from 'lucide-react';
+import { CheckCircle, XCircle, Clock, IndianRupee, Star, Briefcase } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -20,7 +20,7 @@ const KarigarDashboard = () => {
 
   const myBookings = bookings.filter(b => b.karigar_id === karigar?.id);
   const pending = myBookings.filter(b => b.status === 'pending');
-  const active = myBookings.filter(b => ['accepted', 'on_the_way'].includes(b.status));
+  const active = myBookings.filter(b => b.status === 'accepted');
   const completed = myBookings.filter(b => b.status === 'completed');
 
   const handleAccept = async (id: string) => { await updateBookingStatus(id, 'accepted'); toast.success('Booking accepted!'); };
@@ -111,12 +111,7 @@ const KarigarDashboard = () => {
                       <p className="text-sm text-muted-foreground">{b.date} · {b.time}</p>
                       <p className="mt-1 text-xs font-medium capitalize text-info">{b.status.replace('_', ' ')}</p>
                     </div>
-                     <div className="flex flex-col gap-2 items-end">
-                      {b.status === 'accepted' && (
-                        <Button size="sm" variant="outline" onClick={() => handleStatusChange(b.id, 'on_the_way')} className="gap-1 bg-info/10 border-info/30 text-info hover:bg-info/20"><Truck className="h-4 w-4" />On The Way</Button>
-                      )}
-                      <Button size="sm" onClick={() => handleStatusChange(b.id, 'completed')} className="gap-1 bg-success text-success-foreground hover:bg-success/90"><CheckCircle className="h-4 w-4" />Job Completed</Button>
-                    </div>
+                    <Button size="sm" onClick={() => handleStatusChange(b.id, 'completed')} className="gap-1 bg-success text-success-foreground hover:bg-success/90"><CheckCircle className="h-4 w-4" />Job Completed</Button>
                   </div>
                   <div className="mt-3">
                     {expandedChat === b.id ? (
