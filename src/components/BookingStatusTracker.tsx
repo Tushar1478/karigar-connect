@@ -1,10 +1,9 @@
-import { CheckCircle, Circle, Truck, Send } from 'lucide-react';
+import { CheckCircle, Circle, Send } from 'lucide-react';
 
 const STAGES = [
   { key: 'pending', label: 'Request Sent', icon: Send },
-  { key: 'accepted', label: 'Karigar Accepted', icon: CheckCircle },
-  { key: 'on_the_way', label: 'On The Way', icon: Truck },
-  { key: 'completed', label: 'Job Completed', icon: CheckCircle },
+  { key: 'accepted', label: 'Accepted', icon: CheckCircle },
+  { key: 'completed', label: 'Completed', icon: CheckCircle },
 ];
 
 const stageIndex = (status: string) => {
