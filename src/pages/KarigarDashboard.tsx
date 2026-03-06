@@ -20,7 +20,7 @@ const KarigarDashboard = () => {
 
   const myBookings = bookings.filter(b => b.karigar_id === karigar?.id);
   const pending = myBookings.filter(b => b.status === 'pending');
-  const active = myBookings.filter(b => ['accepted', 'on_the_way'].includes(b.status));
+  const active = myBookings.filter(b => b.status === 'accepted');
   const completed = myBookings.filter(b => b.status === 'completed');
 
   const handleAccept = async (id: string) => { await updateBookingStatus(id, 'accepted'); toast.success('Booking accepted!'); };
