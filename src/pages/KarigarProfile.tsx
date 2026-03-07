@@ -206,9 +206,31 @@ const KarigarProfile = () => {
             <div className="space-y-4">
               <div>
                 <Label>Date</Label>
-                <Input type="date" value={date} onChange={e => setDate(e.target.value)} min={new Date().toISOString().split('T')[0]} max={new Date(Date.now() + 90 * 86400000).toISOString().split('T')[0]} />
+                <Input type="date" value={date} onChange={e => { setDate(e.target.value); setTime(''); }} min={todayIST} max={maxDate} />
               </div>
-              <div><Label>Time</Label><Input type="time" value={time} onChange={e => setTime(e.target.value)} /></div>
+              <div>
+                <Label>Time Slot</Label>
+                {!date ? (
+                  <p className="text-sm text-muted-foreground">Select a date first</p>
+                ) : availableSlots.length === 0 ? (
+                  <p className="text-sm text-destructive">No available slots for this date</p>
+                ) : (
+                  <div className="grid grid-cols-4 gap-2 mt-1">
+                    {availableSlots.map(slot => (
+                      <Button
+                        key={slot}
+                        type="button"
+                        size="sm"
+                        variant={time === slot ? 'default' : 'outline'}
+                        onClick={() => setTime(slot)}
+                        className="text-xs"
+                      >
+                        {formatSlot(slot)}
+                      </Button>
+                    ))}
+                  </div>
+                )}
+              </div>
               <div><Label>Job Description (optional)</Label><Textarea placeholder="Describe the work needed..." value={description} onChange={e => setDescription(e.target.value)} /></div>
             </div>
             <DialogFooter>
