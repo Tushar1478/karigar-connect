@@ -50,7 +50,8 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const isCustomer = role === 'customer';
+  const normalizedRole = role === 'karigar' ? 'karigar' : 'customer';
+  const isCustomer = normalizedRole === 'customer';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -176,7 +177,7 @@ const Login = () => {
             Don't have an account?{' '}
             <button
               type="button"
-              onClick={() => navigate(`/signup/${role}`)}
+              onClick={() => navigate(isCustomer ? '/signup/customer' : '/signup/karigar')}
               style={{
                 background: 'none', border: 'none', padding: 0,
                 color: '#fb923c', fontWeight: 700, fontSize: '0.82rem',

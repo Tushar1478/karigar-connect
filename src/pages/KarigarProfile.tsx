@@ -27,14 +27,14 @@ const formatSlot = (slot: string) => {
 
 const getISTDate = () => {
   const now = new Date();
-  const ist = new Date(now.getTime() + (5.5 * 60 * 60 * 1000 - now.getTimezoneOffset() * 60 * 1000));
-  return ist.toISOString().split('T')[0];
+  const tzOffset = now.getTimezoneOffset() * 60 * 1000;
+  const local = new Date(now.getTime() - tzOffset);
+  return local.toISOString().split('T')[0];
 };
 
 const getISTHour = () => {
   const now = new Date();
-  const ist = new Date(now.getTime() + (5.5 * 60 * 60 * 1000 - now.getTimezoneOffset() * 60 * 1000));
-  return ist.getUTCHours();
+  return now.getHours();
 };
 
 /* ─── STAT PILL ─────────────────────────────────────── */
@@ -273,6 +273,21 @@ const KarigarProfile = () => {
 
   const handleBook = async () => {
     if (!date || !time || !user?.authUser || !user.profile) return;
+
+    const selected = new Date(date);
+    const min = new Date(todayIST);
+    const max = new Date(maxDate);
+
+    if (selected < min) {
+      toast.error('Please choose a date from today onwards.');
+      return;
+    }
+
+    if (selected > max) {
+      toast.error('Bookings can only be made up to 90 days in advance.');
+      return;
+    }
+
     await addBooking({
       customer_id: user.authUser.id,
       customer_name: user.profile.name,
