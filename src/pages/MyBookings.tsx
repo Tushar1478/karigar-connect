@@ -38,7 +38,12 @@ const MyBookings = () => {
     setReview('');
   };
 
-  const chatStatuses = ['accepted', 'on_the_way', 'in_progress', 'completed'];
+  const chatStatuses = ['accepted', 'completed'];
+
+  const handleCancel = async (id: string) => {
+    await updateBookingStatus(id, 'cancelled');
+    toast.success('Booking cancelled');
+  };
 
   return (
     <div className="min-h-screen bg-background">
