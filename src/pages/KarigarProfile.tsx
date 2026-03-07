@@ -4,6 +4,7 @@ import { MapPin, Clock, IndianRupee, Briefcase, Navigation } from 'lucide-react'
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import Header from '@/components/Header';
 import StarRating from '@/components/StarRating';
