@@ -139,8 +139,12 @@ const KarigarProfile = () => {
           <DialogContent>
             <DialogHeader><DialogTitle>Book {karigar.name}</DialogTitle></DialogHeader>
             <div className="space-y-4">
-              <div><Label>Date</Label><Input type="date" value={date} onChange={e => setDate(e.target.value)} /></div>
+              <div>
+                <Label>Date</Label>
+                <Input type="date" value={date} onChange={e => setDate(e.target.value)} min={new Date().toISOString().split('T')[0]} max={new Date(Date.now() + 90 * 86400000).toISOString().split('T')[0]} />
+              </div>
               <div><Label>Time</Label><Input type="time" value={time} onChange={e => setTime(e.target.value)} /></div>
+              <div><Label>Job Description (optional)</Label><Textarea placeholder="Describe the work needed..." value={description} onChange={e => setDescription(e.target.value)} /></div>
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setBookingOpen(false)}>Cancel</Button>
