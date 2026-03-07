@@ -21,7 +21,7 @@ const statusColor: Record<string, string> = {
 
 const MyBookings = () => {
   const { user } = useAuth();
-  const { bookings, rateBooking } = useBookings();
+  const { bookings, rateBooking, updateBookingStatus } = useBookings();
   const [ratingDialog, setRatingDialog] = useState<{ id: string; karigarId: string } | null>(null);
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
