@@ -55,6 +55,42 @@ const KarigarProfile = () => {
   const [time, setTime] = useState('');
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(true);
+  const [bookedSlots, setBookedSlots] = useState<string[]>([]);
+
+  const todayIST = useMemo(() => getISTDate(), []);
+  const maxDate = useMemo(() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 90);
+    return d.toISOString().split('T')[0];
+  }, []);
+
+  // Fetch booked slots when date changes
+  useEffect(() => {
+    if (!date || !id) { setBookedSlots([]); return; }
+    const fetchBooked = async () => {
+      const { data } = await supabase
+        .from('bookings')
+        .select('time')
+        .eq('karigar_id', id)
+        .eq('date', date)
+        .in('status', ['pending', 'accepted']);
+      setBookedSlots((data || []).map(b => b.time));
+    };
+    fetchBooked();
+  }, [date, id]);
+
+  // Filter out past slots if selected date is today
+  const availableSlots = useMemo(() => {
+    const currentHour = getISTHour();
+    return TIME_SLOTS.filter(slot => {
+      if (bookedSlots.includes(slot)) return false;
+      if (date === todayIST) {
+        const slotHour = parseInt(slot.split(':')[0]);
+        return slotHour > currentHour;
+      }
+      return true;
+    });
+  }, [date, todayIST, bookedSlots]);
 
   const distance = karigar ? (Number((karigar as any).distance) || (Math.random() * 4 + 0.3).toFixed(1)) : '0';
 
