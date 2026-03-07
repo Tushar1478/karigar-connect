@@ -82,6 +82,9 @@ const MyBookings = () => {
                 {b.status === 'completed' && !b.rating && (
                   <Button size="sm" variant="outline" className="mt-3" onClick={() => setRatingDialog({ id: b.id, karigarId: b.karigar_id })}>Rate Service</Button>
                 )}
+                {(b.status === 'pending' || b.status === 'accepted') && (
+                  <Button size="sm" variant="destructive" className="mt-3" onClick={() => handleCancel(b.id)}>Cancel Booking</Button>
+                )}
 
                 {chatStatuses.includes(b.status) && (
                   <div className="mt-3">
