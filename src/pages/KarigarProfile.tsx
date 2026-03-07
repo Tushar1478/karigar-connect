@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { MapPin, Clock, IndianRupee, Briefcase, Navigation } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -15,6 +15,33 @@ import { useBookings } from '@/contexts/BookingContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import type { Tables } from '@/integrations/supabase/types';
+
+const TIME_SLOTS = [
+  '06:00', '07:00', '08:00', '09:00', '10:00', '11:00',
+  '12:00', '13:00', '14:00', '15:00', '16:00', '17:00',
+  '18:00', '19:00', '20:00', '21:00',
+];
+
+const formatSlot = (slot: string) => {
+  const [h] = slot.split(':');
+  const hour = parseInt(h);
+  if (hour === 0) return '12 AM';
+  if (hour === 12) return '12 PM';
+  return hour > 12 ? `${hour - 12} PM` : `${hour} AM`;
+};
+
+// Get current IST date string (YYYY-MM-DD)
+const getISTDate = () => {
+  const now = new Date();
+  const ist = new Date(now.getTime() + (5.5 * 60 * 60 * 1000 - now.getTimezoneOffset() * 60 * 1000));
+  return ist.toISOString().split('T')[0];
+};
+
+const getISTHour = () => {
+  const now = new Date();
+  const ist = new Date(now.getTime() + (5.5 * 60 * 60 * 1000 - now.getTimezoneOffset() * 60 * 1000));
+  return ist.getUTCHours();
+};
 
 const KarigarProfile = () => {
   const { id } = useParams();
