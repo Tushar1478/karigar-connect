@@ -4,6 +4,7 @@ import { MapPin, Clock, IndianRupee, Briefcase, Navigation } from 'lucide-react'
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import Header from '@/components/Header';
 import StarRating from '@/components/StarRating';
@@ -25,6 +26,7 @@ const KarigarProfile = () => {
   const [bookingOpen, setBookingOpen] = useState(false);
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
+  const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(true);
 
   const distance = karigar ? (Number((karigar as any).distance) || (Math.random() * 4 + 0.3).toFixed(1)) : '0';
@@ -55,7 +57,7 @@ const KarigarProfile = () => {
       skill: karigar.skill,
       date,
       time,
-      description: `${karigar.skill} service requested`,
+      description: description || `${karigar.skill} service requested`,
     });
     setBookingOpen(false);
     toast.success('Booking Confirmed!', { description: `${karigar.name} will be notified.` });
@@ -139,8 +141,12 @@ const KarigarProfile = () => {
           <DialogContent>
             <DialogHeader><DialogTitle>Book {karigar.name}</DialogTitle></DialogHeader>
             <div className="space-y-4">
-              <div><Label>Date</Label><Input type="date" value={date} onChange={e => setDate(e.target.value)} /></div>
+              <div>
+                <Label>Date</Label>
+                <Input type="date" value={date} onChange={e => setDate(e.target.value)} min={new Date().toISOString().split('T')[0]} max={new Date(Date.now() + 90 * 86400000).toISOString().split('T')[0]} />
+              </div>
               <div><Label>Time</Label><Input type="time" value={time} onChange={e => setTime(e.target.value)} /></div>
+              <div><Label>Job Description (optional)</Label><Textarea placeholder="Describe the work needed..." value={description} onChange={e => setDescription(e.target.value)} /></div>
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setBookingOpen(false)}>Cancel</Button>

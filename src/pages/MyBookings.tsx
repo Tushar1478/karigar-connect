@@ -14,15 +14,14 @@ import { toast } from 'sonner';
 const statusColor: Record<string, string> = {
   pending: 'bg-warning/15 text-warning border-warning/30',
   accepted: 'bg-info/15 text-info border-info/30',
-  on_the_way: 'bg-info/15 text-info border-info/30',
-  in_progress: 'bg-primary/15 text-primary border-primary/30',
   completed: 'bg-success/15 text-success border-success/30',
   rejected: 'bg-destructive/15 text-destructive border-destructive/30',
+  cancelled: 'bg-muted text-muted-foreground border-border',
 };
 
 const MyBookings = () => {
   const { user } = useAuth();
-  const { bookings, rateBooking } = useBookings();
+  const { bookings, rateBooking, updateBookingStatus } = useBookings();
   const [ratingDialog, setRatingDialog] = useState<{ id: string; karigarId: string } | null>(null);
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
@@ -39,7 +38,12 @@ const MyBookings = () => {
     setReview('');
   };
 
-  const chatStatuses = ['accepted', 'on_the_way', 'in_progress', 'completed'];
+  const chatStatuses = ['accepted', 'completed'];
+
+  const handleCancel = async (id: string) => {
+    await updateBookingStatus(id, 'cancelled');
+    toast.success('Booking cancelled');
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -77,6 +81,9 @@ const MyBookings = () => {
                 )}
                 {b.status === 'completed' && !b.rating && (
                   <Button size="sm" variant="outline" className="mt-3" onClick={() => setRatingDialog({ id: b.id, karigarId: b.karigar_id })}>Rate Service</Button>
+                )}
+                {(b.status === 'pending' || b.status === 'accepted') && (
+                  <Button size="sm" variant="destructive" className="mt-3" onClick={() => handleCancel(b.id)}>Cancel Booking</Button>
                 )}
 
                 {chatStatuses.includes(b.status) && (

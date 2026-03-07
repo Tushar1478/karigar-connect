@@ -11,8 +11,13 @@ import type { Tables } from '@/integrations/supabase/types';
 
 const CustomerDashboard = () => {
   const [searchParams] = useSearchParams();
-  const initialSearch = searchParams.get('search') || '';
-  const [search, setSearch] = useState(initialSearch);
+  const searchFromUrl = searchParams.get('search') || '';
+  const [search, setSearch] = useState(searchFromUrl);
+
+  // Sync search state when URL search param changes (e.g. category click)
+  useEffect(() => {
+    setSearch(searchFromUrl);
+  }, [searchFromUrl]);
   const [skillFilter, setSkillFilter] = useState('all');
   const [ratingFilter, setRatingFilter] = useState('all');
   const [priceSort, setPriceSort] = useState('none');
