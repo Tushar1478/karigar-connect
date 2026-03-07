@@ -25,6 +25,7 @@ const KarigarProfile = () => {
   const [bookingOpen, setBookingOpen] = useState(false);
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
+  const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(true);
 
   const distance = karigar ? (Number((karigar as any).distance) || (Math.random() * 4 + 0.3).toFixed(1)) : '0';
