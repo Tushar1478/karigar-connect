@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { MapPin, Clock, IndianRupee, Briefcase, Navigation } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -16,6 +16,33 @@ import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import type { Tables } from '@/integrations/supabase/types';
 
+const TIME_SLOTS = [
+  '06:00', '07:00', '08:00', '09:00', '10:00', '11:00',
+  '12:00', '13:00', '14:00', '15:00', '16:00', '17:00',
+  '18:00', '19:00', '20:00', '21:00',
+];
+
+const formatSlot = (slot: string) => {
+  const [h] = slot.split(':');
+  const hour = parseInt(h);
+  if (hour === 0) return '12 AM';
+  if (hour === 12) return '12 PM';
+  return hour > 12 ? `${hour - 12} PM` : `${hour} AM`;
+};
+
+// Get current IST date string (YYYY-MM-DD)
+const getISTDate = () => {
+  const now = new Date();
+  const ist = new Date(now.getTime() + (5.5 * 60 * 60 * 1000 - now.getTimezoneOffset() * 60 * 1000));
+  return ist.toISOString().split('T')[0];
+};
+
+const getISTHour = () => {
+  const now = new Date();
+  const ist = new Date(now.getTime() + (5.5 * 60 * 60 * 1000 - now.getTimezoneOffset() * 60 * 1000));
+  return ist.getUTCHours();
+};
+
 const KarigarProfile = () => {
   const { id } = useParams();
   const { user } = useAuth();
@@ -28,6 +55,42 @@ const KarigarProfile = () => {
   const [time, setTime] = useState('');
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(true);
+  const [bookedSlots, setBookedSlots] = useState<string[]>([]);
+
+  const todayIST = useMemo(() => getISTDate(), []);
+  const maxDate = useMemo(() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 90);
+    return d.toISOString().split('T')[0];
+  }, []);
+
+  // Fetch booked slots when date changes
+  useEffect(() => {
+    if (!date || !id) { setBookedSlots([]); return; }
+    const fetchBooked = async () => {
+      const { data } = await supabase
+        .from('bookings')
+        .select('time')
+        .eq('karigar_id', id)
+        .eq('date', date)
+        .in('status', ['pending', 'accepted']);
+      setBookedSlots((data || []).map(b => b.time));
+    };
+    fetchBooked();
+  }, [date, id]);
+
+  // Filter out past slots if selected date is today
+  const availableSlots = useMemo(() => {
+    const currentHour = getISTHour();
+    return TIME_SLOTS.filter(slot => {
+      if (bookedSlots.includes(slot)) return false;
+      if (date === todayIST) {
+        const slotHour = parseInt(slot.split(':')[0]);
+        return slotHour > currentHour;
+      }
+      return true;
+    });
+  }, [date, todayIST, bookedSlots]);
 
   const distance = karigar ? (Number((karigar as any).distance) || (Math.random() * 4 + 0.3).toFixed(1)) : '0';
 
@@ -143,9 +206,31 @@ const KarigarProfile = () => {
             <div className="space-y-4">
               <div>
                 <Label>Date</Label>
-                <Input type="date" value={date} onChange={e => setDate(e.target.value)} min={new Date().toISOString().split('T')[0]} max={new Date(Date.now() + 90 * 86400000).toISOString().split('T')[0]} />
+                <Input type="date" value={date} onChange={e => { setDate(e.target.value); setTime(''); }} min={todayIST} max={maxDate} />
               </div>
-              <div><Label>Time</Label><Input type="time" value={time} onChange={e => setTime(e.target.value)} /></div>
+              <div>
+                <Label>Time Slot</Label>
+                {!date ? (
+                  <p className="text-sm text-muted-foreground">Select a date first</p>
+                ) : availableSlots.length === 0 ? (
+                  <p className="text-sm text-destructive">No available slots for this date</p>
+                ) : (
+                  <div className="grid grid-cols-4 gap-2 mt-1">
+                    {availableSlots.map(slot => (
+                      <Button
+                        key={slot}
+                        type="button"
+                        size="sm"
+                        variant={time === slot ? 'default' : 'outline'}
+                        onClick={() => setTime(slot)}
+                        className="text-xs"
+                      >
+                        {formatSlot(slot)}
+                      </Button>
+                    ))}
+                  </div>
+                )}
+              </div>
               <div><Label>Job Description (optional)</Label><Textarea placeholder="Describe the work needed..." value={description} onChange={e => setDescription(e.target.value)} /></div>
             </div>
             <DialogFooter>
