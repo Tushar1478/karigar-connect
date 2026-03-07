@@ -57,7 +57,7 @@ const KarigarProfile = () => {
       skill: karigar.skill,
       date,
       time,
-      description: `${karigar.skill} service requested`,
+      description: description || `${karigar.skill} service requested`,
     });
     setBookingOpen(false);
     toast.success('Booking Confirmed!', { description: `${karigar.name} will be notified.` });

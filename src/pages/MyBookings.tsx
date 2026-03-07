@@ -14,10 +14,9 @@ import { toast } from 'sonner';
 const statusColor: Record<string, string> = {
   pending: 'bg-warning/15 text-warning border-warning/30',
   accepted: 'bg-info/15 text-info border-info/30',
-  on_the_way: 'bg-info/15 text-info border-info/30',
-  in_progress: 'bg-primary/15 text-primary border-primary/30',
   completed: 'bg-success/15 text-success border-success/30',
   rejected: 'bg-destructive/15 text-destructive border-destructive/30',
+  cancelled: 'bg-muted text-muted-foreground border-border',
 };
 
 const MyBookings = () => {
