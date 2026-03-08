@@ -102,7 +102,38 @@ function Confetti({ active }) {
 /* ─── PROGRESS BAR ──────────────────────────────────── */
 function ProgressBar({ status }) {
   const meta = STATUS_META[status];
-  if (!meta || meta.step < 0) return null;
+  if (!meta) return null;
+
+  // Cancelled / Rejected state
+  if (meta.step < 0) {
+    return (
+      <div style={{ marginTop: 14, marginBottom: 4 }}>
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 10,
+          padding: '12px 16px', borderRadius: 12,
+          background: `${meta.color}10`,
+          border: `1px solid ${meta.color}30`,
+        }}>
+          <div style={{
+            width: 28, height: 28, borderRadius: '50%',
+            background: `${meta.color}20`, border: `2px solid ${meta.color}`,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <X size={13} color={meta.color} />
+          </div>
+          <div>
+            <span style={{ fontSize: '0.82rem', fontWeight: 700, color: meta.color }}>
+              {status === 'cancelled' ? 'Booking Cancelled' : 'Booking Rejected'}
+            </span>
+            <p style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.35)', marginTop: 2 }}>
+              {status === 'cancelled' ? 'You cancelled this booking. No further action possible.' : 'The karigar declined this request.'}
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const pct = (meta.step / (STEPS.length - 1)) * 100;
 
   return (
@@ -135,7 +166,7 @@ function ProgressBar({ status }) {
                 fontSize: '0.58rem', fontWeight: current ? 700 : 400,
                 color: done ? '#34d399' : current ? meta.color : 'rgba(255,255,255,0.25)',
                 transition: 'color 0.4s', textAlign: 'center', lineHeight: 1.2,
-                display: 'none',  // hide on small, show on md
+                display: 'none',
               }}>{s}</span>
             </div>
           );
@@ -153,7 +184,6 @@ function ProgressBar({ status }) {
           transition: 'width 1.2s cubic-bezier(0.22,1,0.36,1)',
           boxShadow: `0 0 10px ${meta.color}66`,
         }} />
-        {/* shimmer overlay */}
         <div style={{
           position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
           background: 'linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.25) 50%,transparent 100%)',
