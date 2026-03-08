@@ -295,9 +295,12 @@ function BookingCard({ b, index, onRate, onCancel, expandedChat, setExpandedChat
         position: 'relative', overflow: 'hidden',
         background: isCompleted
           ? 'linear-gradient(135deg,rgba(52,211,153,0.05),rgba(255,255,255,0.02))'
-          : 'rgba(255,255,255,0.03)',
+          : isTerminal
+            ? 'linear-gradient(135deg,rgba(148,163,184,0.04),rgba(255,255,255,0.01))'
+            : 'rgba(255,255,255,0.03)',
         backdropFilter: 'blur(16px)',
-        border: `1px solid ${isCompleted ? 'rgba(52,211,153,0.2)' : hov ? 'rgba(251,146,60,0.2)' : 'rgba(255,255,255,0.07)'}`,
+        border: `1px solid ${isCompleted ? 'rgba(52,211,153,0.2)' : isTerminal ? 'rgba(148,163,184,0.15)' : hov ? 'rgba(251,146,60,0.2)' : 'rgba(255,255,255,0.07)'}`,
+        opacity: isTerminal ? 0.75 : 1,
         borderRadius: 20, padding: 20,
         transition: 'all 0.35s cubic-bezier(0.22,1,0.36,1)',
         transform: hov ? 'translateY(-3px)' : 'translateY(0)',
