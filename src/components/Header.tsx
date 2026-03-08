@@ -1,18 +1,61 @@
 import { useAuth } from '@/contexts/AuthContext';
+import { useBookings } from '@/contexts/BookingContext';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { LogOut, User, Menu, X } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { LogOut, User, Menu, X, Bell } from 'lucide-react';
+import { useState, useEffect, useMemo } from 'react';
 
 const Header = () => {
   const { user, logout, isAuthenticated } = useAuth();
+  const { bookings } = useBookings();
   const navigate  = useNavigate();
   const location  = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [logoSpin,   setLogoSpin]   = useState(true);
   const [scrolled,   setScrolled]   = useState(false);
+  const [notifOpen,  setNotifOpen]  = useState(false);
 
   const displayName = user?.profile?.name || 'User';
   const initials    = displayName.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2);
+
+  const notifications = useMemo(() => {
+    if (!user) return [];
+
+    const statusLabels: Record<string, string> = {
+      pending: 'Pending',
+      accepted: 'Accepted',
+      on_the_way: 'On the way',
+      completed: 'Completed',
+      rejected: 'Rejected',
+      cancelled: 'Cancelled',
+    };
+
+    const isCustomer = user.role === 'customer';
+    const isKarigar  = user.role === 'karigar';
+
+    const myBookings = bookings.filter(b => {
+      if (isCustomer) return b.customer_id === user.authUser.id;
+      if (isKarigar)  return b.karigar_id  === user.karigar?.id;
+      return false;
+    });
+
+    return myBookings
+      .slice()
+      .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
+      .slice(0, 8)
+      .map(b => {
+        const statusLabel = statusLabels[b.status] || b.status;
+        const otherName = isCustomer ? b.karigar_name : b.customer_name;
+        const prefix = isCustomer ? 'Your booking with' : 'Booking from';
+        const message = `${prefix} ${otherName} is ${statusLabel}`;
+        const when = new Date(b.updated_at).toLocaleString('en-IN', {
+          day: '2-digit',
+          month: 'short',
+          hour: '2-digit',
+          minute: '2-digit',
+        });
+        return { id: b.id, message, when, status: b.status };
+      });
+  }, [bookings, user]);
 
   useEffect(() => {
     const t = setTimeout(() => setLogoSpin(false), 1000);
@@ -123,6 +166,31 @@ const Header = () => {
         }
         .mobile-nav-link:hover  { background: rgba(255,255,255,0.05); color: #fff; }
         .mobile-nav-link.active { background: rgba(251,146,60,0.1); color: #fb923c; font-weight: 600; }
+
+        .notif-btn {
+          position: relative;
+          width: 34px; height: 34px;
+          border-radius: 999px;
+          border: 1.5px solid rgba(255,255,255,0.16);
+          background: rgba(255,255,255,0.05);
+          display: flex; align-items: center; justify-content: center;
+          cursor: pointer;
+          color: rgba(255,255,255,0.7);
+          transition: all .2s;
+        }
+        .notif-btn:hover {
+          border-color: rgba(251,146,60,0.5);
+          background: rgba(251,146,60,0.12);
+          color: #fb923c;
+        }
+        .notif-dot {
+          position: absolute;
+          top: 5px; right: 6px;
+          width: 6px; height: 6px;
+          border-radius: 50%;
+          background: #fb923c;
+          box-shadow: 0 0 6px rgba(251,146,60,0.8);
+        }
       `}</style>
 
       <header style={{
@@ -164,7 +232,70 @@ const Header = () => {
               </nav>
 
               {/* ── DESKTOP RIGHT ── */}
-              <div style={{ display: 'none', alignItems: 'center', gap: 12 }} className="md-right">
+              <div style={{ display: 'none', alignItems: 'center', gap: 12, position: 'relative' }} className="md-right">
+                {/* Notifications */}
+                <button
+                  type="button"
+                  className="notif-btn"
+                  onClick={() => setNotifOpen(o => !o)}
+                  aria-label="Notifications"
+                >
+                  <Bell size={16} />
+                  {notifications.length > 0 && <span className="notif-dot" />}
+                </button>
+
+                {notifOpen && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: 'calc(100% + 10px)',
+                      right: 0,
+                      width: 280,
+                      maxHeight: 320,
+                      overflowY: 'auto',
+                      background: 'rgba(10,10,15,0.97)',
+                      borderRadius: 14,
+                      border: '1px solid rgba(255,255,255,0.08)',
+                      boxShadow: '0 18px 60px rgba(0,0,0,0.6)',
+                      padding: '10px 10px 8px',
+                      zIndex: 120,
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+                      <span style={{ fontSize: '0.78rem', fontWeight: 600, color: '#fff' }}>Notifications</span>
+                      <span style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.4)', fontFamily: "'Space Mono',monospace', letterSpacing: '0.08em'" }}>
+                        {notifications.length || 0} ITEMS
+                      </span>
+                    </div>
+                    {notifications.length === 0 ? (
+                      <p style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.4)', padding: '8px 4px' }}>
+                        No recent activity yet.
+                      </p>
+                    ) : (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                        {notifications.map(n => (
+                          <div
+                            key={n.id}
+                            style={{
+                              padding: '8px 9px',
+                              borderRadius: 10,
+                              background: 'rgba(255,255,255,0.02)',
+                              border: '1px solid rgba(255,255,255,0.06)',
+                            }}
+                          >
+                            <p style={{ fontSize: '0.8rem', color: '#fff', marginBottom: 3 }}>
+                              {n.message}
+                            </p>
+                            <p style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.4)', fontFamily: "'Space Mono',monospace" }}>
+                              {n.when}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 {/* User pill */}
                 <div style={{
                   display: 'flex', alignItems: 'center', gap: 9,

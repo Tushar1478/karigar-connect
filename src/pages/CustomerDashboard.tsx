@@ -430,13 +430,12 @@ const CustomerDashboard = () => {
             >
               {CATEGORIES.map((cat, i) => (
                 <CategoryCard
-                  key={cat.label}
+                  count={undefined} key={cat.label}
                   {...cat}
                   active={skillFilter === cat.label}
                   onClick={() => setSkillFilter(skillFilter === cat.label ? 'all' : cat.label)}
                   delay={i * 0.07}
-                  visible={catVisible}
-                />
+                  visible={catVisible}                />
               ))}
             </div>
           </section>
