@@ -33,7 +33,7 @@ function useScrollReveal(threshold = 0.15) {
     obs.observe(el);
     return () => obs.disconnect();
   }, [threshold]);
-  return [ref, visible];
+  return [ref, visible] as const;
 }
 
 function useCountUp(target, duration = 1800, visible) {
@@ -273,25 +273,29 @@ export default function Landing() {
 
   return (
     <div style={{
-      "--bg":          dark ? "#0a0a0f"                  : "#f5f0eb",
-      "--fg":          dark ? "#ffffff"                  : "#1a1208",
-      "--muted":       dark ? "rgba(255,255,255,0.45)"   : "rgba(26,18,8,0.5)",
-      "--glass":       dark ? "rgba(255,255,255,0.04)"   : "rgba(255,255,255,0.7)",
-      "--glass-border":dark ? "rgba(255,255,255,0.08)"   : "rgba(0,0,0,0.09)",
-      "--popup-bg":    dark ? "rgba(14,14,20,0.96)"      : "rgba(255,255,255,0.97)",
-      "--header-bg":   dark ? "rgba(10,10,15,0.78)"      : "rgba(245,240,235,0.88)",
-      "--sec-alt":     dark ? "rgba(255,255,255,0.015)"  : "rgba(0,0,0,0.025)",
       fontFamily: "'Sora',sans-serif",
       background: "var(--bg)",
       color: "var(--fg)",
       minHeight: "100vh",
       transition: "background 0.5s, color 0.5s",
-    }}>
+    } as React.CSSProperties} className={dark ? 'theme-dark' : 'theme-light'}>
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+        .theme-dark {
+          --bg: #0a0a0f; --fg: #ffffff; --muted: rgba(255,255,255,0.45);
+          --glass: rgba(255,255,255,0.04); --glass-border: rgba(255,255,255,0.08);
+          --popup-bg: rgba(14,14,20,0.96); --header-bg: rgba(10,10,15,0.78);
+          --sec-alt: rgba(255,255,255,0.015);
+        }
+        .theme-light {
+          --bg: #f5f0eb; --fg: #1a1208; --muted: rgba(26,18,8,0.5);
+          --glass: rgba(255,255,255,0.7); --glass-border: rgba(0,0,0,0.09);
+          --popup-bg: rgba(255,255,255,0.97); --header-bg: rgba(245,240,235,0.88);
+          --sec-alt: rgba(0,0,0,0.025);
+        }
         @keyframes fadeUp    { from { opacity:0; transform:translateY(32px); } to { opacity:1; transform:translateY(0); } }
         @keyframes glowPulse { 0%,100% { text-shadow:0 0 20px rgba(251,146,60,.5),0 0 60px rgba(251,146,60,.2); } 50% { text-shadow:0 0 40px rgba(251,146,60,.9),0 0 100px rgba(251,146,60,.4); } }
         @keyframes shimmer   { 0% { background-position:-200% center; } 100% { background-position:200% center; } }
