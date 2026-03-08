@@ -287,6 +287,7 @@ const KarigarDashboard = () => {
   const pending     = myBookings.filter(b => b.status === 'pending');
   const active      = myBookings.filter(b => b.status === 'accepted');
   const completed   = myBookings.filter(b => b.status === 'completed');
+  const cancelled   = myBookings.filter(b => b.status === 'cancelled');
 
   const handleAccept  = async (id: string) => { await updateBookingStatus(id, 'accepted');  toast.success('Booking accepted!'); };
   const handleReject  = async (id: string) => { await updateBookingStatus(id, 'rejected');  toast.info('Booking rejected.'); };
