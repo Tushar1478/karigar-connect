@@ -280,8 +280,11 @@ function BookingCard({ b, index, onRate, onCancel, expandedChat, setExpandedChat
   const meta = STATUS_META[b.status] || STATUS_META.pending;
   const [hov, setHov] = useState(false);
   const isCompleted = b.status === 'completed';
-  const showProgress = !['rejected','cancelled'].includes(b.status);
-  const showChat = ['accepted', 'on_the_way', 'completed'].includes(b.status);
+  const isCancelled = b.status === 'cancelled';
+  const isRejected = b.status === 'rejected';
+  const isTerminal = isCancelled || isRejected;
+  const showProgress = true; // always show - cancelled/rejected get their own visual
+  const showChat = !isTerminal && ['accepted', 'on_the_way', 'completed'].includes(b.status);
   const chatOpen = expandedChat === b.id;
 
   return (
