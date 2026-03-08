@@ -1,4 +1,4 @@
-import { CheckCircle, Circle, Send, XCircle } from 'lucide-react';
+import { CheckCircle, Circle, Send } from 'lucide-react';
 
 const STAGES = [
   { key: 'pending', label: 'Request Sent', icon: Send },
@@ -12,23 +12,6 @@ const stageIndex = (status: string) => {
 };
 
 const BookingStatusTracker = ({ status }: { status: string }) => {
-  const isCancelled = status === 'cancelled';
-  const isRejected = status === 'rejected';
-
-  if (isCancelled || isRejected) {
-    return (
-      <div className="flex items-center gap-2 w-full py-2 px-3 rounded-lg" style={{
-        background: isCancelled ? 'rgba(148,163,184,0.08)' : 'rgba(248,113,113,0.08)',
-        border: `1px solid ${isCancelled ? 'rgba(148,163,184,0.2)' : 'rgba(248,113,113,0.2)'}`,
-      }}>
-        <XCircle className="h-4 w-4" style={{ color: isCancelled ? '#94a3b8' : '#f87171' }} />
-        <span className="text-xs font-semibold" style={{ color: isCancelled ? '#94a3b8' : '#f87171' }}>
-          {isCancelled ? 'Cancelled by Customer' : 'Rejected by Karigar'}
-        </span>
-      </div>
-    );
-  }
-
   const current = stageIndex(status);
 
   return (

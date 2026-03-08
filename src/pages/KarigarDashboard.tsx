@@ -184,10 +184,10 @@ function ActiveCard({ b, expandedChat, setExpandedChat, onComplete, index }) {
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
         <button onClick={onComplete} style={{
           display: 'flex', alignItems: 'center', gap: 6,
-          padding: '8px 16px', borderRadius: 10,
-          border: '1.5px solid rgba(52,211,153,0.35)',
+          padding: '8px 16px', borderRadius: 10, border: 'none',
           background: 'rgba(52,211,153,0.15)', color: '#34d399',
           fontWeight: 700, fontSize: '0.82rem',
+          border: '1.5px solid rgba(52,211,153,0.35)',
           cursor: 'pointer', fontFamily: "'Sora',sans-serif", transition: 'all .2s',
         }}
           onMouseEnter={e => { e.currentTarget.style.background = 'rgba(52,211,153,0.25)'; }}
@@ -287,7 +287,6 @@ const KarigarDashboard = () => {
   const pending     = myBookings.filter(b => b.status === 'pending');
   const active      = myBookings.filter(b => b.status === 'accepted');
   const completed   = myBookings.filter(b => b.status === 'completed');
-  const cancelled   = myBookings.filter(b => b.status === 'cancelled');
 
   const handleAccept  = async (id: string) => { await updateBookingStatus(id, 'accepted');  toast.success('Booking accepted!'); };
   const handleReject  = async (id: string) => { await updateBookingStatus(id, 'rejected');  toast.info('Booking rejected.'); };
@@ -396,29 +395,6 @@ const KarigarDashboard = () => {
         <Section label="Completed Jobs" count={completed.length} color="#34d399" emptyMsg="No completed jobs yet.">
           {completed.map((b, i) => <CompletedCard key={b.id} b={b} index={i} />)}
         </Section>
-
-        {/* ── CANCELLED JOBS ── */}
-        {cancelled.length > 0 && (
-          <Section label="Cancelled" count={cancelled.length} color="#94a3b8" emptyMsg="">
-            {cancelled.map((b, i) => (
-              <div key={b.id} style={{
-                background: 'rgba(148,163,184,0.03)', backdropFilter: 'blur(16px)',
-                border: '1px solid rgba(148,163,184,0.12)',
-                borderRadius: 18, padding: '16px 20px',
-                display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
-                animation: `cardFadeUp .5s cubic-bezier(.22,1,.36,1) ${i * 0.07}s both`,
-              }}>
-                <div>
-                  <h3 style={{ fontWeight: 600, fontSize: '0.95rem', color: 'rgba(255,255,255,0.5)', marginBottom: 3 }}>{b.customer_name}</h3>
-                  <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.25)', fontWeight: 300 }}>{b.date} · {b.time}</span>
-                </div>
-                <span style={{ background: 'rgba(148,163,184,0.1)', border: '1px solid rgba(148,163,184,0.2)', color: '#94a3b8', fontSize: '0.65rem', fontWeight: 700, padding: '3px 9px', borderRadius: 999 }}>
-                  Cancelled
-                </span>
-              </div>
-            ))}
-          </Section>
-        )}
 
       </main>
     </div>

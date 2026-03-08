@@ -49,12 +49,6 @@ export const BookingProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const updateBookingStatus = async (id: string, status: string) => {
-    // Prevent any status change on cancelled or completed bookings
-    const existing = bookings.find(b => b.id === id);
-    if (existing && (existing.status === 'cancelled' || existing.status === 'completed')) {
-      console.warn(`Cannot update booking ${id}: already ${existing.status}`);
-      return;
-    }
     const { error } = await supabase.from('bookings').update({ status }).eq('id', id);
     if (error) {
       console.error('Failed to update booking status:', error);

@@ -64,7 +64,7 @@ function useScrollReveal(threshold = 0.1) {
     obs.observe(el);
     return () => obs.disconnect();
   }, [threshold]);
-  return [ref, visible] as const;
+  return [ref, visible];
 }
 
 /* ─── CATEGORY CARD (big) ───────────────────────────── */
