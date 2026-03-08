@@ -273,20 +273,12 @@ export default function Landing() {
 
   return (
     <div style={{
-      "--bg":          dark ? "#0a0a0f"                  : "#f5f0eb",
-      "--fg":          dark ? "#ffffff"                  : "#1a1208",
-      "--muted":       dark ? "rgba(255,255,255,0.45)"   : "rgba(26,18,8,0.5)",
-      "--glass":       dark ? "rgba(255,255,255,0.04)"   : "rgba(255,255,255,0.7)",
-      "--glass-border":dark ? "rgba(255,255,255,0.08)"   : "rgba(0,0,0,0.09)",
-      "--popup-bg":    dark ? "rgba(14,14,20,0.96)"      : "rgba(255,255,255,0.97)",
-      "--header-bg":   dark ? "rgba(10,10,15,0.78)"      : "rgba(245,240,235,0.88)",
-      "--sec-alt":     dark ? "rgba(255,255,255,0.015)"  : "rgba(0,0,0,0.025)",
       fontFamily: "'Sora',sans-serif",
       background: "var(--bg)",
       color: "var(--fg)",
       minHeight: "100vh",
       transition: "background 0.5s, color 0.5s",
-    }}>
+    } as React.CSSProperties} className={dark ? 'theme-dark' : 'theme-light'}>
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
