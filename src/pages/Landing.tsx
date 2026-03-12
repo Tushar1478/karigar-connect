@@ -286,7 +286,7 @@ export default function Landing() {
       color: "var(--fg)",
       minHeight: "100vh",
       transition: "background 0.5s, color 0.5s",
-    }}>
+    } as React.CSSProperties}>
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
