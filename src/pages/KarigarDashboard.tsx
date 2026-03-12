@@ -184,7 +184,7 @@ function ActiveCard({ b, expandedChat, setExpandedChat, onComplete, index }) {
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
         <button onClick={onComplete} style={{
           display: 'flex', alignItems: 'center', gap: 6,
-          padding: '8px 16px', borderRadius: 10, border: 'none',
+          padding: '8px 16px', borderRadius: 10,
           background: 'rgba(52,211,153,0.15)', color: '#34d399',
           fontWeight: 700, fontSize: '0.82rem',
           border: '1.5px solid rgba(52,211,153,0.35)',

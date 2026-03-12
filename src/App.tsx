@@ -15,6 +15,7 @@ import KarigarDashboard from "./pages/KarigarDashboard";
 import KarigarProfileEdit from "./pages/KarigarProfileEdit";
 import CustomerProfile from "./pages/CustomerProfile";
 import NotFound from "./pages/NotFound";
+import AIChatbot from "./components/AIChatbot";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,7 @@ const App = () => (
               <Route path="/customer-profile" element={<CustomerProfile />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
+            <AIChatbot />
           </BrowserRouter>
         </TooltipProvider>
       </BookingProvider>
