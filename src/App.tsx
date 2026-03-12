@@ -15,6 +15,7 @@ import KarigarDashboard from "./pages/KarigarDashboard";
 import KarigarProfileEdit from "./pages/KarigarProfileEdit";
 import CustomerProfile from "./pages/CustomerProfile";
 import NotFound from "./pages/NotFound";
+import AIChatbot from "./components/AIChatbot";
 
 const queryClient = new QueryClient();
 
