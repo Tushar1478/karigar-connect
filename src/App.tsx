@@ -40,6 +40,7 @@ const App = () => (
               <Route path="/customer-profile" element={<CustomerProfile />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
+            <AIChatbot />
           </BrowserRouter>
         </TooltipProvider>
       </BookingProvider>
