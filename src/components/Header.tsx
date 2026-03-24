@@ -325,7 +325,7 @@ const Header = () => {
 
                 {/* Logout */}
                 <button className="logout-btn" onClick={handleLogout}>
-                  <LogOut size={14} /> Logout
+                  <LogOut size={14} /> {t('logout')}
                 </button>
               </div>
 
