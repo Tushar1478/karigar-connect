@@ -236,6 +236,7 @@ const Header = () => {
 
               {/* ── DESKTOP RIGHT ── */}
               <div style={{ display: 'none', alignItems: 'center', gap: 12, position: 'relative' }} className="md-right">
+                <LanguageSelector />
                 {/* Notifications */}
                 <button
                   type="button"
