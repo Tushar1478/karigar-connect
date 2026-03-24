@@ -47,6 +47,7 @@ const App = () => (
         </TooltipProvider>
       </BookingProvider>
     </AuthProvider>
+    </LanguageProvider>
   </QueryClientProvider>
 );
 

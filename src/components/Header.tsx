@@ -84,14 +84,14 @@ const Header = () => {
     : '/';
 
   const customerLinks = [
-    { label: 'Home',        path: '/customer' },
-    { label: 'My Bookings', path: '/my-bookings' },
-    { label: 'Profile',     path: '/customer-profile' },
+    { label: t('home'),        path: '/customer' },
+    { label: t('my_bookings'), path: '/my-bookings' },
+    { label: t('profile'),     path: '/customer-profile' },
   ];
 
   const karigarLinks = [
-    { label: 'Dashboard', path: '/karigar-dashboard' },
-    { label: 'My Profile', path: '/karigar-profile-edit' },
+    { label: t('dashboard'), path: '/karigar-dashboard' },
+    { label: t('my_profile'), path: '/karigar-profile-edit' },
   ];
 
   const navLinks = user?.role === 'customer' ? customerLinks : user?.role === 'karigar' ? karigarLinks : [];
