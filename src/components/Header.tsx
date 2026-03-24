@@ -3,10 +3,13 @@ import { useBookings } from '@/contexts/BookingContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { LogOut, User, Menu, X, Bell } from 'lucide-react';
 import { useState, useEffect, useMemo } from 'react';
+import LanguageSelector from '@/components/LanguageSelector';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Header = () => {
   const { user, logout, isAuthenticated } = useAuth();
   const { bookings } = useBookings();
+  const { t } = useLanguage();
   const navigate  = useNavigate();
   const location  = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -81,14 +84,14 @@ const Header = () => {
     : '/';
 
   const customerLinks = [
-    { label: 'Home',        path: '/customer' },
-    { label: 'My Bookings', path: '/my-bookings' },
-    { label: 'Profile',     path: '/customer-profile' },
+    { label: t('home'),        path: '/customer' },
+    { label: t('my_bookings'), path: '/my-bookings' },
+    { label: t('profile'),     path: '/customer-profile' },
   ];
 
   const karigarLinks = [
-    { label: 'Dashboard', path: '/karigar-dashboard' },
-    { label: 'My Profile', path: '/karigar-profile-edit' },
+    { label: t('dashboard'), path: '/karigar-dashboard' },
+    { label: t('my_profile'), path: '/karigar-profile-edit' },
   ];
 
   const navLinks = user?.role === 'customer' ? customerLinks : user?.role === 'karigar' ? karigarLinks : [];
@@ -233,6 +236,7 @@ const Header = () => {
 
               {/* ── DESKTOP RIGHT ── */}
               <div style={{ display: 'none', alignItems: 'center', gap: 12, position: 'relative' }} className="md-right">
+                <LanguageSelector />
                 {/* Notifications */}
                 <button
                   type="button"
@@ -321,7 +325,7 @@ const Header = () => {
 
                 {/* Logout */}
                 <button className="logout-btn" onClick={handleLogout}>
-                  <LogOut size={14} /> Logout
+                  <LogOut size={14} /> {t('logout')}
                 </button>
               </div>
 
