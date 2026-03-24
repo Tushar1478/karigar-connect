@@ -9,6 +9,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 const Header = () => {
   const { user, logout, isAuthenticated } = useAuth();
   const { bookings } = useBookings();
+  const { t } = useLanguage();
   const navigate  = useNavigate();
   const location  = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
