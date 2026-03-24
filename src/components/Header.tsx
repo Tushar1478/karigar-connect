@@ -3,6 +3,8 @@ import { useBookings } from '@/contexts/BookingContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { LogOut, User, Menu, X, Bell } from 'lucide-react';
 import { useState, useEffect, useMemo } from 'react';
+import LanguageSelector from '@/components/LanguageSelector';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Header = () => {
   const { user, logout, isAuthenticated } = useAuth();
