@@ -1,15 +1,20 @@
-import { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send, Loader2, Bot, User } from 'lucide-react';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { MessageCircle, X, Send, Loader2, Bot, User, Mic, MicOff, Volume2 } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 type Msg = { role: 'user' | 'assistant'; content: string };
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
 
+// Speech recognition language codes
+const SPEECH_LANG_MAP: Record<string, string> = {
+  en: 'en-IN', hi: 'hi-IN', pa: 'pa-IN', bn: 'bn-IN',
+  or: 'or-IN', kn: 'kn-IN', ta: 'ta-IN', te: 'te-IN',
+  mr: 'mr-IN', gu: 'gu-IN',
+};
+
 async function streamChat({
-  messages,
-  onDelta,
-  onDone,
-  onError,
+  messages, onDelta, onDone, onError,
 }: {
   messages: Msg[];
   onDelta: (text: string) => void;
@@ -30,7 +35,6 @@ async function streamChat({
     onError(errData.error || 'Something went wrong');
     return;
   }
-
   if (!resp.body) { onError('No response body'); return; }
 
   const reader = resp.body.getReader();
@@ -41,7 +45,6 @@ async function streamChat({
     const { done, value } = await reader.read();
     if (done) break;
     buf += decoder.decode(value, { stream: true });
-
     let idx: number;
     while ((idx = buf.indexOf('\n')) !== -1) {
       let line = buf.slice(0, idx);
@@ -54,29 +57,71 @@ async function streamChat({
         const parsed = JSON.parse(json);
         const content = parsed.choices?.[0]?.delta?.content;
         if (content) onDelta(content);
-      } catch { /* partial json, skip */ }
+      } catch { /* partial json */ }
     }
   }
   onDone();
 }
 
-const QUICK_PROMPTS = [
-  '🔧 Find an electrician',
-  '🚿 Plumbing help',
-  '📋 How to book?',
-  '💰 Pricing info',
-];
-
 const AIChatbot = () => {
+  const { t, lang } = useLanguage();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [ttsEnabled, setTtsEnabled] = useState(true);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const recognitionRef = useRef<any>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  // TTS for assistant messages
+  const speak = useCallback((text: string) => {
+    if (!ttsEnabled || !('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = SPEECH_LANG_MAP[lang] || 'en-IN';
+    utterance.rate = 0.95;
+    window.speechSynthesis.speak(utterance);
+  }, [ttsEnabled, lang]);
+
+  // Speech recognition
+  const toggleListening = useCallback(() => {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert('Speech recognition is not supported in this browser.');
+      return;
+    }
+
+    if (isListening && recognitionRef.current) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = SPEECH_LANG_MAP[lang] || 'en-IN';
+    recognition.interimResults = true;
+    recognition.continuous = false;
+    recognitionRef.current = recognition;
+
+    recognition.onresult = (event: any) => {
+      let transcript = '';
+      for (let i = 0; i < event.results.length; i++) {
+        transcript += event.results[i][0].transcript;
+      }
+      setInput(transcript);
+    };
+
+    recognition.onend = () => setIsListening(false);
+    recognition.onerror = () => setIsListening(false);
+
+    recognition.start();
+    setIsListening(true);
+  }, [isListening, lang]);
 
   const send = async (text: string) => {
     if (!text.trim() || loading) return;
@@ -100,7 +145,10 @@ const AIChatbot = () => {
           return [...prev, { role: 'assistant', content: assistantSoFar }];
         });
       },
-      onDone: () => setLoading(false),
+      onDone: () => {
+        setLoading(false);
+        if (assistantSoFar) speak(assistantSoFar);
+      },
       onError: (msg) => {
         setMessages(prev => [...prev, { role: 'assistant', content: `⚠️ ${msg}` }]);
         setLoading(false);
@@ -108,9 +156,12 @@ const AIChatbot = () => {
     });
   };
 
+  const quickPrompts = [
+    t('find_electrician'), t('plumbing_help'), t('how_to_book'), t('pricing_info'),
+  ];
+
   return (
     <>
-      {/* FAB */}
       {!open && (
         <button
           onClick={() => setOpen(true)}
@@ -130,12 +181,11 @@ const AIChatbot = () => {
         </button>
       )}
 
-      {/* Chat Panel */}
       {open && (
         <div style={{
           position: 'fixed', bottom: 24, right: 24, zIndex: 9999,
           width: 380, maxWidth: 'calc(100vw - 32px)',
-          height: 520, maxHeight: 'calc(100vh - 48px)',
+          height: 540, maxHeight: 'calc(100vh - 48px)',
           borderRadius: 20, overflow: 'hidden',
           background: 'rgba(10,10,15,0.97)',
           border: '1px solid rgba(255,255,255,0.08)',
@@ -158,8 +208,20 @@ const AIChatbot = () => {
             </div>
             <div style={{ flex: 1 }}>
               <p style={{ fontSize: '0.85rem', fontWeight: 700, color: '#fff', margin: 0 }}>KarigarHub AI</p>
-              <p style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.4)', margin: 0 }}>Your smart assistant</p>
+              <p style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.4)', margin: 0 }}>
+                {isListening ? '🎤 Listening...' : t('chatbot_subtitle')}
+              </p>
             </div>
+            {/* TTS toggle */}
+            <button onClick={() => { setTtsEnabled(e => !e); window.speechSynthesis.cancel(); }} style={{
+              background: ttsEnabled ? 'rgba(251,146,60,0.15)' : 'rgba(255,255,255,0.06)',
+              border: `1px solid ${ttsEnabled ? 'rgba(251,146,60,0.3)' : 'rgba(255,255,255,0.1)'}`,
+              borderRadius: 8, width: 30, height: 30, cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: ttsEnabled ? '#fb923c' : 'rgba(255,255,255,0.4)',
+            }} title={ttsEnabled ? 'Disable voice' : 'Enable voice'}>
+              <Volume2 size={13} />
+            </button>
             <button onClick={() => setOpen(false)} style={{
               background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
               borderRadius: 8, width: 30, height: 30, cursor: 'pointer',
@@ -175,27 +237,24 @@ const AIChatbot = () => {
               <div style={{ textAlign: 'center', padding: '24px 12px' }}>
                 <div style={{ fontSize: '2rem', marginBottom: 8 }}>🤖</div>
                 <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.85rem', fontWeight: 500, margin: '0 0 4px' }}>
-                  Namaste! I'm KarigarHub AI
+                  {t('chatbot_greeting')}
                 </p>
                 <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.75rem', margin: '0 0 16px' }}>
-                  Ask me anything about our services
+                  {t('chatbot_subtitle')}
                 </p>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, justifyContent: 'center' }}>
-                  {QUICK_PROMPTS.map(p => (
+                  {quickPrompts.map(p => (
                     <button key={p} onClick={() => send(p)}
                       style={{
                         padding: '6px 12px', borderRadius: 999,
                         background: 'rgba(255,255,255,0.05)',
                         border: '1px solid rgba(255,255,255,0.1)',
                         color: 'rgba(255,255,255,0.6)', fontSize: '0.72rem',
-                        cursor: 'pointer', fontFamily: "'Sora',sans-serif",
-                        transition: 'all .2s',
+                        cursor: 'pointer', fontFamily: "'Sora',sans-serif", transition: 'all .2s',
                       }}
                       onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(251,146,60,0.4)'; e.currentTarget.style.color = '#fb923c'; }}
                       onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = 'rgba(255,255,255,0.6)'; }}
-                    >
-                      {p}
-                    </button>
+                    >{p}</button>
                   ))}
                 </div>
               </div>
@@ -228,10 +287,19 @@ const AIChatbot = () => {
                     fontSize: '0.82rem', lineHeight: 1.55, margin: 0,
                     color: m.role === 'user' ? '#fff' : 'rgba(255,255,255,0.85)',
                     whiteSpace: 'pre-wrap',
-                  }}>
-                    {m.content}
-                  </p>
+                  }}>{m.content}</p>
                 </div>
+                {/* Speak button for assistant messages */}
+                {m.role === 'assistant' && (
+                  <button onClick={() => speak(m.content)} style={{
+                    width: 22, height: 22, borderRadius: '50%', border: 'none', flexShrink: 0,
+                    background: 'rgba(255,255,255,0.06)', cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: 'rgba(255,255,255,0.4)', marginTop: 4,
+                  }} title="Listen">
+                    <Volume2 size={10} />
+                  </button>
+                )}
               </div>
             ))}
 
@@ -253,7 +321,6 @@ const AIChatbot = () => {
                 </div>
               </div>
             )}
-
             <div ref={bottomRef} />
           </div>
 
@@ -263,11 +330,29 @@ const AIChatbot = () => {
             borderTop: '1px solid rgba(255,255,255,0.08)',
             background: 'rgba(255,255,255,0.02)',
           }}>
+            {/* Mic button */}
+            <button
+              onClick={toggleListening}
+              style={{
+                width: 38, height: 38, borderRadius: 10, flexShrink: 0, border: 'none',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                cursor: 'pointer',
+                background: isListening
+                  ? 'linear-gradient(135deg, #ef4444, #f87171)'
+                  : 'rgba(255,255,255,0.05)',
+                color: isListening ? '#fff' : 'rgba(255,255,255,0.4)',
+                transition: 'all .2s',
+                animation: isListening ? 'pulse-mic 1.5s ease-in-out infinite' : 'none',
+              }}
+              title={isListening ? t('stop_recording') : t('voice_input')}
+            >
+              {isListening ? <MicOff size={15} /> : <Mic size={15} />}
+            </button>
             <input
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send(input)}
-              placeholder="Ask anything..."
+              placeholder={t('ask_anything')}
               style={{
                 flex: 1, height: 38,
                 background: 'rgba(255,255,255,0.05)',
@@ -300,7 +385,13 @@ const AIChatbot = () => {
         </div>
       )}
 
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      <style>{`
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse-mic {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); }
+          50% { box-shadow: 0 0 0 8px rgba(239,68,68,0); }
+        }
+      `}</style>
     </>
   );
 };
