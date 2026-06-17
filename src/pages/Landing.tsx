@@ -631,6 +631,37 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* ── KARIGAR CTA STRIP ── */}
+      <section style={{ background:"#2D1F0E", padding:"56px 16px" }}>
+        <div style={{ maxWidth:1100, margin:"0 auto", display:"flex", flexWrap:"wrap", alignItems:"center", justifyContent:"space-between", gap:24 }}>
+          <div>
+            <span style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.64rem", letterSpacing:"0.22em", textTransform:"uppercase", color:"#F4722B", display:"block", marginBottom:10 }}>For Workers</span>
+            <h2 style={{ fontSize:"clamp(1.4rem,3.5vw,1.9rem)", fontWeight:800, color:"#FFFAF6", letterSpacing:"-0.02em", marginBottom:8 }}>
+              Are you a karigar? <span style={{ color:"#F4722B" }}>Start earning today.</span>
+            </h2>
+            <p style={{ color:"#E8D8C4", fontSize:"0.9rem", fontWeight:300, maxWidth:520 }}>
+              Join 240+ verified workers getting steady jobs through KarigarHub. Free to sign up. Get paid fast.
+            </p>
+          </div>
+          <button
+            onClick={() => navigate("/signup/karigar")}
+            style={{
+              background:"#F4722B", color:"#FFFAF6", fontWeight:700,
+              border:"none", cursor:"pointer", borderRadius:12,
+              padding:"14px 28px", fontSize:"0.95rem", fontFamily:"'Sora',sans-serif",
+              display:"inline-flex", alignItems:"center", gap:8,
+              boxShadow:"0 8px 24px rgba(244,114,43,0.35)",
+              transition:"transform .2s, box-shadow .2s",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 12px 30px rgba(244,114,43,0.5)"; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 8px 24px rgba(244,114,43,0.35)"; }}
+          >
+            <Wrench size={18}/> Join as Karigar <ArrowRight size={16}/>
+          </button>
+        </div>
+      </section>
+
+
       {/* ── FOOTER ── */}
       <footer style={{ borderTop:"1px solid var(--glass-border)", padding:"28px 16px", textAlign:"center", color:"var(--muted)", fontSize:"0.8rem", background:"var(--bg)", fontWeight:300, transition:"background .5s" }}>
         © {new Date().getFullYear()}{" "}
