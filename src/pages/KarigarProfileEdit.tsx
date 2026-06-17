@@ -10,7 +10,7 @@ function GlassInput({ label, value, onChange, type = 'text', colSpan = false }) 
   const [focused, setFocused] = useState(false);
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 6, gridColumn: colSpan ? 'span 2' : 'span 1' }}>
-      <label style={{ fontSize: '0.72rem', fontWeight: 600, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+      <label style={{ fontSize: '0.72rem', fontWeight: 600, color: '#6B5744', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
         {label}
       </label>
       <input
@@ -20,11 +20,11 @@ function GlassInput({ label, value, onChange, type = 'text', colSpan = false }) 
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         style={{
-          background: 'rgba(255,255,255,0.05)',
+          background: '#FFFFFF',
           border: `1.5px solid ${focused ? 'rgba(251,146,60,0.55)' : 'rgba(255,255,255,0.1)'}`,
           borderRadius: 12,
           padding: '10px 14px',
-          color: '#fff',
+          color: '#2D1F0E',
           fontSize: '0.9rem',
           fontFamily: "'Sora', sans-serif",
           outline: 'none',
@@ -42,7 +42,7 @@ function GlassTextarea({ label, value, onChange, rows = 3 }) {
   const [focused, setFocused] = useState(false);
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 6, gridColumn: 'span 2' }}>
-      <label style={{ fontSize: '0.72rem', fontWeight: 600, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+      <label style={{ fontSize: '0.72rem', fontWeight: 600, color: '#6B5744', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
         {label}
       </label>
       <textarea
@@ -52,11 +52,11 @@ function GlassTextarea({ label, value, onChange, rows = 3 }) {
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         style={{
-          background: 'rgba(255,255,255,0.05)',
+          background: '#FFFFFF',
           border: `1.5px solid ${focused ? 'rgba(251,146,60,0.55)' : 'rgba(255,255,255,0.1)'}`,
           borderRadius: 12,
           padding: '10px 14px',
-          color: '#fff',
+          color: '#2D1F0E',
           fontSize: '0.9rem',
           fontFamily: "'Sora', sans-serif",
           outline: 'none',
@@ -155,10 +155,10 @@ const KarigarProfileEdit = () => {
   };
 
   if (!karigar) return (
-    <div style={{ minHeight: '100vh', background: '#0a0a0f', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{ minHeight: '100vh', background: '#FFFAF6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
         <Loader2 size={32} color="#fb923c" style={{ animation: 'spin 1s linear infinite' }} />
-        <p style={{ color: 'rgba(255,255,255,0.4)', fontFamily: "'Sora',sans-serif" }}>Loading...</p>
+        <p style={{ color: '#6B5744', fontFamily: "'Sora',sans-serif" }}>Loading...</p>
       </div>
     </div>
   );
@@ -166,7 +166,7 @@ const KarigarProfileEdit = () => {
   const initials = form.name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'K';
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0a0a0f', fontFamily: "'Sora', sans-serif", color: '#fff' }}>
+    <div style={{ minHeight: '100vh', background: '#FFFAF6', fontFamily: "'Sora', sans-serif", color: '#2D1F0E' }}>
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
@@ -203,9 +203,9 @@ const KarigarProfileEdit = () => {
 
         {/* ── PHOTO CARD ── */}
         <div className="fu-2" style={{
-          background: 'rgba(255,255,255,0.03)',
+          background: '#FFFFFF',
           backdropFilter: 'blur(20px)',
-          border: '1px solid rgba(255,255,255,0.08)',
+          border: '1px solid #E8E0D8',
           borderRadius: 24, padding: 28, marginBottom: 24,
         }}>
           <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.6rem', letterSpacing: '0.18em', color: '#fb923c', textTransform: 'uppercase', display: 'block', marginBottom: 20 }}>Profile Photo</span>
@@ -242,7 +242,7 @@ const KarigarProfileEdit = () => {
                   position: 'absolute', bottom: -4, right: -4,
                   width: 28, height: 28, borderRadius: '50%',
                   background: 'linear-gradient(135deg,#f97316,#fb923c)',
-                  border: '2px solid #0a0a0f',
+                  border: '2px solid #FFFFFF',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   cursor: 'pointer',
                 }}
@@ -258,7 +258,7 @@ const KarigarProfileEdit = () => {
               {uploading ? (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                   <Loader2 size={12} color="#fb923c" style={{ animation: 'spin 1s linear infinite' }} />
-                  <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)' }}>Uploading...</span>
+                  <span style={{ fontSize: '0.75rem', color: '#6B5744' }}>Uploading...</span>
                 </div>
               ) : (
                 <button
@@ -281,15 +281,15 @@ const KarigarProfileEdit = () => {
 
         {/* ── FORM CARD ── */}
         <div className="fu-2" style={{
-          background: 'rgba(255,255,255,0.03)',
+          background: '#FFFFFF',
           backdropFilter: 'blur(20px)',
-          border: '1px solid rgba(255,255,255,0.08)',
+          border: '1px solid #E8E0D8',
           borderRadius: 24, padding: 28, marginBottom: 24,
         }}>
           <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.6rem', letterSpacing: '0.18em', color: '#fb923c', textTransform: 'uppercase', display: 'block', marginBottom: 20 }}>Details</span>
 
           {/* Divider */}
-          <div style={{ height: 1, background: 'linear-gradient(90deg,transparent,rgba(255,255,255,0.07),transparent)', marginBottom: 20 }} />
+          <div style={{ height: 1, background: 'linear-gradient(90deg,transparent,#E8E0D8,transparent)', marginBottom: 20 }} />
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
             <GlassInput label="Name" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
@@ -311,7 +311,7 @@ const KarigarProfileEdit = () => {
                 : 'linear-gradient(90deg,#f97316,#fb923c,#fdba74,#fb923c,#f97316)',
               backgroundSize: '200% auto',
               animation: saving ? 'none' : 'shimmer 3s linear infinite',
-              color: saving ? 'rgba(255,255,255,0.25)' : '#0a0a0f',
+              color: saving ? '#6B5744' : '#0a0a0f',
               fontWeight: 700, fontSize: '0.9rem',
               cursor: saving ? 'not-allowed' : 'pointer',
               fontFamily: "'Sora',sans-serif",
@@ -329,9 +329,9 @@ const KarigarProfileEdit = () => {
 
         {/* ── PORTFOLIO CARD ── */}
         <div className="fu-3" style={{
-          background: 'rgba(255,255,255,0.03)',
+          background: '#FFFFFF',
           backdropFilter: 'blur(20px)',
-          border: '1px solid rgba(255,255,255,0.08)',
+          border: '1px solid #E8E0D8',
           borderRadius: 24, padding: 28,
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
@@ -341,7 +341,7 @@ const KarigarProfileEdit = () => {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               {portfolioImages.length > 0 && (
-                <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.65rem', color: 'rgba(255,255,255,0.3)', letterSpacing: '0.1em' }}>
+                <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.65rem', color: '#6B5744', letterSpacing: '0.1em' }}>
                   {portfolioImages.length} PHOTOS
                 </span>
               )}
@@ -371,15 +371,15 @@ const KarigarProfileEdit = () => {
           </div>
 
           {/* Divider */}
-          <div style={{ height: 1, background: 'linear-gradient(90deg,transparent,rgba(255,255,255,0.07),transparent)', marginBottom: 20 }} />
+          <div style={{ height: 1, background: 'linear-gradient(90deg,transparent,#E8E0D8,transparent)', marginBottom: 20 }} />
 
           {portfolioImages.length === 0 ? (
             <div
               onClick={() => portfolioInputRef.current?.click()}
               style={{
                 padding: '48px 24px', textAlign: 'center',
-                background: 'rgba(255,255,255,0.02)',
-                border: '1.5px dashed rgba(255,255,255,0.1)',
+                background: '#F7F2ED',
+                border: '1.5px dashed #E8E0D8',
                 borderRadius: 16, cursor: 'pointer',
                 transition: 'border-color .2s, background .2s',
               }}
@@ -387,7 +387,7 @@ const KarigarProfileEdit = () => {
               onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(255,255,255,0.1)'; (e.currentTarget as HTMLDivElement).style.background = 'rgba(255,255,255,0.02)'; }}
             >
               <div style={{ fontSize: '2rem', marginBottom: 12 }}>🖼️</div>
-              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.875rem', fontWeight: 300, marginBottom: 4 }}>No portfolio images yet.</p>
+              <p style={{ color: '#6B5744', fontSize: '0.875rem', fontWeight: 300, marginBottom: 4 }}>No portfolio images yet.</p>
               <p style={{ color: 'rgba(251,146,60,0.5)', fontSize: '0.78rem', fontWeight: 600 }}>Click to upload your previous work</p>
             </div>
           ) : (

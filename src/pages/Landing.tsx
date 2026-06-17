@@ -262,7 +262,7 @@ function MapPinItem({ top, left, name, delay }) {
 ══════════════════════════════════════════════════════ */
 export default function Landing() {
   const navigate = useNavigate();
-  const [dark, setDark] = useState(true);
+  const [dark, setDark] = useState(false);
   const [logoSpin, setLogoSpin] = useState(true);
   const [statsRef, statsVisible] = useScrollReveal(0.3);
   const [howRef,  howVisible]  = useScrollReveal(0.1);
@@ -273,14 +273,14 @@ export default function Landing() {
 
   return (
     <div style={{
-      "--bg":          dark ? "#0a0a0f"                  : "#f5f0eb",
-      "--fg":          dark ? "#ffffff"                  : "#1a1208",
-      "--muted":       dark ? "rgba(255,255,255,0.45)"   : "rgba(26,18,8,0.5)",
-      "--glass":       dark ? "rgba(255,255,255,0.04)"   : "rgba(255,255,255,0.7)",
-      "--glass-border":dark ? "rgba(255,255,255,0.08)"   : "rgba(0,0,0,0.09)",
-      "--popup-bg":    dark ? "rgba(14,14,20,0.96)"      : "rgba(255,255,255,0.97)",
-      "--header-bg":   dark ? "rgba(10,10,15,0.78)"      : "rgba(245,240,235,0.88)",
-      "--sec-alt":     dark ? "rgba(255,255,255,0.015)"  : "rgba(0,0,0,0.025)",
+      "--bg":          dark ? "#0a0a0f"                  : "#FFFAF6",
+      "--fg":          dark ? "#ffffff"                  : "#2D1F0E",
+      "--muted":       dark ? "rgba(255,255,255,0.45)"   : "#6B5744",
+      "--glass":       dark ? "rgba(255,255,255,0.04)"   : "#FFFFFF",
+      "--glass-border":dark ? "rgba(255,255,255,0.08)"   : "#E8E0D8",
+      "--popup-bg":    dark ? "rgba(14,14,20,0.96)"      : "#FFFFFF",
+      "--header-bg":   dark ? "rgba(10,10,15,0.78)"      : "rgba(255,250,246,0.92)",
+      "--sec-alt":     dark ? "rgba(255,255,255,0.015)"  : "#F7F2ED",
       fontFamily: "'Sora',sans-serif",
       background: "var(--bg)",
       color: "var(--fg)",
@@ -416,8 +416,8 @@ export default function Landing() {
           transition:"background .5s",
         }} />
 
-        {/* Floating sparks */}
-        {[...Array(14)].map((_,i) => (
+        {/* Floating sparks - dark mode only */}
+        {dark && [...Array(14)].map((_,i) => (
           <div key={i} style={{
             position:"absolute",
             bottom: `${8 + (i*7)%40}%`,
@@ -461,6 +461,23 @@ export default function Landing() {
         </div>
 
         <div style={{ position:"absolute", bottom:0, left:0, right:0, height:120, background:"linear-gradient(to bottom,transparent,var(--bg))", transition:"background .5s" }} />
+      </section>
+
+      {/* ── SOCIAL PROOF STRIP ── */}
+      <section style={{ background:"#2D1F0E", padding:"32px 16px" }}>
+        <div style={{ maxWidth:1100, margin:"0 auto", display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:24, textAlign:"center" }}>
+          {[
+            { num:"2,400+", label:"Jobs completed" },
+            { num:"240+",   label:"Verified karigars" },
+            { num:"4.8★",   label:"Average rating" },
+            { num:"30 min", label:"Avg response time" },
+          ].map(s => (
+            <div key={s.label}>
+              <p style={{ fontFamily:"'Space Mono',monospace", fontSize:"clamp(1.4rem,3vw,1.9rem)", fontWeight:800, color:"#F4722B", lineHeight:1 }}>{s.num}</p>
+              <p style={{ color:"#E8D8C4", fontSize:"0.78rem", marginTop:6, fontWeight:400, letterSpacing:"0.04em" }}>{s.label}</p>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* ── STATS ── */}
@@ -613,6 +630,37 @@ export default function Landing() {
           </Reveal>
         </div>
       </section>
+
+      {/* ── KARIGAR CTA STRIP ── */}
+      <section style={{ background:"#2D1F0E", padding:"56px 16px" }}>
+        <div style={{ maxWidth:1100, margin:"0 auto", display:"flex", flexWrap:"wrap", alignItems:"center", justifyContent:"space-between", gap:24 }}>
+          <div>
+            <span style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.64rem", letterSpacing:"0.22em", textTransform:"uppercase", color:"#F4722B", display:"block", marginBottom:10 }}>For Workers</span>
+            <h2 style={{ fontSize:"clamp(1.4rem,3.5vw,1.9rem)", fontWeight:800, color:"#FFFAF6", letterSpacing:"-0.02em", marginBottom:8 }}>
+              Are you a karigar? <span style={{ color:"#F4722B" }}>Start earning today.</span>
+            </h2>
+            <p style={{ color:"#E8D8C4", fontSize:"0.9rem", fontWeight:300, maxWidth:520 }}>
+              Join 240+ verified workers getting steady jobs through KarigarHub. Free to sign up. Get paid fast.
+            </p>
+          </div>
+          <button
+            onClick={() => navigate("/signup/karigar")}
+            style={{
+              background:"#F4722B", color:"#FFFAF6", fontWeight:700,
+              border:"none", cursor:"pointer", borderRadius:12,
+              padding:"14px 28px", fontSize:"0.95rem", fontFamily:"'Sora',sans-serif",
+              display:"inline-flex", alignItems:"center", gap:8,
+              boxShadow:"0 8px 24px rgba(244,114,43,0.35)",
+              transition:"transform .2s, box-shadow .2s",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 12px 30px rgba(244,114,43,0.5)"; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 8px 24px rgba(244,114,43,0.35)"; }}
+          >
+            <Wrench size={18}/> Join as Karigar <ArrowRight size={16}/>
+          </button>
+        </div>
+      </section>
+
 
       {/* ── FOOTER ── */}
       <footer style={{ borderTop:"1px solid var(--glass-border)", padding:"28px 16px", textAlign:"center", color:"var(--muted)", fontSize:"0.8rem", background:"var(--bg)", fontWeight:300, transition:"background .5s" }}>
