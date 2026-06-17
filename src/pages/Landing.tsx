@@ -262,7 +262,7 @@ function MapPinItem({ top, left, name, delay }) {
 ══════════════════════════════════════════════════════ */
 export default function Landing() {
   const navigate = useNavigate();
-  const [dark, setDark] = useState(true);
+  const [dark, setDark] = useState(false);
   const [logoSpin, setLogoSpin] = useState(true);
   const [statsRef, statsVisible] = useScrollReveal(0.3);
   const [howRef,  howVisible]  = useScrollReveal(0.1);
@@ -273,14 +273,14 @@ export default function Landing() {
 
   return (
     <div style={{
-      "--bg":          dark ? "#0a0a0f"                  : "#f5f0eb",
-      "--fg":          dark ? "#ffffff"                  : "#1a1208",
-      "--muted":       dark ? "rgba(255,255,255,0.45)"   : "rgba(26,18,8,0.5)",
-      "--glass":       dark ? "rgba(255,255,255,0.04)"   : "rgba(255,255,255,0.7)",
-      "--glass-border":dark ? "rgba(255,255,255,0.08)"   : "rgba(0,0,0,0.09)",
-      "--popup-bg":    dark ? "rgba(14,14,20,0.96)"      : "rgba(255,255,255,0.97)",
-      "--header-bg":   dark ? "rgba(10,10,15,0.78)"      : "rgba(245,240,235,0.88)",
-      "--sec-alt":     dark ? "rgba(255,255,255,0.015)"  : "rgba(0,0,0,0.025)",
+      "--bg":          dark ? "#0a0a0f"                  : "#FFFAF6",
+      "--fg":          dark ? "#ffffff"                  : "#2D1F0E",
+      "--muted":       dark ? "rgba(255,255,255,0.45)"   : "#6B5744",
+      "--glass":       dark ? "rgba(255,255,255,0.04)"   : "#FFFFFF",
+      "--glass-border":dark ? "rgba(255,255,255,0.08)"   : "#E8E0D8",
+      "--popup-bg":    dark ? "rgba(14,14,20,0.96)"      : "#FFFFFF",
+      "--header-bg":   dark ? "rgba(10,10,15,0.78)"      : "rgba(255,250,246,0.92)",
+      "--sec-alt":     dark ? "rgba(255,255,255,0.015)"  : "#F7F2ED",
       fontFamily: "'Sora',sans-serif",
       background: "var(--bg)",
       color: "var(--fg)",
