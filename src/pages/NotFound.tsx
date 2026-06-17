@@ -148,7 +148,7 @@ function SnakeGame() {
         <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.8rem', fontWeight: 700, color: '#ea580c' }}>{score} pts</span>
       </div>
 
-      <div style={{ position: 'relative', borderRadius: 16, overflow: 'hidden', border: '1.5px solid #3D2E1F', boxShadow: '0 4px 24px rgba(180,100,20,0.12)', cursor: 'pointer' }} onClick={() => !started && start()}>
+      <div style={{ position: 'relative', borderRadius: 16, overflow: 'hidden', border: '1.5px solid #E8E0D8', boxShadow: '0 4px 24px rgba(180,100,20,0.12)', cursor: 'pointer' }} onClick={() => !started && start()}>
         <canvas ref={canvasRef} width={COLS*CELL} height={ROWS*CELL} style={{ display: 'block' }} />
 
         {/* Overlay */}
@@ -192,9 +192,9 @@ function SnakeGame() {
 
 const dpad: React.CSSProperties = {
   width: 38, height: 38, borderRadius: 10,
-  background: '#4A3826',
+  background: '#FFFFFF',
   backdropFilter: 'blur(8px)',
-  border: '1.5px solid #2D1F0E',
+  border: '1.5px solid #E8E0D8',
   color: 'rgba(180,90,20,0.7)', fontSize: '0.8rem',
   cursor: 'pointer', fontFamily: 'inherit',
   boxShadow: '0 2px 8px rgba(180,100,20,0.08)',
@@ -274,7 +274,7 @@ const NotFound = () => {
           background: '#6B5744',
           backdropFilter: 'blur(24px)',
           WebkitBackdropFilter: 'blur(24px)',
-          border: '1.5px solid #3D2E1F',
+          border: '1.5px solid #E8E0D8',
           borderRadius: 24, padding: '24px 24px 20px',
           boxShadow: '0 8px 48px rgba(180,100,20,0.1), 0 2px 8px rgba(180,100,20,0.06), inset 0 1px 0 #2D1F0E',
           width: '100%',
@@ -305,9 +305,9 @@ const NotFound = () => {
             href="/"
             style={{
               padding: '11px 24px', borderRadius: 12,
-              background: '#4A3826',
+              background: '#FFFFFF',
               backdropFilter: 'blur(8px)',
-              border: '1.5px solid #2D1F0E',
+              border: '1.5px solid #E8E0D8',
               color: 'rgba(150,80,20,0.8)', fontWeight: 600, fontSize: '0.85rem',
               cursor: 'pointer', fontFamily: "'Sora',sans-serif",
               textDecoration: 'none',

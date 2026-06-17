@@ -37,7 +37,7 @@ function AvailSelect({ value, onChange }) {
       {open && (
         <div style={{
           position: 'absolute', top: 'calc(100% + 8px)', left: 0, zIndex: 50,
-          background: '#2D1F0E', backdropFilter: 'blur(20px)',
+          background: '#FFFFFF', backdropFilter: 'blur(20px)',
           border: '1px solid #E8E0D8', borderRadius: 12,
           overflow: 'hidden', minWidth: 140,
           boxShadow: '0 16px 48px rgba(0,0,0,0.5)',
@@ -66,7 +66,7 @@ function AvailSelect({ value, onChange }) {
 function StatCard({ icon: Icon, label, value, color, delay }) {
   return (
     <div style={{
-      background: '#2D1F0E',
+      background: '#FFFFFF',
       border: '1px solid #E8E0D8',
       borderRadius: 18, padding: '20px 16px', textAlign: 'center',
       backdropFilter: 'blur(12px)',
@@ -91,7 +91,7 @@ function PendingCard({ b, onAccept, onReject, index }) {
   const [hov, setHov] = useState(false);
   return (
     <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)} style={{
-      background: '#2D1F0E', backdropFilter: 'blur(16px)',
+      background: '#FFFFFF', backdropFilter: 'blur(16px)',
       border: `1px solid ${hov ? 'rgba(251,191,36,0.25)' : '#E8E0D8'}`,
       borderRadius: 20, padding: 20,
       transition: 'all .3s cubic-bezier(.22,1,.36,1)',
@@ -301,7 +301,7 @@ const KarigarDashboard = () => {
   };
 
   if (!karigar) return (
-    <div style={{ minHeight: '100vh', background: '#FFFFFFAF6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{ minHeight: '100vh', background: '#FFFAF6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <p style={{ color: '#6B5744', fontFamily: "'Sora',sans-serif" }}>Loading dashboard...</p>
     </div>
   );
@@ -309,7 +309,7 @@ const KarigarDashboard = () => {
   const initials = karigar.name.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2);
 
   return (
-    <div style={{ minHeight: '100vh', background: '#FFFFFFAF6', fontFamily: "'Sora',sans-serif", color: '#2D1F0E' }}>
+    <div style={{ minHeight: '100vh', background: '#FFFAF6', fontFamily: "'Sora',sans-serif", color: '#2D1F0E' }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
         *, *::before, *::after { box-sizing: border-box; }
@@ -333,7 +333,7 @@ const KarigarDashboard = () => {
 
         {/* ── WELCOME HERO ── */}
         <div className="fu-1" style={{
-          background: '#2D1F0E', backdropFilter: 'blur(20px)',
+          background: '#FFFFFF', backdropFilter: 'blur(20px)',
           border: '1px solid #E8E0D8',
           borderRadius: 24, padding: '24px 28px', marginBottom: 28,
           display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap',

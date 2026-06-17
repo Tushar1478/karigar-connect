@@ -67,7 +67,7 @@ const Login = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#FFFFFFAF6', fontFamily: "'Sora', sans-serif", color: '#2D1F0E', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px 16px' }}>
+    <div style={{ minHeight: '100vh', background: '#FFFAF6', fontFamily: "'Sora', sans-serif", color: '#2D1F0E', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px 16px' }}>
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap');

@@ -257,7 +257,7 @@ const Header = () => {
                       width: 280,
                       maxHeight: 320,
                       overflowY: 'auto',
-                      background: '#2D1F0E',
+                      background: '#FFFFFF',
                       borderRadius: 14,
                       border: '1px solid #E8E0D8',
                       boxShadow: '0 18px 60px rgba(0,0,0,0.6)',
@@ -304,7 +304,7 @@ const Header = () => {
                 <div style={{
                   display: 'flex', alignItems: 'center', gap: 9,
                   padding: '6px 12px 6px 6px',
-                  background: '#2D1F0E',
+                  background: '#FFFFFF',
                   border: '1px solid #E8E0D8',
                   borderRadius: 999,
                 }}>
@@ -352,7 +352,7 @@ const Header = () => {
         {mobileOpen && isAuthenticated && (
           <div style={{
             borderTop: '1px solid #F0E8DE',
-            background: '#2D1F0E',
+            background: '#FFFFFF',
             backdropFilter: 'blur(20px)',
             padding: '12px 16px 16px',
             animation: 'mobileSlide .25s cubic-bezier(.22,1,.36,1)',
@@ -362,7 +362,7 @@ const Header = () => {
             <div style={{
               display: 'flex', alignItems: 'center', gap: 10,
               padding: '10px 14px', borderRadius: 14, marginBottom: 10,
-              background: '#2D1F0E',
+              background: '#FFFFFF',
               border: '1px solid #F0E8DE',
             }}>
               <div style={{
