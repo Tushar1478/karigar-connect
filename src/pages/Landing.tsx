@@ -464,7 +464,7 @@ export default function Landing() {
       </section>
 
       {/* ── SOCIAL PROOF STRIP ── */}
-      <section style={{ background:"#2D1F0E", padding:"32px 16px" }}>
+      <section style={{ background: '#FFFFFF', padding:"32px 16px" }}>
         <div style={{ maxWidth:1100, margin:"0 auto", display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:24, textAlign:"center" }}>
           {[
             { num:"2,400+", label:"Jobs completed" },
@@ -632,7 +632,7 @@ export default function Landing() {
       </section>
 
       {/* ── KARIGAR CTA STRIP ── */}
-      <section style={{ background:"#2D1F0E", padding:"56px 16px" }}>
+      <section style={{ background: '#FFFFFF', padding:"56px 16px" }}>
         <div style={{ maxWidth:1100, margin:"0 auto", display:"flex", flexWrap:"wrap", alignItems:"center", justifyContent:"space-between", gap:24 }}>
           <div>
             <span style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.64rem", letterSpacing:"0.22em", textTransform:"uppercase", color:"#F4722B", display:"block", marginBottom:10 }}>For Workers</span>

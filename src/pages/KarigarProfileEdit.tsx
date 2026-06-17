@@ -20,7 +20,7 @@ function GlassInput({ label, value, onChange, type = 'text', colSpan = false }) 
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         style={{
-          background: '#2D1F0E',
+          background: '#FFFFFF',
           border: `1.5px solid ${focused ? 'rgba(251,146,60,0.55)' : '#E8E0D8'}`,
           borderRadius: 12,
           padding: '10px 14px',
@@ -52,7 +52,7 @@ function GlassTextarea({ label, value, onChange, rows = 3 }) {
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         style={{
-          background: '#2D1F0E',
+          background: '#FFFFFF',
           border: `1.5px solid ${focused ? 'rgba(251,146,60,0.55)' : '#E8E0D8'}`,
           borderRadius: 12,
           padding: '10px 14px',
@@ -155,7 +155,7 @@ const KarigarProfileEdit = () => {
   };
 
   if (!karigar) return (
-    <div style={{ minHeight: '100vh', background: '#FFFFFFAF6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{ minHeight: '100vh', background: '#FFFAF6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
         <Loader2 size={32} color="#fb923c" style={{ animation: 'spin 1s linear infinite' }} />
         <p style={{ color: '#6B5744', fontFamily: "'Sora',sans-serif" }}>Loading...</p>
@@ -166,7 +166,7 @@ const KarigarProfileEdit = () => {
   const initials = form.name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'K';
 
   return (
-    <div style={{ minHeight: '100vh', background: '#FFFFFFAF6', fontFamily: "'Sora', sans-serif", color: '#2D1F0E' }}>
+    <div style={{ minHeight: '100vh', background: '#FFFAF6', fontFamily: "'Sora', sans-serif", color: '#2D1F0E' }}>
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
@@ -203,7 +203,7 @@ const KarigarProfileEdit = () => {
 
         {/* ── PHOTO CARD ── */}
         <div className="fu-2" style={{
-          background: '#2D1F0E',
+          background: '#FFFFFF',
           backdropFilter: 'blur(20px)',
           border: '1px solid #E8E0D8',
           borderRadius: 24, padding: 28, marginBottom: 24,
@@ -242,7 +242,7 @@ const KarigarProfileEdit = () => {
                   position: 'absolute', bottom: -4, right: -4,
                   width: 28, height: 28, borderRadius: '50%',
                   background: 'linear-gradient(135deg,#f97316,#fb923c)',
-                  border: '2px solid #2D1F0E',
+                  border: '2px solid #E8E0D8',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   cursor: 'pointer',
                 }}
@@ -281,7 +281,7 @@ const KarigarProfileEdit = () => {
 
         {/* ── FORM CARD ── */}
         <div className="fu-2" style={{
-          background: '#2D1F0E',
+          background: '#FFFFFF',
           backdropFilter: 'blur(20px)',
           border: '1px solid #E8E0D8',
           borderRadius: 24, padding: 28, marginBottom: 24,
@@ -329,7 +329,7 @@ const KarigarProfileEdit = () => {
 
         {/* ── PORTFOLIO CARD ── */}
         <div className="fu-3" style={{
-          background: '#2D1F0E',
+          background: '#FFFFFF',
           backdropFilter: 'blur(20px)',
           border: '1px solid #E8E0D8',
           borderRadius: 24, padding: 28,

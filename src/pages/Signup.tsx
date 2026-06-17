@@ -71,7 +71,7 @@ function GlassCard({ children }) {
       background: '#6B5744',
       backdropFilter: 'blur(24px)',
       WebkitBackdropFilter: 'blur(24px)',
-      border: '1.5px solid #3D2E1F',
+      border: '1.5px solid #E8E0D8',
       borderRadius: 24,
       padding: '28px 28px 24px',
       boxShadow: '0 8px 48px rgba(180,100,20,0.1), 0 2px 8px rgba(180,100,20,0.06), inset 0 1px 0 #2D1F0E',
@@ -303,7 +303,7 @@ const SignupKarigar = () => {
                   position: 'absolute', top: 'calc(100% + 6px)', left: 0, right: 0, zIndex: 50,
                   background: 'rgba(255,248,240,0.97)',
                   backdropFilter: 'blur(16px)',
-                  border: '1.5px solid #2D1F0E',
+                  border: '1.5px solid #E8E0D8',
                   borderRadius: 12, overflow: 'hidden',
                   boxShadow: '0 12px 40px rgba(180,100,20,0.15), 0 2px 8px rgba(180,100,20,0.08)',
                 }}>

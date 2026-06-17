@@ -255,7 +255,7 @@ const KarigarProfile = () => {
   }, [id]);
 
   if (loading) return (
-    <div style={{ minHeight: '100vh', background: '#FFFFFFAF6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{ minHeight: '100vh', background: '#FFFAF6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
         <Loader2 size={32} color="#fb923c" style={{ animation: 'spin 1s linear infinite' }} />
         <p style={{ color: '#6B5744', fontFamily: "'Sora',sans-serif" }}>Loading profile...</p>
@@ -264,7 +264,7 @@ const KarigarProfile = () => {
   );
 
   if (!karigar) return (
-    <div style={{ minHeight: '100vh', background: '#FFFFFFAF6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{ minHeight: '100vh', background: '#FFFAF6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <p style={{ color: '#6B5744', fontFamily: "'Sora',sans-serif" }}>Karigar not found</p>
     </div>
   );
@@ -303,7 +303,7 @@ const KarigarProfile = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#FFFFFFAF6', fontFamily: "'Sora', sans-serif", color: '#2D1F0E' }}>
+    <div style={{ minHeight: '100vh', background: '#FFFAF6', fontFamily: "'Sora', sans-serif", color: '#2D1F0E' }}>
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
