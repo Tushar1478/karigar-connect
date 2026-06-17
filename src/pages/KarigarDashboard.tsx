@@ -37,8 +37,8 @@ function AvailSelect({ value, onChange }) {
       {open && (
         <div style={{
           position: 'absolute', top: 'calc(100% + 8px)', left: 0, zIndex: 50,
-          background: 'rgba(14,14,20,0.97)', backdropFilter: 'blur(20px)',
-          border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12,
+          background: '#FFFFFF', backdropFilter: 'blur(20px)',
+          border: '1px solid #E8E0D8', borderRadius: 12,
           overflow: 'hidden', minWidth: 140,
           boxShadow: '0 16px 48px rgba(0,0,0,0.5)',
           animation: 'dropIn .18s cubic-bezier(.22,1,.36,1)',
@@ -66,8 +66,8 @@ function AvailSelect({ value, onChange }) {
 function StatCard({ icon: Icon, label, value, color, delay }) {
   return (
     <div style={{
-      background: 'rgba(255,255,255,0.03)',
-      border: '1px solid rgba(255,255,255,0.07)',
+      background: '#FFFFFF',
+      border: '1px solid #E8E0D8',
       borderRadius: 18, padding: '20px 16px', textAlign: 'center',
       backdropFilter: 'blur(12px)',
       animation: `cardFadeUp .55s cubic-bezier(.22,1,.36,1) ${delay}s both`,
@@ -80,8 +80,8 @@ function StatCard({ icon: Icon, label, value, color, delay }) {
       }}>
         <Icon size={18} color={color} />
       </div>
-      <p style={{ fontFamily: "'Space Mono',monospace", fontSize: '1.4rem', fontWeight: 700, color: '#fff', lineHeight: 1 }}>{value}</p>
-      <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.35)', marginTop: 5, fontWeight: 300 }}>{label}</p>
+      <p style={{ fontFamily: "'Space Mono',monospace", fontSize: '1.4rem', fontWeight: 700, color: '#2D1F0E', lineHeight: 1 }}>{value}</p>
+      <p style={{ fontSize: '0.72rem', color: '#6B5744', marginTop: 5, fontWeight: 300 }}>{label}</p>
     </div>
   );
 }
@@ -91,7 +91,7 @@ function PendingCard({ b, onAccept, onReject, index }) {
   const [hov, setHov] = useState(false);
   return (
     <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)} style={{
-      background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(16px)',
+      background: '#FFFFFF', backdropFilter: 'blur(16px)',
       border: `1px solid ${hov ? 'rgba(251,191,36,0.25)' : 'rgba(255,255,255,0.07)'}`,
       borderRadius: 20, padding: 20,
       transition: 'all .3s cubic-bezier(.22,1,.36,1)',
@@ -105,11 +105,11 @@ function PendingCard({ b, onAccept, onReject, index }) {
 
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, marginBottom: 10 }}>
         <div>
-          <h3 style={{ fontWeight: 700, fontSize: '1rem', color: '#fff', marginBottom: 4 }}>{b.customer_name}</h3>
-          {b.description && <p style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.45)', fontWeight: 300, marginBottom: 4 }}>{b.description}</p>}
+          <h3 style={{ fontWeight: 700, fontSize: '1rem', color: '#2D1F0E', marginBottom: 4 }}>{b.customer_name}</h3>
+          {b.description && <p style={{ fontSize: '0.82rem', color: '#6B5744', fontWeight: 300, marginBottom: 4 }}>{b.description}</p>}
           <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
             <Clock size={12} color="rgba(255,255,255,0.3)" />
-            <span style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.4)', fontWeight: 300 }}>{b.date} · {b.time}</span>
+            <span style={{ fontSize: '0.78rem', color: '#6B5744', fontWeight: 300 }}>{b.date} · {b.time}</span>
           </div>
         </div>
         <span style={{ background: 'rgba(251,191,36,0.12)', border: '1px solid rgba(251,191,36,0.3)', color: '#fbbf24', fontSize: '0.68rem', fontWeight: 700, padding: '4px 10px', borderRadius: 999, whiteSpace: 'nowrap', flexShrink: 0 }}>
@@ -123,7 +123,7 @@ function PendingCard({ b, onAccept, onReject, index }) {
           padding: '9px 0', borderRadius: 10, border: 'none',
           background: 'linear-gradient(90deg,#f97316,#fb923c,#fdba74,#fb923c,#f97316)',
           backgroundSize: '200% auto', animation: 'shimmer 3s linear infinite',
-          color: '#0a0a0f', fontWeight: 700, fontSize: '0.85rem',
+          color: '#FFFFFF', fontWeight: 700, fontSize: '0.85rem',
           cursor: 'pointer', fontFamily: "'Sora',sans-serif",
           transition: 'transform .2s, box-shadow .2s',
         }}
@@ -170,10 +170,10 @@ function ActiveCard({ b, expandedChat, setExpandedChat, onComplete, index }) {
 
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, marginBottom: 14 }}>
         <div>
-          <h3 style={{ fontWeight: 700, fontSize: '1rem', color: '#fff', marginBottom: 4 }}>{b.customer_name}</h3>
+          <h3 style={{ fontWeight: 700, fontSize: '1rem', color: '#2D1F0E', marginBottom: 4 }}>{b.customer_name}</h3>
           <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
             <Clock size={12} color="rgba(255,255,255,0.3)" />
-            <span style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.4)', fontWeight: 300 }}>{b.date} · {b.time}</span>
+            <span style={{ fontSize: '0.78rem', color: '#6B5744', fontWeight: 300 }}>{b.date} · {b.time}</span>
           </div>
         </div>
         <span style={{ background: 'rgba(56,189,248,0.12)', border: '1px solid rgba(56,189,248,0.3)', color: '#38bdf8', fontSize: '0.68rem', fontWeight: 700, padding: '4px 10px', borderRadius: 999, whiteSpace: 'nowrap', flexShrink: 0 }}>
@@ -201,7 +201,7 @@ function ActiveCard({ b, expandedChat, setExpandedChat, onComplete, index }) {
           padding: '8px 14px', borderRadius: 10,
           background: chatOpen ? 'rgba(56,189,248,0.14)' : 'rgba(255,255,255,0.05)',
           border: `1px solid ${chatOpen ? 'rgba(56,189,248,0.4)' : 'rgba(255,255,255,0.1)'}`,
-          color: chatOpen ? '#38bdf8' : 'rgba(255,255,255,0.5)',
+          color: chatOpen ? '#38bdf8' : '#6B5744',
           fontSize: '0.82rem', fontWeight: 600,
           cursor: 'pointer', fontFamily: "'Sora',sans-serif", transition: 'all .2s',
         }}>
@@ -240,8 +240,8 @@ function CompletedCard({ b, index }) {
     }}>
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1.5, background: 'linear-gradient(90deg,transparent,rgba(52,211,153,0.4),transparent)' }} />
       <div>
-        <h3 style={{ fontWeight: 600, fontSize: '0.95rem', color: '#fff', marginBottom: 3 }}>{b.customer_name}</h3>
-        <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.3)', fontWeight: 300 }}>{b.date}</span>
+        <h3 style={{ fontWeight: 600, fontSize: '0.95rem', color: '#2D1F0E', marginBottom: 3 }}>{b.customer_name}</h3>
+        <span style={{ fontSize: '0.75rem', color: '#6B5744', fontWeight: 300 }}>{b.date}</span>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
         {b.rating && <StarRating rating={b.rating} size={14} />}
@@ -264,8 +264,8 @@ function Section({ label, count, color, children, emptyMsg }) {
         </span>
       </div>
       {count === 0
-        ? <div style={{ padding: '32px 24px', textAlign: 'center', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: 16 }}>
-            <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.875rem', fontWeight: 300 }}>{emptyMsg}</p>
+        ? <div style={{ padding: '32px 24px', textAlign: 'center', background: '#F7F2ED', border: '1px solid #E8E0D8', borderRadius: 16 }}>
+            <p style={{ color: '#6B5744', fontSize: '0.875rem', fontWeight: 300 }}>{emptyMsg}</p>
           </div>
         : <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>{children}</div>
       }
@@ -301,15 +301,15 @@ const KarigarDashboard = () => {
   };
 
   if (!karigar) return (
-    <div style={{ minHeight: '100vh', background: '#0a0a0f', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <p style={{ color: 'rgba(255,255,255,0.4)', fontFamily: "'Sora',sans-serif" }}>Loading dashboard...</p>
+    <div style={{ minHeight: '100vh', background: '#FFFAF6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <p style={{ color: '#6B5744', fontFamily: "'Sora',sans-serif" }}>Loading dashboard...</p>
     </div>
   );
 
   const initials = karigar.name.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2);
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0a0a0f', fontFamily: "'Sora',sans-serif", color: '#fff' }}>
+    <div style={{ minHeight: '100vh', background: '#FFFAF6', fontFamily: "'Sora',sans-serif", color: '#2D1F0E' }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
         *, *::before, *::after { box-sizing: border-box; }
@@ -333,8 +333,8 @@ const KarigarDashboard = () => {
 
         {/* ── WELCOME HERO ── */}
         <div className="fu-1" style={{
-          background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(20px)',
-          border: '1px solid rgba(255,255,255,0.08)',
+          background: '#FFFFFF', backdropFilter: 'blur(20px)',
+          border: '1px solid #E8E0D8',
           borderRadius: 24, padding: '24px 28px', marginBottom: 28,
           display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap',
         }}>
@@ -351,7 +351,7 @@ const KarigarDashboard = () => {
               <h1 style={{ fontSize: 'clamp(1.2rem,3vw,1.6rem)', fontWeight: 800, letterSpacing: '-0.025em', lineHeight: 1.1, marginBottom: 4 }}>
                 Welcome, <span style={{ color: '#fb923c' }}>{karigar.name}</span>!
               </h1>
-              <p style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.4)', fontWeight: 300 }}>
+              <p style={{ fontSize: '0.82rem', color: '#6B5744', fontWeight: 300 }}>
                 {karigar.skill} · {karigar.location}
               </p>
             </div>
@@ -368,7 +368,7 @@ const KarigarDashboard = () => {
         </div>
 
         {/* ── DIVIDER ── */}
-        <div style={{ height: 1, background: 'linear-gradient(90deg,transparent,rgba(255,255,255,0.07),transparent)', marginBottom: 36 }} />
+        <div style={{ height: 1, background: 'linear-gradient(90deg,transparent,#E8E0D8,transparent)', marginBottom: 36 }} />
 
         {/* ── INCOMING REQUESTS ── */}
         <Section label="Incoming Requests" count={pending.length} color="#fbbf24" emptyMsg="No pending requests right now.">
