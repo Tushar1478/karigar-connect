@@ -241,7 +241,7 @@ function MapPinItem({ top, left, name, delay }) {
         display: "flex", alignItems: "center", justifyContent: "center",
         cursor: "pointer", transition: "transform 0.2s ease",
       }}>
-        <Wrench size={11} style={{ transform: "rotate(45deg)", color: "#fff" }} />
+        <Wrench size={11} style={{ transform: "rotate(45deg)", color: "#2D1F0E" }} />
       </div>
       <div style={{
         position: "absolute", bottom: "calc(100% + 10px)", left: "50%",
@@ -250,7 +250,7 @@ function MapPinItem({ top, left, name, delay }) {
         background: "rgba(10,10,15,0.92)", backdropFilter: "blur(12px)",
         border: "1px solid rgba(251,146,60,0.3)", borderRadius: 8,
         padding: "3px 10px", whiteSpace: "nowrap",
-        fontSize: "0.68rem", color: "#fff", fontWeight: 600,
+        fontSize: "0.68rem", color: "#2D1F0E", fontWeight: 600,
         pointerEvents: "none",
       }}>{name}</div>
     </div>
@@ -273,12 +273,12 @@ export default function Landing() {
 
   return (
     <div style={{
-      "--bg":          dark ? "#0a0a0f"                  : "#FFFAF6",
+      "--bg":          dark ? "#FFFAF6"                  : "#FFFAF6",
       "--fg":          dark ? "#ffffff"                  : "#2D1F0E",
-      "--muted":       dark ? "rgba(255,255,255,0.45)"   : "#6B5744",
-      "--glass":       dark ? "rgba(255,255,255,0.04)"   : "#FFFFFF",
-      "--glass-border":dark ? "rgba(255,255,255,0.08)"   : "#E8E0D8",
-      "--popup-bg":    dark ? "rgba(14,14,20,0.96)"      : "#FFFFFF",
+      "--muted":       dark ? "#6B5744"   : "#6B5744",
+      "--glass":       dark ? "#FFFFFF"   : "#2D1F0E",
+      "--glass-border":dark ? "#E8E0D8"   : "#E8E0D8",
+      "--popup-bg":    dark ? "rgba(14,14,20,0.96)"      : "#2D1F0E",
       "--header-bg":   dark ? "rgba(10,10,15,0.78)"      : "rgba(255,250,246,0.92)",
       "--sec-alt":     dark ? "rgba(255,255,255,0.015)"  : "#F7F2ED",
       fontFamily: "'Sora',sans-serif",
@@ -315,7 +315,7 @@ export default function Landing() {
           background: linear-gradient(90deg,#f97316,#fb923c,#fdba74,#fb923c,#f97316);
           background-size: 200% auto;
           animation: shimmer 3s linear infinite;
-          color: #0a0a0f !important; font-weight: 700; border: none; cursor: pointer;
+          color: #2D1F0EAF6 !important; font-weight: 700; border: none; cursor: pointer;
           display: inline-flex; align-items: center; gap: 8px;
           border-radius: 12px; padding: 14px 28px;
           font-size: 1rem; font-family: 'Sora',sans-serif;
@@ -326,8 +326,8 @@ export default function Landing() {
         .shimmer-btn-sm { padding: 9px 18px !important; font-size: .875rem !important; }
 
         .outline-btn {
-          border: 1.5px solid rgba(255,255,255,.2);
-          background: rgba(255,255,255,.05); backdrop-filter: blur(8px);
+          border: 1.5px solid #A89880;
+          background: #FFFFFF; backdrop-filter: blur(8px);
           font-weight: 600; cursor: pointer;
           display: inline-flex; align-items: center; gap: 8px;
           border-radius: 12px; padding: 14px 28px;
@@ -338,7 +338,7 @@ export default function Landing() {
         .outline-btn:hover { border-color: rgba(251,146,60,.6); background: rgba(251,146,60,.1); color:#fb923c; transform:translateY(-3px); }
         .outline-btn-sm  { padding: 9px 18px !important; font-size: .875rem !important; }
 
-        .divider { height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent); }
+        .divider { height:1px; background:linear-gradient(90deg,transparent,#E8E0D8,transparent); }
 
         .map-grid {
           background-image:
@@ -378,7 +378,7 @@ export default function Landing() {
               <Sun  size={13} style={{ color: dark ? "var(--muted)" : "#fb923c", transition:"color .3s" }} />
               <div onClick={() => setDark(!dark)} style={{
                 width:50, height:26, borderRadius:999, cursor:"pointer", position:"relative",
-                background:"rgba(255,255,255,.08)", border:"1.5px solid rgba(251,146,60,.35)",
+                background:"#E8E0D8", border:"1.5px solid rgba(251,146,60,.35)",
                 display:"flex", alignItems:"center",
               }}>
                 <div style={{
@@ -636,7 +636,7 @@ export default function Landing() {
         <div style={{ maxWidth:1100, margin:"0 auto", display:"flex", flexWrap:"wrap", alignItems:"center", justifyContent:"space-between", gap:24 }}>
           <div>
             <span style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.64rem", letterSpacing:"0.22em", textTransform:"uppercase", color:"#F4722B", display:"block", marginBottom:10 }}>For Workers</span>
-            <h2 style={{ fontSize:"clamp(1.4rem,3.5vw,1.9rem)", fontWeight:800, color:"#FFFAF6", letterSpacing:"-0.02em", marginBottom:8 }}>
+            <h2 style={{ fontSize:"clamp(1.4rem,3.5vw,1.9rem)", fontWeight:800, color:"#2D1F0EAF6", letterSpacing:"-0.02em", marginBottom:8 }}>
               Are you a karigar? <span style={{ color:"#F4722B" }}>Start earning today.</span>
             </h2>
             <p style={{ color:"#E8D8C4", fontSize:"0.9rem", fontWeight:300, maxWidth:520 }}>
@@ -646,7 +646,7 @@ export default function Landing() {
           <button
             onClick={() => navigate("/signup/karigar")}
             style={{
-              background:"#F4722B", color:"#FFFAF6", fontWeight:700,
+              background:"#F4722B", color:"#2D1F0EAF6", fontWeight:700,
               border:"none", cursor:"pointer", borderRadius:12,
               padding:"14px 28px", fontSize:"0.95rem", fontFamily:"'Sora',sans-serif",
               display:"inline-flex", alignItems:"center", gap:8,

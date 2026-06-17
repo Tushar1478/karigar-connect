@@ -169,7 +169,7 @@ const AIChatbot = () => {
             position: 'fixed', bottom: 24, right: 24, zIndex: 9999,
             width: 56, height: 56, borderRadius: '50%', border: 'none',
             background: 'linear-gradient(135deg, #f97316, #fb923c)',
-            color: '#fff', cursor: 'pointer',
+            color: '#2D1F0E', cursor: 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             boxShadow: '0 8px 32px rgba(249,115,22,0.4)',
             transition: 'transform .2s',
@@ -188,7 +188,7 @@ const AIChatbot = () => {
           height: 540, maxHeight: 'calc(100vh - 48px)',
           borderRadius: 20, overflow: 'hidden',
           background: 'rgba(10,10,15,0.97)',
-          border: '1px solid rgba(255,255,255,0.08)',
+          border: '1px solid #E8E0D8',
           boxShadow: '0 24px 80px rgba(0,0,0,0.6)',
           display: 'flex', flexDirection: 'column',
           fontFamily: "'Sora', sans-serif",
@@ -196,7 +196,7 @@ const AIChatbot = () => {
           {/* Header */}
           <div style={{
             padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 10,
-            borderBottom: '1px solid rgba(255,255,255,0.08)',
+            borderBottom: '1px solid #E8E0D8',
             background: 'linear-gradient(135deg, rgba(249,115,22,0.12), rgba(251,146,60,0.06))',
           }}>
             <div style={{
@@ -207,25 +207,25 @@ const AIChatbot = () => {
               <Bot size={18} color="#fff" />
             </div>
             <div style={{ flex: 1 }}>
-              <p style={{ fontSize: '0.85rem', fontWeight: 700, color: '#fff', margin: 0 }}>KarigarHub AI</p>
-              <p style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.4)', margin: 0 }}>
+              <p style={{ fontSize: '0.85rem', fontWeight: 700, color: '#2D1F0E', margin: 0 }}>KarigarHub AI</p>
+              <p style={{ fontSize: '0.65rem', color: '#6B5744', margin: 0 }}>
                 {isListening ? '🎤 Listening...' : t('chatbot_subtitle')}
               </p>
             </div>
             {/* TTS toggle */}
             <button onClick={() => { setTtsEnabled(e => !e); window.speechSynthesis.cancel(); }} style={{
-              background: ttsEnabled ? 'rgba(251,146,60,0.15)' : 'rgba(255,255,255,0.06)',
-              border: `1px solid ${ttsEnabled ? 'rgba(251,146,60,0.3)' : 'rgba(255,255,255,0.1)'}`,
+              background: ttsEnabled ? 'rgba(251,146,60,0.15)' : '#F0E8DE',
+              border: `1px solid ${ttsEnabled ? 'rgba(251,146,60,0.3)' : '#E8E0D8'}`,
               borderRadius: 8, width: 30, height: 30, cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: ttsEnabled ? '#fb923c' : 'rgba(255,255,255,0.4)',
+              color: ttsEnabled ? '#fb923c' : '#6B5744',
             }} title={ttsEnabled ? 'Disable voice' : 'Enable voice'}>
               <Volume2 size={13} />
             </button>
             <button onClick={() => setOpen(false)} style={{
-              background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
+              background: '#F0E8DE', border: '1px solid #E8E0D8',
               borderRadius: 8, width: 30, height: 30, cursor: 'pointer',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.5)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6B5744',
             }}>
               <X size={14} />
             </button>
@@ -236,10 +236,10 @@ const AIChatbot = () => {
             {messages.length === 0 && (
               <div style={{ textAlign: 'center', padding: '24px 12px' }}>
                 <div style={{ fontSize: '2rem', marginBottom: 8 }}>🤖</div>
-                <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.85rem', fontWeight: 500, margin: '0 0 4px' }}>
+                <p style={{ color: '#4A3826', fontSize: '0.85rem', fontWeight: 500, margin: '0 0 4px' }}>
                   {t('chatbot_greeting')}
                 </p>
-                <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.75rem', margin: '0 0 16px' }}>
+                <p style={{ color: '#8B7355', fontSize: '0.75rem', margin: '0 0 16px' }}>
                   {t('chatbot_subtitle')}
                 </p>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, justifyContent: 'center' }}>
@@ -247,13 +247,13 @@ const AIChatbot = () => {
                     <button key={p} onClick={() => send(p)}
                       style={{
                         padding: '6px 12px', borderRadius: 999,
-                        background: 'rgba(255,255,255,0.05)',
-                        border: '1px solid rgba(255,255,255,0.1)',
-                        color: 'rgba(255,255,255,0.6)', fontSize: '0.72rem',
+                        background: '#FFFFFF',
+                        border: '1px solid #E8E0D8',
+                        color: '#4A3826', fontSize: '0.72rem',
                         cursor: 'pointer', fontFamily: "'Sora',sans-serif", transition: 'all .2s',
                       }}
                       onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(251,146,60,0.4)'; e.currentTarget.style.color = '#fb923c'; }}
-                      onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = 'rgba(255,255,255,0.6)'; }}
+                      onMouseLeave={e => { e.currentTarget.style.borderColor = '#E8E0D8'; e.currentTarget.style.color = '#4A3826'; }}
                     >{p}</button>
                   ))}
                 </div>
@@ -280,12 +280,12 @@ const AIChatbot = () => {
                   borderRadius: m.role === 'user' ? '14px 4px 14px 14px' : '4px 14px 14px 14px',
                   background: m.role === 'user'
                     ? 'linear-gradient(135deg, rgba(56,189,248,0.15), rgba(56,189,248,0.08))'
-                    : 'rgba(255,255,255,0.05)',
-                  border: `1px solid ${m.role === 'user' ? 'rgba(56,189,248,0.2)' : 'rgba(255,255,255,0.07)'}`,
+                    : '#FFFFFF',
+                  border: `1px solid ${m.role === 'user' ? 'rgba(56,189,248,0.2)' : '#E8E0D8'}`,
                 }}>
                   <p style={{
                     fontSize: '0.82rem', lineHeight: 1.55, margin: 0,
-                    color: m.role === 'user' ? '#fff' : 'rgba(255,255,255,0.85)',
+                    color: m.role === 'user' ? '#fff' : '#2D1F0E',
                     whiteSpace: 'pre-wrap',
                   }}>{m.content}</p>
                 </div>
@@ -293,9 +293,9 @@ const AIChatbot = () => {
                 {m.role === 'assistant' && (
                   <button onClick={() => speak(m.content)} style={{
                     width: 22, height: 22, borderRadius: '50%', border: 'none', flexShrink: 0,
-                    background: 'rgba(255,255,255,0.06)', cursor: 'pointer',
+                    background: '#F0E8DE', cursor: 'pointer',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: 'rgba(255,255,255,0.4)', marginTop: 4,
+                    color: '#6B5744', marginTop: 4,
                   }} title="Listen">
                     <Volume2 size={10} />
                   </button>
@@ -314,10 +314,10 @@ const AIChatbot = () => {
                 </div>
                 <div style={{
                   padding: '10px 14px', borderRadius: '4px 14px 14px 14px',
-                  background: 'rgba(255,255,255,0.05)',
-                  border: '1px solid rgba(255,255,255,0.07)',
+                  background: '#FFFFFF',
+                  border: '1px solid #E8E0D8',
                 }}>
-                  <Loader2 size={14} color="rgba(255,255,255,0.4)" style={{ animation: 'spin 1s linear infinite' }} />
+                  <Loader2 size={14} color="#6B5744" style={{ animation: 'spin 1s linear infinite' }} />
                 </div>
               </div>
             )}
@@ -327,8 +327,8 @@ const AIChatbot = () => {
           {/* Input */}
           <div style={{
             padding: '10px 12px', display: 'flex', gap: 8,
-            borderTop: '1px solid rgba(255,255,255,0.08)',
-            background: 'rgba(255,255,255,0.02)',
+            borderTop: '1px solid #E8E0D8',
+            background: '#F7F2ED',
           }}>
             {/* Mic button */}
             <button
@@ -339,8 +339,8 @@ const AIChatbot = () => {
                 cursor: 'pointer',
                 background: isListening
                   ? 'linear-gradient(135deg, #ef4444, #f87171)'
-                  : 'rgba(255,255,255,0.05)',
-                color: isListening ? '#fff' : 'rgba(255,255,255,0.4)',
+                  : '#FFFFFF',
+                color: isListening ? '#fff' : '#6B5744',
                 transition: 'all .2s',
                 animation: isListening ? 'pulse-mic 1.5s ease-in-out infinite' : 'none',
               }}
@@ -355,15 +355,15 @@ const AIChatbot = () => {
               placeholder={t('ask_anything')}
               style={{
                 flex: 1, height: 38,
-                background: 'rgba(255,255,255,0.05)',
-                border: '1.5px solid rgba(255,255,255,0.08)',
+                background: '#FFFFFF',
+                border: '1.5px solid #E8E0D8',
                 borderRadius: 10, padding: '0 12px',
-                color: '#fff', fontSize: '0.82rem',
+                color: '#2D1F0E', fontSize: '0.82rem',
                 fontFamily: "'Sora',sans-serif",
                 outline: 'none', transition: 'border-color .2s',
               }}
               onFocus={e => (e.currentTarget.style.borderColor = 'rgba(251,146,60,0.4)')}
-              onBlur={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)')}
+              onBlur={e => (e.currentTarget.style.borderColor = '#E8E0D8')}
             />
             <button
               onClick={() => send(input)}
@@ -373,9 +373,9 @@ const AIChatbot = () => {
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 cursor: loading || !input.trim() ? 'not-allowed' : 'pointer',
                 background: loading || !input.trim()
-                  ? 'rgba(255,255,255,0.05)'
+                  ? '#FFFFFF'
                   : 'linear-gradient(135deg, #f97316, #fb923c)',
-                color: loading || !input.trim() ? 'rgba(255,255,255,0.2)' : '#fff',
+                color: loading || !input.trim() ? '#A89880' : '#fff',
                 transition: 'all .2s',
               }}
             >

@@ -43,12 +43,12 @@ function StatPill({ icon, value }) {
     <div style={{
       display: 'flex', alignItems: 'center', gap: 6,
       padding: '6px 12px',
-      background: 'rgba(255,255,255,0.04)',
-      border: '1px solid rgba(255,255,255,0.08)',
+      background: '#FFFFFF',
+      border: '1px solid #E8E0D8',
       borderRadius: 999,
     }}>
       {icon}
-      <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.6)', fontWeight: 500 }}>{value}</span>
+      <span style={{ fontSize: '0.8rem', color: '#4A3826', fontWeight: 500 }}>{value}</span>
     </div>
   );
 }
@@ -78,13 +78,13 @@ function BookingDialog({ open, onClose, karigar, date, setDate, time, setTime, d
       >
         <div style={{ marginBottom: 24 }}>
           <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.6rem', letterSpacing: '0.18em', color: '#fb923c', textTransform: 'uppercase', display: 'block', marginBottom: 6 }}>Schedule</span>
-          <h3 style={{ fontSize: '1.2rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#fff' }}>Book {karigar?.name}</h3>
+          <h3 style={{ fontSize: '1.2rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#2D1F0E' }}>Book {karigar?.name}</h3>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           {/* Date */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <label style={{ fontSize: '0.72rem', fontWeight: 600, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Date</label>
+            <label style={{ fontSize: '0.72rem', fontWeight: 600, color: '#6B5744', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Date</label>
             <input
               type="date"
               value={date}
@@ -92,23 +92,23 @@ function BookingDialog({ open, onClose, karigar, date, setDate, time, setTime, d
               min={todayIST}
               max={maxDate}
               style={{
-                background: 'rgba(255,255,255,0.05)',
-                border: '1.5px solid rgba(255,255,255,0.1)',
+                background: '#FFFFFF',
+                border: '1.5px solid #E8E0D8',
                 borderRadius: 12, padding: '10px 14px',
-                color: '#fff', fontSize: '0.9rem',
+                color: '#2D1F0E', fontSize: '0.9rem',
                 fontFamily: "'Sora', sans-serif", outline: 'none',
                 width: '100%', colorScheme: 'dark',
               }}
               onFocus={e => { e.target.style.borderColor = 'rgba(251,146,60,0.55)'; e.target.style.boxShadow = '0 0 0 3px rgba(251,146,60,0.1)'; }}
-              onBlur={e => { e.target.style.borderColor = 'rgba(255,255,255,0.1)'; e.target.style.boxShadow = 'none'; }}
+              onBlur={e => { e.target.style.borderColor = '#E8E0D8'; e.target.style.boxShadow = 'none'; }}
             />
           </div>
 
           {/* Time Slots */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <label style={{ fontSize: '0.72rem', fontWeight: 600, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Time Slot</label>
+            <label style={{ fontSize: '0.72rem', fontWeight: 600, color: '#6B5744', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Time Slot</label>
             {!date ? (
-              <p style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.3)' }}>Select a date first</p>
+              <p style={{ fontSize: '0.82rem', color: '#8B7355' }}>Select a date first</p>
             ) : availableSlots.length === 0 ? (
               <p style={{ fontSize: '0.82rem', color: '#f87171' }}>No available slots for this date</p>
             ) : (
@@ -120,9 +120,9 @@ function BookingDialog({ open, onClose, karigar, date, setDate, time, setTime, d
                     style={{
                       padding: '8px 4px',
                       borderRadius: 10,
-                      border: `1.5px solid ${time === slot ? 'rgba(251,146,60,0.6)' : 'rgba(255,255,255,0.1)'}`,
-                      background: time === slot ? 'rgba(251,146,60,0.15)' : 'rgba(255,255,255,0.03)',
-                      color: time === slot ? '#fb923c' : 'rgba(255,255,255,0.55)',
+                      border: `1.5px solid ${time === slot ? 'rgba(251,146,60,0.6)' : '#E8E0D8'}`,
+                      background: time === slot ? 'rgba(251,146,60,0.15)' : '#F7F2ED',
+                      color: time === slot ? '#fb923c' : '#4A3826',
                       fontSize: '0.75rem', fontWeight: 600,
                       cursor: 'pointer', fontFamily: "'Sora',sans-serif",
                       transition: 'all .2s',
@@ -137,22 +137,22 @@ function BookingDialog({ open, onClose, karigar, date, setDate, time, setTime, d
 
           {/* Description */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <label style={{ fontSize: '0.72rem', fontWeight: 600, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Job Description <span style={{ color: 'rgba(255,255,255,0.2)', fontWeight: 400 }}>(optional)</span></label>
+            <label style={{ fontSize: '0.72rem', fontWeight: 600, color: '#6B5744', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Job Description <span style={{ color: '#A89880', fontWeight: 400 }}>(optional)</span></label>
             <textarea
               placeholder="Describe the work needed..."
               value={description}
               onChange={e => setDescription(e.target.value)}
               rows={3}
               style={{
-                background: 'rgba(255,255,255,0.05)',
-                border: '1.5px solid rgba(255,255,255,0.1)',
+                background: '#FFFFFF',
+                border: '1.5px solid #E8E0D8',
                 borderRadius: 12, padding: '10px 14px',
-                color: '#fff', fontSize: '0.875rem', resize: 'none',
+                color: '#2D1F0E', fontSize: '0.875rem', resize: 'none',
                 fontFamily: "'Sora', sans-serif", outline: 'none',
                 transition: 'border-color .2s',
               }}
               onFocus={e => { e.target.style.borderColor = 'rgba(251,146,60,0.5)'; }}
-              onBlur={e => { e.target.style.borderColor = 'rgba(255,255,255,0.1)'; }}
+              onBlur={e => { e.target.style.borderColor = '#E8E0D8'; }}
             />
           </div>
         </div>
@@ -160,8 +160,8 @@ function BookingDialog({ open, onClose, karigar, date, setDate, time, setTime, d
         <div style={{ display: 'flex', gap: 10, marginTop: 24 }}>
           <button onClick={onClose} style={{
             flex: 1, padding: '11px', borderRadius: 12,
-            border: '1.5px solid rgba(255,255,255,0.1)',
-            background: 'transparent', color: 'rgba(255,255,255,0.5)',
+            border: '1.5px solid #E8E0D8',
+            background: 'transparent', color: '#6B5744',
             fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer',
             fontFamily: "'Sora',sans-serif",
           }}>Cancel</button>
@@ -171,10 +171,10 @@ function BookingDialog({ open, onClose, karigar, date, setDate, time, setTime, d
             style={{
               flex: 2, padding: '11px', borderRadius: 12, border: 'none',
               background: (!date || !time)
-                ? 'rgba(255,255,255,0.06)'
+                ? '#F0E8DE'
                 : 'linear-gradient(90deg,#f97316,#fb923c,#fdba74,#fb923c,#f97316)',
               backgroundSize: '200% auto',
-              color: (!date || !time) ? 'rgba(255,255,255,0.25)' : '#0a0a0f',
+              color: (!date || !time) ? '#A89880' : '#FFFAF6',
               fontSize: '0.875rem', fontWeight: 700,
               cursor: (!date || !time) ? 'not-allowed' : 'pointer',
               fontFamily: "'Sora',sans-serif",
@@ -255,17 +255,17 @@ const KarigarProfile = () => {
   }, [id]);
 
   if (loading) return (
-    <div style={{ minHeight: '100vh', background: '#0a0a0f', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{ minHeight: '100vh', background: '#FFFFFFAF6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
         <Loader2 size={32} color="#fb923c" style={{ animation: 'spin 1s linear infinite' }} />
-        <p style={{ color: 'rgba(255,255,255,0.4)', fontFamily: "'Sora',sans-serif" }}>Loading profile...</p>
+        <p style={{ color: '#6B5744', fontFamily: "'Sora',sans-serif" }}>Loading profile...</p>
       </div>
     </div>
   );
 
   if (!karigar) return (
-    <div style={{ minHeight: '100vh', background: '#0a0a0f', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <p style={{ color: 'rgba(255,255,255,0.4)', fontFamily: "'Sora',sans-serif" }}>Karigar not found</p>
+    <div style={{ minHeight: '100vh', background: '#FFFFFFAF6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <p style={{ color: '#6B5744', fontFamily: "'Sora',sans-serif" }}>Karigar not found</p>
     </div>
   );
 
@@ -303,7 +303,7 @@ const KarigarProfile = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0a0a0f', fontFamily: "'Sora', sans-serif", color: '#fff' }}>
+    <div style={{ minHeight: '100vh', background: '#FFFFFFAF6', fontFamily: "'Sora', sans-serif", color: '#2D1F0E' }}>
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
@@ -343,9 +343,9 @@ const KarigarProfile = () => {
 
         {/* ── PROFILE CARD ── */}
         <div className="fu-2" style={{
-          background: 'rgba(255,255,255,0.03)',
+          background: '#F7F2ED',
           backdropFilter: 'blur(20px)',
-          border: '1px solid rgba(255,255,255,0.08)',
+          border: '1px solid #E8E0D8',
           borderRadius: 24, padding: 28, marginBottom: 24,
         }}>
           {/* Avatar + name row */}
@@ -390,7 +390,7 @@ const KarigarProfile = () => {
           </div>
 
           {/* Divider */}
-          <div style={{ height: 1, background: 'linear-gradient(90deg,transparent,rgba(255,255,255,0.07),transparent)', marginBottom: 20 }} />
+          <div style={{ height: 1, background: 'linear-gradient(90deg,transparent,#E8E0D8,transparent)', marginBottom: 20 }} />
 
           {/* Trust badges */}
           <div style={{ marginBottom: 16 }}>
@@ -400,7 +400,7 @@ const KarigarProfile = () => {
           {/* Star rating */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20 }}>
             <StarRating rating={Number(karigar.rating)} />
-            <span style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.4)' }}>
+            <span style={{ fontSize: '0.82rem', color: '#6B5744' }}>
               {Number(karigar.rating).toFixed(1)} ({karigar.review_count} reviews)
             </span>
           </div>
@@ -417,13 +417,13 @@ const KarigarProfile = () => {
 
         {/* ── ABOUT ── */}
         <div className="fu-2" style={{
-          background: 'rgba(255,255,255,0.03)',
+          background: '#F7F2ED',
           backdropFilter: 'blur(20px)',
-          border: '1px solid rgba(255,255,255,0.08)',
+          border: '1px solid #E8E0D8',
           borderRadius: 24, padding: 24, marginBottom: 24,
         }}>
           <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.6rem', letterSpacing: '0.18em', color: '#fb923c', textTransform: 'uppercase', display: 'block', marginBottom: 10 }}>Bio</span>
-          <p style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.5)', lineHeight: 1.7, fontWeight: 300 }}>{karigar.description}</p>
+          <p style={{ fontSize: '0.875rem', color: '#6B5744', lineHeight: 1.7, fontWeight: 300 }}>{karigar.description}</p>
         </div>
 
         {/* ── BOOK BUTTON ── */}
@@ -437,7 +437,7 @@ const KarigarProfile = () => {
                 background: 'linear-gradient(90deg,#f97316,#fb923c,#fdba74,#fb923c,#f97316)',
                 backgroundSize: '200% auto',
                 animation: 'shimmer 3s linear infinite',
-                color: '#0a0a0f', fontWeight: 800, fontSize: '0.95rem',
+                color: '#2D1F0EAF6', fontWeight: 800, fontSize: '0.95rem',
                 cursor: 'pointer', fontFamily: "'Sora',sans-serif",
                 letterSpacing: '0.01em',
               }}
@@ -452,7 +452,7 @@ const KarigarProfile = () => {
           <div className="fu-3" style={{ marginBottom: 32 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
               <h2 style={{ fontSize: '1rem', fontWeight: 700, letterSpacing: '-0.01em' }}>Previous Work</h2>
-              <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.65rem', color: 'rgba(255,255,255,0.3)', letterSpacing: '0.1em' }}>
+              <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.65rem', color: '#8B7355', letterSpacing: '0.1em' }}>
                 {portfolioImages.length} PHOTOS
               </span>
             </div>
@@ -462,8 +462,8 @@ const KarigarProfile = () => {
                   key={img.id}
                   style={{
                     overflow: 'hidden', borderRadius: 16,
-                    border: '1px solid rgba(255,255,255,0.07)',
-                    background: 'rgba(255,255,255,0.03)',
+                    border: '1px solid #E8E0D8',
+                    background: '#F7F2ED',
                     animation: `cardFadeUp .5s cubic-bezier(.22,1,.36,1) ${i * 0.07}s both`,
                   }}
                 >
@@ -478,7 +478,7 @@ const KarigarProfile = () => {
         <div className="fu-4">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
             <h2 style={{ fontSize: '1rem', fontWeight: 700, letterSpacing: '-0.01em' }}>Customer Reviews</h2>
-            <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.65rem', color: 'rgba(255,255,255,0.3)', letterSpacing: '0.1em' }}>
+            <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.65rem', color: '#8B7355', letterSpacing: '0.1em' }}>
               {reviews.length} TOTAL
             </span>
           </div>
@@ -486,13 +486,13 @@ const KarigarProfile = () => {
           {reviews.length === 0 ? (
             <div style={{
               padding: '56px 24px', textAlign: 'center',
-              background: 'rgba(255,255,255,0.02)',
-              border: '1px solid rgba(255,255,255,0.06)',
+              background: '#F7F2ED',
+              border: '1px solid #F0E8DE',
               borderRadius: 20,
             }}>
               <div style={{ fontSize: '2.5rem', marginBottom: 14 }}>⭐</div>
-              <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.9rem', fontWeight: 300 }}>No reviews yet.</p>
-              <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: '0.8rem', marginTop: 6 }}>Be the first to book and leave a review!</p>
+              <p style={{ color: '#6B5744', fontSize: '0.9rem', fontWeight: 300 }}>No reviews yet.</p>
+              <p style={{ color: '#A89880', fontSize: '0.8rem', marginTop: 6 }}>Be the first to book and leave a review!</p>
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -532,9 +532,9 @@ function ReviewCard({ r, index }) {
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
-        background: 'rgba(255,255,255,0.03)',
+        background: '#F7F2ED',
         backdropFilter: 'blur(16px)',
-        border: `1px solid ${hov ? 'rgba(251,146,60,0.2)' : 'rgba(255,255,255,0.07)'}`,
+        border: `1px solid ${hov ? 'rgba(251,146,60,0.2)' : '#E8E0D8'}`,
         borderRadius: 20, padding: 20,
         transition: 'all 0.3s cubic-bezier(0.22,1,0.36,1)',
         transform: hov ? 'translateY(-2px)' : 'translateY(0)',
@@ -557,8 +557,8 @@ function ReviewCard({ r, index }) {
         </div>
         <StarRating rating={r.rating} size={13} />
       </div>
-      <p style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.45)', lineHeight: 1.6, fontWeight: 300, marginBottom: 8 }}>{r.text}</p>
-      <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.2)', fontFamily: "'Space Mono',monospace" }}>
+      <p style={{ fontSize: '0.82rem', color: '#6B5744', lineHeight: 1.6, fontWeight: 300, marginBottom: 8 }}>{r.text}</p>
+      <p style={{ fontSize: '0.72rem', color: '#A89880', fontFamily: "'Space Mono',monospace" }}>
         {new Date(r.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
       </p>
     </div>

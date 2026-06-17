@@ -83,12 +83,12 @@ function CategoryCard({ label, icon, color, desc, count, active, onClick, delay,
         alignItems: 'flex-start', gap: 0,
         padding: '24px 22px 20px',
         borderRadius: 22,
-        border: `1.5px solid ${active ? color : hov ? color + '44' : 'rgba(255,255,255,0.07)'}`,
+        border: `1.5px solid ${active ? color : hov ? color + '44' : '#E8E0D8'}`,
         background: active
           ? `linear-gradient(135deg, ${color}18, ${color}08)`
           : hov
-            ? `linear-gradient(135deg, ${color}10, rgba(255,255,255,0.02))`
-            : 'rgba(255,255,255,0.03)',
+            ? `linear-gradient(135deg, ${color}10, #F7F2ED)`
+            : '#F7F2ED',
         backdropFilter: 'blur(16px)',
         cursor: 'pointer',
         transition: 'all 0.38s cubic-bezier(0.22,1,0.36,1)',
@@ -129,10 +129,10 @@ function CategoryCard({ label, icon, color, desc, count, active, onClick, delay,
       {/* Icon box */}
       <div style={{
         width: 52, height: 52, borderRadius: 15, marginBottom: 16,
-        background: lit ? `${color}20` : 'rgba(255,255,255,0.05)',
-        border: `1.5px solid ${lit ? color + '40' : 'rgba(255,255,255,0.08)'}`,
+        background: lit ? `${color}20` : '#FFFFFF',
+        border: `1.5px solid ${lit ? color + '40' : '#E8E0D8'}`,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        color: lit ? color : 'rgba(255,255,255,0.4)',
+        color: lit ? color : '#6B5744',
         transition: 'all .35s',
         boxShadow: lit ? `0 0 20px ${color}30` : 'none',
         flexShrink: 0,
@@ -143,7 +143,7 @@ function CategoryCard({ label, icon, color, desc, count, active, onClick, delay,
       {/* Label */}
       <span style={{
         fontSize: '1rem', fontWeight: 700, lineHeight: 1.2,
-        color: active ? color : hov ? '#fff' : 'rgba(255,255,255,0.85)',
+        color: active ? color : hov ? '#fff' : '#2D1F0E',
         transition: 'color .3s', marginBottom: 5,
       }}>
         {label}
@@ -152,7 +152,7 @@ function CategoryCard({ label, icon, color, desc, count, active, onClick, delay,
       {/* Desc */}
       <span style={{
         fontSize: '0.75rem', fontWeight: 300,
-        color: lit ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.3)',
+        color: lit ? '#6B5744' : '#8B7355',
         transition: 'color .3s', lineHeight: 1.4, marginBottom: 14,
       }}>
         {desc}
@@ -166,9 +166,9 @@ function CategoryCard({ label, icon, color, desc, count, active, onClick, delay,
         {/* Availability pill */}
         <span style={{
           fontSize: '0.65rem', fontWeight: 700,
-          color: lit ? color : 'rgba(255,255,255,0.25)',
-          background: lit ? `${color}15` : 'rgba(255,255,255,0.04)',
-          border: `1px solid ${lit ? color + '30' : 'rgba(255,255,255,0.06)'}`,
+          color: lit ? color : '#A89880',
+          background: lit ? `${color}15` : '#FFFFFF',
+          border: `1px solid ${lit ? color + '30' : '#F0E8DE'}`,
           padding: '3px 9px', borderRadius: 999,
           transition: 'all .3s',
           display: 'flex', alignItems: 'center', gap: 5,
@@ -183,10 +183,10 @@ function CategoryCard({ label, icon, color, desc, count, active, onClick, delay,
         {/* Arrow */}
         <div style={{
           width: 28, height: 28, borderRadius: '50%',
-          background: lit ? `${color}18` : 'rgba(255,255,255,0.04)',
-          border: `1px solid ${lit ? color + '30' : 'rgba(255,255,255,0.06)'}`,
+          background: lit ? `${color}18` : '#FFFFFF',
+          border: `1px solid ${lit ? color + '30' : '#F0E8DE'}`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color: lit ? color : 'rgba(255,255,255,0.25)',
+          color: lit ? color : '#A89880',
           transition: 'all .3s',
           transform: hov ? 'translateX(2px)' : 'translateX(0)',
           flexShrink: 0,
@@ -212,8 +212,8 @@ function CategoryCard({ label, icon, color, desc, count, active, onClick, delay,
 function Skeleton() {
   return (
     <div style={{
-      background: 'rgba(255,255,255,0.03)',
-      border: '1px solid rgba(255,255,255,0.06)',
+      background: '#F7F2ED',
+      border: '1px solid #F0E8DE',
       borderRadius: 20, padding: 24, height: 220,
       animation: 'skeletonPulse 1.6s ease-in-out infinite',
     }} />
@@ -237,10 +237,10 @@ function FilterSelect({ value, onChange, placeholder, options }) {
         style={{
           display: 'flex', alignItems: 'center', gap: 8,
           padding: '9px 14px', borderRadius: 10,
-          border: `1.5px solid ${open ? 'rgba(251,146,60,0.5)' : 'rgba(255,255,255,0.1)'}`,
-          background: open ? 'rgba(251,146,60,0.08)' : 'rgba(255,255,255,0.04)',
+          border: `1.5px solid ${open ? 'rgba(251,146,60,0.5)' : '#E8E0D8'}`,
+          background: open ? 'rgba(251,146,60,0.08)' : '#FFFFFF',
           backdropFilter: 'blur(12px)',
-          color: value && value !== 'all' && value !== 'none' ? '#fb923c' : 'rgba(255,255,255,0.6)',
+          color: value && value !== 'all' && value !== 'none' ? '#fb923c' : '#4A3826',
           fontSize: '0.875rem', fontWeight: 600,
           cursor: 'pointer', transition: 'all 0.2s',
           fontFamily: "'Sora', sans-serif", whiteSpace: 'nowrap',
@@ -262,12 +262,12 @@ function FilterSelect({ value, onChange, placeholder, options }) {
             <button key={opt.value} onClick={() => { onChange(opt.value); setOpen(false); }} style={{
               display: 'block', width: '100%', padding: '10px 16px', textAlign: 'left',
               background: value === opt.value ? 'rgba(251,146,60,0.12)' : 'transparent',
-              color: value === opt.value ? '#fb923c' : 'rgba(255,255,255,0.7)',
+              color: value === opt.value ? '#fb923c' : '#3D2E1F',
               fontSize: '0.875rem', fontWeight: value === opt.value ? 700 : 400,
               border: 'none', cursor: 'pointer', transition: 'background 0.15s',
               fontFamily: "'Sora', sans-serif",
             }}
-              onMouseEnter={e => { if (value !== opt.value) (e.target as HTMLElement).style.background = 'rgba(255,255,255,0.05)'; }}
+              onMouseEnter={e => { if (value !== opt.value) (e.target as HTMLElement).style.background = '#FFFFFF'; }}
               onMouseLeave={e => { if (value !== opt.value) (e.target as HTMLElement).style.background = 'transparent'; }}
             >
               {opt.label}
@@ -323,7 +323,7 @@ const CustomerDashboard = () => {
   const clearFilters = () => { setSkillFilter('all'); setRatingFilter('all'); setPriceSort('none'); };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0a0a0f', fontFamily: "'Sora', sans-serif", color: '#fff' }}>
+    <div style={{ minHeight: '100vh', background: '#FFFFFFAF6', fontFamily: "'Sora', sans-serif", color: '#2D1F0E' }}>
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
@@ -342,10 +342,10 @@ const CustomerDashboard = () => {
 
         .search-input {
           width: 100%; height: 52px;
-          background: rgba(255,255,255,0.05) !important;
-          border: 1.5px solid rgba(255,255,255,0.1) !important;
+          background: #FFFFFF !important;
+          border: 1.5px solid #E8E0D8 !important;
           border-radius: 14px !important;
-          color: #fff !important; font-size: 0.95rem;
+          color: #2D1F0E !important; font-size: 0.95rem;
           padding-left: 48px !important;
           font-family: 'Sora', sans-serif;
           transition: border-color .25s, box-shadow .25s !important;
@@ -355,7 +355,7 @@ const CustomerDashboard = () => {
           box-shadow: 0 0 0 3px rgba(251,146,60,0.1) !important;
           outline: none !important;
         }
-        .search-input::placeholder { color: rgba(255,255,255,0.3); }
+        .search-input::placeholder { color: #8B7355; }
 
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -380,7 +380,7 @@ const CustomerDashboard = () => {
         <div className="fu-2" style={{ position: 'relative', marginBottom: 32 }}>
           <Search size={18} style={{
             position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)',
-            color: searchFocused ? '#fb923c' : 'rgba(255,255,255,0.35)',
+            color: searchFocused ? '#fb923c' : '#6B5744',
             transition: 'color .25s', zIndex: 1, pointerEvents: 'none',
           }} />
           <input
@@ -394,9 +394,9 @@ const CustomerDashboard = () => {
           {search && (
             <button onClick={() => setSearch('')} style={{
               position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)',
-              background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '50%',
+              background: '#E8E0D8', border: 'none', borderRadius: '50%',
               width: 22, height: 22, display: 'flex', alignItems: 'center', justifyContent: 'center',
-              cursor: 'pointer', color: 'rgba(255,255,255,0.5)',
+              cursor: 'pointer', color: '#6B5744',
             }}>
               <X size={12} />
             </button>
@@ -411,11 +411,11 @@ const CustomerDashboard = () => {
                 <h2 style={{ fontSize: '1.05rem', fontWeight: 700, letterSpacing: '-0.01em', marginBottom: 3 }}>
                   Service Categories
                 </h2>
-                <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.3)', fontWeight: 300 }}>
+                <p style={{ fontSize: '0.75rem', color: '#8B7355', fontWeight: 300 }}>
                   Tap a category to filter karigars
                 </p>
               </div>
-              <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.65rem', color: 'rgba(255,255,255,0.3)', letterSpacing: '0.1em' }}>
+              <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.65rem', color: '#8B7355', letterSpacing: '0.1em' }}>
                 {CATEGORIES.length} TRADES
               </span>
             </div>
@@ -446,13 +446,13 @@ const CustomerDashboard = () => {
           <div style={{
             display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 10,
             padding: '14px 18px',
-            background: 'rgba(255,255,255,0.03)',
-            border: '1px solid rgba(255,255,255,0.07)',
+            background: '#F7F2ED',
+            border: '1px solid #E8E0D8',
             borderRadius: 16, backdropFilter: 'blur(12px)',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginRight: 4 }}>
-              <SlidersHorizontal size={15} color="rgba(255,255,255,0.4)" />
-              <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.4)', fontWeight: 600 }}>Filters</span>
+              <SlidersHorizontal size={15} color="#6B5744" />
+              <span style={{ fontSize: '0.8rem', color: '#6B5744', fontWeight: 600 }}>Filters</span>
               {activeFiltersCount > 0 && (
                 <span style={{
                   background: 'rgba(251,146,60,0.2)', border: '1px solid rgba(251,146,60,0.4)',
@@ -461,7 +461,7 @@ const CustomerDashboard = () => {
                 }}>{activeFiltersCount}</span>
               )}
             </div>
-            <div style={{ width: 1, height: 20, background: 'rgba(255,255,255,0.08)', margin: '0 4px' }} />
+            <div style={{ width: 1, height: 20, background: '#E8E0D8', margin: '0 4px' }} />
             <FilterSelect value={skillFilter} onChange={setSkillFilter} placeholder="All Skills"
               options={[{ value: 'all', label: 'All Skills' }, ...['Electrician','Plumber','Carpenter','AC Repair','Mason','Painter'].map(s => ({ value: s, label: s }))]} />
             <FilterSelect value={ratingFilter} onChange={setRatingFilter} placeholder="All Ratings"
@@ -472,12 +472,12 @@ const CustomerDashboard = () => {
               <button onClick={clearFilters} style={{
                 marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6,
                 padding: '7px 12px', borderRadius: 8,
-                border: '1px solid rgba(255,255,255,0.1)',
-                background: 'transparent', color: 'rgba(255,255,255,0.4)',
+                border: '1px solid #E8E0D8',
+                background: 'transparent', color: '#6B5744',
                 fontSize: '0.8rem', cursor: 'pointer', fontFamily: "'Sora',sans-serif", transition: 'all .2s',
               }}
                 onMouseEnter={e => { e.currentTarget.style.color = '#fb923c'; e.currentTarget.style.borderColor = 'rgba(251,146,60,0.3)'; }}
-                onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.4)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = '#6B5744'; e.currentTarget.style.borderColor = '#E8E0D8'; }}
               >
                 <X size={12} /> Clear all
               </button>
@@ -492,7 +492,7 @@ const CustomerDashboard = () => {
               {search ? <span>Results for <span style={{ color: '#fb923c' }}>"{search}"</span></span> : 'Nearby Karigars'}
             </h2>
             {!loading && (
-              <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.65rem', color: 'rgba(255,255,255,0.3)', letterSpacing: '0.1em' }}>
+              <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.65rem', color: '#8B7355', letterSpacing: '0.1em' }}>
                 {filtered.length} FOUND
               </span>
             )}
@@ -505,12 +505,12 @@ const CustomerDashboard = () => {
           ) : filtered.length === 0 ? (
             <div style={{
               padding: '64px 24px', textAlign: 'center',
-              background: 'rgba(255,255,255,0.02)',
-              border: '1px solid rgba(255,255,255,0.06)', borderRadius: 20,
+              background: '#F7F2ED',
+              border: '1px solid #F0E8DE', borderRadius: 20,
             }}>
               <div style={{ fontSize: '2.5rem', marginBottom: 16 }}>🔍</div>
-              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.95rem', fontWeight: 300 }}>No karigars found.</p>
-              <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: '0.85rem', marginTop: 6 }}>Try adjusting your search or filters.</p>
+              <p style={{ color: '#6B5744', fontSize: '0.95rem', fontWeight: 300 }}>No karigars found.</p>
+              <p style={{ color: '#A89880', fontSize: '0.85rem', marginTop: 6 }}>Try adjusting your search or filters.</p>
             </div>
           ) : (
             <div ref={cardRef} style={{ display: 'grid', gap: 16, gridTemplateColumns: 'repeat(auto-fill,minmax(300px,1fr))' }}>

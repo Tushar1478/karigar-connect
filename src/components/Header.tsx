@@ -167,7 +167,7 @@ const Header = () => {
           transition: all .2s;
           color: #6B5744;
         }
-        .mobile-nav-link:hover  { background: #FFFFFF; color: #fff; }
+        .mobile-nav-link:hover  { background: #FFFFFF; color: #2D1F0E; }
         .mobile-nav-link.active { background: rgba(251,146,60,0.1); color: #fb923c; font-weight: 600; }
 
         .notif-btn {
@@ -257,9 +257,9 @@ const Header = () => {
                       width: 280,
                       maxHeight: 320,
                       overflowY: 'auto',
-                      background: '#FFFFFF',
+                      background: '#2D1F0E',
                       borderRadius: 14,
-                      border: '1px solid rgba(255,255,255,0.08)',
+                      border: '1px solid #E8E0D8',
                       boxShadow: '0 18px 60px rgba(0,0,0,0.6)',
                       padding: '10px 10px 8px',
                       zIndex: 120,
@@ -284,7 +284,7 @@ const Header = () => {
                               padding: '8px 9px',
                               borderRadius: 10,
                               background: '#F7F2ED',
-                              border: '1px solid rgba(255,255,255,0.06)',
+                              border: '1px solid #F0E8DE',
                             }}
                           >
                             <p style={{ fontSize: '0.8rem', color: '#2D1F0E', marginBottom: 3 }}>
@@ -304,8 +304,8 @@ const Header = () => {
                 <div style={{
                   display: 'flex', alignItems: 'center', gap: 9,
                   padding: '6px 12px 6px 6px',
-                  background: '#FFFFFF',
-                  border: '1px solid rgba(255,255,255,0.08)',
+                  background: '#2D1F0E',
+                  border: '1px solid #E8E0D8',
                   borderRadius: 999,
                 }}>
                   <div style={{
@@ -337,7 +337,7 @@ const Header = () => {
                   border: `1.5px solid ${mobileOpen ? 'rgba(251,146,60,0.35)' : '#E8E0D8'}`,
                   borderRadius: 10, width: 38, height: 38,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  cursor: 'pointer', color: mobileOpen ? '#fb923c' : 'rgba(255,255,255,0.6)',
+                  cursor: 'pointer', color: mobileOpen ? '#fb923c' : '#4A3826',
                   transition: 'all .2s',
                 }}
                 className="mobile-hamburger"
@@ -351,8 +351,8 @@ const Header = () => {
         {/* ── MOBILE DRAWER ── */}
         {mobileOpen && isAuthenticated && (
           <div style={{
-            borderTop: '1px solid rgba(255,255,255,0.06)',
-            background: '#FFFFFF',
+            borderTop: '1px solid #F0E8DE',
+            background: '#2D1F0E',
             backdropFilter: 'blur(20px)',
             padding: '12px 16px 16px',
             animation: 'mobileSlide .25s cubic-bezier(.22,1,.36,1)',
@@ -362,8 +362,8 @@ const Header = () => {
             <div style={{
               display: 'flex', alignItems: 'center', gap: 10,
               padding: '10px 14px', borderRadius: 14, marginBottom: 10,
-              background: '#FFFFFF',
-              border: '1px solid rgba(255,255,255,0.06)',
+              background: '#2D1F0E',
+              border: '1px solid #F0E8DE',
             }}>
               <div style={{
                 width: 32, height: 32, borderRadius: '50%',
