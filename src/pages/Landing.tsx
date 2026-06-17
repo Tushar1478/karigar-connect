@@ -463,6 +463,23 @@ export default function Landing() {
         <div style={{ position:"absolute", bottom:0, left:0, right:0, height:120, background:"linear-gradient(to bottom,transparent,var(--bg))", transition:"background .5s" }} />
       </section>
 
+      {/* ── SOCIAL PROOF STRIP ── */}
+      <section style={{ background:"#2D1F0E", padding:"32px 16px" }}>
+        <div style={{ maxWidth:1100, margin:"0 auto", display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:24, textAlign:"center" }}>
+          {[
+            { num:"2,400+", label:"Jobs completed" },
+            { num:"240+",   label:"Verified karigars" },
+            { num:"4.8★",   label:"Average rating" },
+            { num:"30 min", label:"Avg response time" },
+          ].map(s => (
+            <div key={s.label}>
+              <p style={{ fontFamily:"'Space Mono',monospace", fontSize:"clamp(1.4rem,3vw,1.9rem)", fontWeight:800, color:"#F4722B", lineHeight:1 }}>{s.num}</p>
+              <p style={{ color:"#E8D8C4", fontSize:"0.78rem", marginTop:6, fontWeight:400, letterSpacing:"0.04em" }}>{s.label}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* ── STATS ── */}
       <section style={{ background:"var(--bg)", padding:"60px 16px", transition:"background .5s" }}>
         <div className="divider" style={{ marginBottom:56 }} />
