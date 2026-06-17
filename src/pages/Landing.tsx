@@ -416,8 +416,8 @@ export default function Landing() {
           transition:"background .5s",
         }} />
 
-        {/* Floating sparks */}
-        {[...Array(14)].map((_,i) => (
+        {/* Floating sparks - dark mode only */}
+        {dark && [...Array(14)].map((_,i) => (
           <div key={i} style={{
             position:"absolute",
             bottom: `${8 + (i*7)%40}%`,
