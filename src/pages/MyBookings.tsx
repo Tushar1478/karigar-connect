@@ -118,8 +118,8 @@ function ProgressBar({ status }) {
                 width: 22, height: 22, borderRadius: '50%',
                 background: done || current
                   ? done ? 'rgba(52,211,153,0.2)' : `${meta.color}22`
-                  : 'rgba(255,255,255,0.05)',
-                border: `2px solid ${done ? '#34d399' : current ? meta.color : 'rgba(255,255,255,0.1)'}`,
+                  : '#FFFFFF',
+                border: `2px solid ${done ? '#34d399' : current ? meta.color : '#E8E0D8'}`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 transition: 'all 0.4s ease',
                 boxShadow: current ? `0 0 10px ${meta.color}55` : 'none',
@@ -128,12 +128,12 @@ function ProgressBar({ status }) {
                   ? <Check size={11} color="#34d399" />
                   : current
                     ? <div style={{ width: 7, height: 7, borderRadius: '50%', background: meta.color, animation: 'pulse 1.5s infinite' }} />
-                    : <div style={{ width: 5, height: 5, borderRadius: '50%', background: 'rgba(255,255,255,0.15)' }} />
+                    : <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#D9CFC2' }} />
                 }
               </div>
               <span style={{
                 fontSize: '0.58rem', fontWeight: current ? 700 : 400,
-                color: done ? '#34d399' : current ? meta.color : 'rgba(255,255,255,0.25)',
+                color: done ? '#34d399' : current ? meta.color : '#A89880',
                 transition: 'color 0.4s', textAlign: 'center', lineHeight: 1.2,
                 display: 'none',  // hide on small, show on md
               }}>{s}</span>
@@ -143,7 +143,7 @@ function ProgressBar({ status }) {
       </div>
 
       {/* Bar track */}
-      <div style={{ height: 5, borderRadius: 999, background: 'rgba(255,255,255,0.06)', overflow: 'hidden', position: 'relative' }}>
+      <div style={{ height: 5, borderRadius: 999, background: '#F0E8DE', overflow: 'hidden', position: 'relative' }}>
         <div style={{
           height: '100%', borderRadius: 999,
           background: status === 'completed'
@@ -156,7 +156,7 @@ function ProgressBar({ status }) {
         {/* shimmer overlay */}
         <div style={{
           position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-          background: 'linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.25) 50%,transparent 100%)',
+          background: 'linear-gradient(90deg,transparent 0%,#A89880 50%,transparent 100%)',
           backgroundSize: '200% 100%',
           animation: pct > 0 && pct < 100 ? 'progressShimmer 2s linear infinite' : 'none',
           borderRadius: 999,
@@ -165,7 +165,7 @@ function ProgressBar({ status }) {
 
       {/* Percentage label */}
       <div style={{ marginTop: 6, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.25)', fontFamily: "'Space Mono',monospace" }}>
+        <span style={{ fontSize: '0.68rem', color: '#A89880', fontFamily: "'Space Mono',monospace" }}>
           Step {meta.step + 1} of {STEPS.length}
         </span>
         <span style={{ fontSize: '0.68rem', color: meta.color, fontFamily: "'Space Mono',monospace", fontWeight: 700 }}>
@@ -196,9 +196,9 @@ function RatingDialog({ open, onClose, onSubmit, rating, setRating, review, setR
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
           <div>
             <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.6rem', letterSpacing: '0.18em', color: '#fb923c', textTransform: 'uppercase', display: 'block', marginBottom: 6 }}>Review</span>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em' }}>Rate this Service</h3>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#2D1F0E', letterSpacing: '-0.02em' }}>Rate this Service</h3>
           </div>
-          <button onClick={onClose} style={{ background: 'rgba(255,255,255,0.06)', border: 'none', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'rgba(255,255,255,0.5)' }}>
+          <button onClick={onClose} style={{ background: '#F0E8DE', border: 'none', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#6B5744' }}>
             <X size={15} />
           </button>
         </div>
@@ -210,30 +210,30 @@ function RatingDialog({ open, onClose, onSubmit, rating, setRating, review, setR
             onChange={e => setReview(e.target.value)}
             rows={3}
             style={{
-              width: '100%', background: 'rgba(255,255,255,0.05)',
-              border: '1.5px solid rgba(255,255,255,0.1)',
+              width: '100%', background: '#FFFFFF',
+              border: '1.5px solid #E8E0D8',
               borderRadius: 12, padding: '10px 14px',
-              color: '#fff', fontSize: '0.875rem', resize: 'none',
+              color: '#2D1F0E', fontSize: '0.875rem', resize: 'none',
               fontFamily: "'Sora',sans-serif", outline: 'none',
               transition: 'border-color .2s',
             }}
             onFocus={e => { e.target.style.borderColor = 'rgba(251,146,60,0.5)'; }}
-            onBlur={e => { e.target.style.borderColor = 'rgba(255,255,255,0.1)'; }}
+            onBlur={e => { e.target.style.borderColor = '#E8E0D8'; }}
           />
         </div>
         <div style={{ display: 'flex', gap: 10, marginTop: 24 }}>
           <button onClick={onClose} style={{
             flex: 1, padding: 11, borderRadius: 12,
-            border: '1.5px solid rgba(255,255,255,0.1)',
-            background: 'transparent', color: 'rgba(255,255,255,0.5)',
+            border: '1.5px solid #E8E0D8',
+            background: 'transparent', color: '#6B5744',
             fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer',
             fontFamily: "'Sora',sans-serif",
           }}>Cancel</button>
           <button onClick={onSubmit} disabled={rating === 0} style={{
             flex: 2, padding: 11, borderRadius: 12, border: 'none',
-            background: rating === 0 ? 'rgba(255,255,255,0.06)' : 'linear-gradient(90deg,#f97316,#fb923c,#fdba74,#fb923c,#f97316)',
+            background: rating === 0 ? '#F0E8DE' : 'linear-gradient(90deg,#f97316,#fb923c,#fdba74,#fb923c,#f97316)',
             backgroundSize: '200% auto',
-            color: rating === 0 ? 'rgba(255,255,255,0.25)' : '#0a0a0f',
+            color: rating === 0 ? '#A89880' : '#FFFAF6',
             fontSize: '0.875rem', fontWeight: 700,
             cursor: rating === 0 ? 'not-allowed' : 'pointer',
             fontFamily: "'Sora',sans-serif",
@@ -261,10 +261,10 @@ function BookingCard({ b, index, onRate, onCancel, expandedChat, setExpandedChat
       style={{
         position: 'relative', overflow: 'hidden',
         background: isCompleted
-          ? 'linear-gradient(135deg,rgba(52,211,153,0.05),rgba(255,255,255,0.02))'
-          : 'rgba(255,255,255,0.03)',
+          ? 'linear-gradient(135deg,rgba(52,211,153,0.05),#F7F2ED)'
+          : '#F7F2ED',
         backdropFilter: 'blur(16px)',
-        border: `1px solid ${isCompleted ? 'rgba(52,211,153,0.2)' : hov ? 'rgba(251,146,60,0.2)' : 'rgba(255,255,255,0.07)'}`,
+        border: `1px solid ${isCompleted ? 'rgba(52,211,153,0.2)' : hov ? 'rgba(251,146,60,0.2)' : '#E8E0D8'}`,
         borderRadius: 20, padding: 20,
         transition: 'all 0.35s cubic-bezier(0.22,1,0.36,1)',
         transform: hov ? 'translateY(-3px)' : 'translateY(0)',
@@ -289,7 +289,7 @@ function BookingCard({ b, index, onRate, onCancel, expandedChat, setExpandedChat
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, marginBottom: 12 }}>
         <div>
-          <h3 style={{ fontWeight: 700, fontSize: '1rem', color: '#fff', marginBottom: 4 }}>{b.karigar_name}</h3>
+          <h3 style={{ fontWeight: 700, fontSize: '1rem', color: '#2D1F0E', marginBottom: 4 }}>{b.karigar_name}</h3>
           <span style={{ fontSize: '0.8rem', color: '#fb923c', fontWeight: 600 }}>{b.skill}</span>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6 }}>
@@ -306,8 +306,8 @@ function BookingCard({ b, index, onRate, onCancel, expandedChat, setExpandedChat
 
       {/* Date/time */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 14 }}>
-        <Clock size={12} color="rgba(255,255,255,0.3)" />
-        <span style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.4)', fontWeight: 300 }}>
+        <Clock size={12} color="#8B7355" />
+        <span style={{ fontSize: '0.78rem', color: '#6B5744', fontWeight: 300 }}>
           {b.date} · {b.time}
         </span>
       </div>
@@ -316,7 +316,7 @@ function BookingCard({ b, index, onRate, onCancel, expandedChat, setExpandedChat
       {showProgress && <ProgressBar status={b.status} />}
 
       {/* Divider */}
-      <div style={{ height: 1, background: 'rgba(255,255,255,0.05)', margin: '14px 0' }} />
+      <div style={{ height: 1, background: '#FFFFFF', margin: '14px 0' }} />
 
       {/* Rating display */}
       {b.rating && (
@@ -327,7 +327,7 @@ function BookingCard({ b, index, onRate, onCancel, expandedChat, setExpandedChat
           borderRadius: 10, marginBottom: 10,
         }}>
           <StarRating rating={b.rating} size={13} />
-          {b.review && <span style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.4)', fontWeight: 300 }}>{b.review}</span>}
+          {b.review && <span style={{ fontSize: '0.78rem', color: '#6B5744', fontWeight: 300 }}>{b.review}</span>}
         </div>
       )}
 
@@ -371,9 +371,9 @@ function BookingCard({ b, index, onRate, onCancel, expandedChat, setExpandedChat
           <button onClick={() => setExpandedChat(chatOpen ? null : b.id)} style={{
             display: 'flex', alignItems: 'center', gap: 6,
             padding: '8px 14px', borderRadius: 10,
-            background: chatOpen ? 'rgba(56,189,248,0.12)' : 'rgba(255,255,255,0.05)',
-            border: `1px solid ${chatOpen ? 'rgba(56,189,248,0.35)' : 'rgba(255,255,255,0.1)'}`,
-            color: chatOpen ? '#38bdf8' : 'rgba(255,255,255,0.5)',
+            background: chatOpen ? 'rgba(56,189,248,0.12)' : '#FFFFFF',
+            border: `1px solid ${chatOpen ? 'rgba(56,189,248,0.35)' : '#E8E0D8'}`,
+            color: chatOpen ? '#38bdf8' : '#6B5744',
             fontSize: '0.8rem', fontWeight: 600,
             cursor: 'pointer', transition: 'all .2s', fontFamily: "'Sora',sans-serif",
           }}>
@@ -429,7 +429,7 @@ const MyBookings = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0a0a0f', fontFamily: "'Sora',sans-serif", color: '#fff' }}>
+    <div style={{ minHeight: '100vh', background: '#FFFFFFAF6', fontFamily: "'Sora',sans-serif", color: '#2D1F0E' }}>
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
@@ -476,13 +476,13 @@ const MyBookings = () => {
               { label: 'Completed', value: counts.completed, color: '#34d399' },
             ].map(s => (
               <div key={s.label} style={{
-                background: 'rgba(255,255,255,0.03)',
-                border: '1px solid rgba(255,255,255,0.07)',
+                background: '#F7F2ED',
+                border: '1px solid #E8E0D8',
                 borderRadius: 16, padding: '16px 18px',
                 backdropFilter: 'blur(12px)',
               }}>
                 <p style={{ fontFamily: "'Space Mono',monospace", fontSize: 'clamp(1.4rem,3vw,1.8rem)', fontWeight: 700, color: s.color, lineHeight: 1 }}>{s.value}</p>
-                <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.35)', marginTop: 5, fontWeight: 300 }}>{s.label}</p>
+                <p style={{ fontSize: '0.72rem', color: '#6B5744', marginTop: 5, fontWeight: 300 }}>{s.label}</p>
               </div>
             ))}
           </div>
@@ -492,14 +492,14 @@ const MyBookings = () => {
         {myBookings.length === 0 ? (
           <div style={{
             padding: '64px 24px', textAlign: 'center',
-            background: 'rgba(255,255,255,0.02)',
-            border: '1px solid rgba(255,255,255,0.06)',
+            background: '#F7F2ED',
+            border: '1px solid #F0E8DE',
             borderRadius: 20,
             animation: 'fadeUp .5s ease both',
           }}>
             <div style={{ fontSize: '2.5rem', marginBottom: 14 }}>📋</div>
-            <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.95rem', fontWeight: 300 }}>No bookings yet.</p>
-            <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: '0.82rem', marginTop: 6 }}>Book a karigar to get started.</p>
+            <p style={{ color: '#6B5744', fontSize: '0.95rem', fontWeight: 300 }}>No bookings yet.</p>
+            <p style={{ color: '#A89880', fontSize: '0.82rem', marginTop: 6 }}>Book a karigar to get started.</p>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>

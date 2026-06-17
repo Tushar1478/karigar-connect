@@ -52,7 +52,7 @@ function PageHeader({ tag, headline, accent }) {
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         marginBottom: 24, boxShadow: '0 8px 24px rgba(249,115,22,0.35)',
       }}>
-        <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '1rem', fontWeight: 700, color: '#fff' }}>K</span>
+        <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '1rem', fontWeight: 700, color: '#2D1F0E' }}>K</span>
       </div>
       <p style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.6rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(180,90,20,0.6)', marginBottom: 10 }}>
         {tag}
@@ -68,13 +68,13 @@ function PageHeader({ tag, headline, accent }) {
 function GlassCard({ children }) {
   return (
     <div style={{
-      background: 'rgba(255,255,255,0.45)',
+      background: '#6B5744',
       backdropFilter: 'blur(24px)',
       WebkitBackdropFilter: 'blur(24px)',
-      border: '1.5px solid rgba(255,255,255,0.75)',
+      border: '1.5px solid #3D2E1F',
       borderRadius: 24,
       padding: '28px 28px 24px',
-      boxShadow: '0 8px 48px rgba(180,100,20,0.1), 0 2px 8px rgba(180,100,20,0.06), inset 0 1px 0 rgba(255,255,255,0.8)',
+      boxShadow: '0 8px 48px rgba(180,100,20,0.1), 0 2px 8px rgba(180,100,20,0.06), inset 0 1px 0 #2D1F0E',
     }}>
       {children}
     </div>
@@ -103,7 +103,7 @@ function useLineInput() {
 
   const inputStyle = (name: string): React.CSSProperties => ({
     width: '100%',
-    background: focused === name ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.5)',
+    background: focused === name ? '#2D1F0E' : '#6B5744',
     border: `1.5px solid ${focused === name ? 'rgba(234,88,12,0.45)' : 'rgba(180,140,100,0.2)'}`,
     borderRadius: 10,
     padding: '10px 13px',
@@ -285,7 +285,7 @@ const SignupKarigar = () => {
                 onClick={() => setSkillOpen(o => !o)}
                 style={{
                   ...sharedInput,
-                  background: skillOpen ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.5)',
+                  background: skillOpen ? '#2D1F0E' : '#6B5744',
                   border: `1.5px solid ${skillOpen ? 'rgba(234,88,12,0.45)' : 'rgba(180,140,100,0.2)'}`,
                   boxShadow: skillOpen ? '0 0 0 3px rgba(234,88,12,0.08)' : 'none',
                   textAlign: 'left', cursor: 'pointer',
@@ -303,7 +303,7 @@ const SignupKarigar = () => {
                   position: 'absolute', top: 'calc(100% + 6px)', left: 0, right: 0, zIndex: 50,
                   background: 'rgba(255,248,240,0.97)',
                   backdropFilter: 'blur(16px)',
-                  border: '1.5px solid rgba(255,255,255,0.8)',
+                  border: '1.5px solid #2D1F0E',
                   borderRadius: 12, overflow: 'hidden',
                   boxShadow: '0 12px 40px rgba(180,100,20,0.15), 0 2px 8px rgba(180,100,20,0.08)',
                 }}>

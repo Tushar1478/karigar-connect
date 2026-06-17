@@ -37,7 +37,7 @@ function AvailSelect({ value, onChange }) {
       {open && (
         <div style={{
           position: 'absolute', top: 'calc(100% + 8px)', left: 0, zIndex: 50,
-          background: '#FFFFFF', backdropFilter: 'blur(20px)',
+          background: '#2D1F0E', backdropFilter: 'blur(20px)',
           border: '1px solid #E8E0D8', borderRadius: 12,
           overflow: 'hidden', minWidth: 140,
           boxShadow: '0 16px 48px rgba(0,0,0,0.5)',
@@ -66,7 +66,7 @@ function AvailSelect({ value, onChange }) {
 function StatCard({ icon: Icon, label, value, color, delay }) {
   return (
     <div style={{
-      background: '#FFFFFF',
+      background: '#2D1F0E',
       border: '1px solid #E8E0D8',
       borderRadius: 18, padding: '20px 16px', textAlign: 'center',
       backdropFilter: 'blur(12px)',
@@ -91,8 +91,8 @@ function PendingCard({ b, onAccept, onReject, index }) {
   const [hov, setHov] = useState(false);
   return (
     <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)} style={{
-      background: '#FFFFFF', backdropFilter: 'blur(16px)',
-      border: `1px solid ${hov ? 'rgba(251,191,36,0.25)' : 'rgba(255,255,255,0.07)'}`,
+      background: '#2D1F0E', backdropFilter: 'blur(16px)',
+      border: `1px solid ${hov ? 'rgba(251,191,36,0.25)' : '#E8E0D8'}`,
       borderRadius: 20, padding: 20,
       transition: 'all .3s cubic-bezier(.22,1,.36,1)',
       transform: hov ? 'translateY(-2px)' : 'translateY(0)',
@@ -108,7 +108,7 @@ function PendingCard({ b, onAccept, onReject, index }) {
           <h3 style={{ fontWeight: 700, fontSize: '1rem', color: '#2D1F0E', marginBottom: 4 }}>{b.customer_name}</h3>
           {b.description && <p style={{ fontSize: '0.82rem', color: '#6B5744', fontWeight: 300, marginBottom: 4 }}>{b.description}</p>}
           <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-            <Clock size={12} color="rgba(255,255,255,0.3)" />
+            <Clock size={12} color="#8B7355" />
             <span style={{ fontSize: '0.78rem', color: '#6B5744', fontWeight: 300 }}>{b.date} · {b.time}</span>
           </div>
         </div>
@@ -123,7 +123,7 @@ function PendingCard({ b, onAccept, onReject, index }) {
           padding: '9px 0', borderRadius: 10, border: 'none',
           background: 'linear-gradient(90deg,#f97316,#fb923c,#fdba74,#fb923c,#f97316)',
           backgroundSize: '200% auto', animation: 'shimmer 3s linear infinite',
-          color: '#FFFFFF', fontWeight: 700, fontSize: '0.85rem',
+          color: '#2D1F0E', fontWeight: 700, fontSize: '0.85rem',
           cursor: 'pointer', fontFamily: "'Sora',sans-serif",
           transition: 'transform .2s, box-shadow .2s',
         }}
@@ -156,7 +156,7 @@ function ActiveCard({ b, expandedChat, setExpandedChat, onComplete, index }) {
   const chatOpen = expandedChat === b.id;
   return (
     <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)} style={{
-      background: 'linear-gradient(135deg,rgba(56,189,248,0.05),rgba(255,255,255,0.02))',
+      background: 'linear-gradient(135deg,rgba(56,189,248,0.05),#F7F2ED)',
       backdropFilter: 'blur(16px)',
       border: `1px solid ${hov ? 'rgba(56,189,248,0.3)' : 'rgba(56,189,248,0.12)'}`,
       borderRadius: 20, padding: 20,
@@ -172,7 +172,7 @@ function ActiveCard({ b, expandedChat, setExpandedChat, onComplete, index }) {
         <div>
           <h3 style={{ fontWeight: 700, fontSize: '1rem', color: '#2D1F0E', marginBottom: 4 }}>{b.customer_name}</h3>
           <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-            <Clock size={12} color="rgba(255,255,255,0.3)" />
+            <Clock size={12} color="#8B7355" />
             <span style={{ fontSize: '0.78rem', color: '#6B5744', fontWeight: 300 }}>{b.date} · {b.time}</span>
           </div>
         </div>
@@ -199,8 +199,8 @@ function ActiveCard({ b, expandedChat, setExpandedChat, onComplete, index }) {
         <button onClick={() => setExpandedChat(chatOpen ? null : b.id)} style={{
           display: 'flex', alignItems: 'center', gap: 6,
           padding: '8px 14px', borderRadius: 10,
-          background: chatOpen ? 'rgba(56,189,248,0.14)' : 'rgba(255,255,255,0.05)',
-          border: `1px solid ${chatOpen ? 'rgba(56,189,248,0.4)' : 'rgba(255,255,255,0.1)'}`,
+          background: chatOpen ? 'rgba(56,189,248,0.14)' : '#FFFFFF',
+          border: `1px solid ${chatOpen ? 'rgba(56,189,248,0.4)' : '#E8E0D8'}`,
           color: chatOpen ? '#38bdf8' : '#6B5744',
           fontSize: '0.82rem', fontWeight: 600,
           cursor: 'pointer', fontFamily: "'Sora',sans-serif", transition: 'all .2s',
@@ -301,7 +301,7 @@ const KarigarDashboard = () => {
   };
 
   if (!karigar) return (
-    <div style={{ minHeight: '100vh', background: '#FFFAF6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{ minHeight: '100vh', background: '#FFFFFFAF6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <p style={{ color: '#6B5744', fontFamily: "'Sora',sans-serif" }}>Loading dashboard...</p>
     </div>
   );
@@ -309,7 +309,7 @@ const KarigarDashboard = () => {
   const initials = karigar.name.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2);
 
   return (
-    <div style={{ minHeight: '100vh', background: '#FFFAF6', fontFamily: "'Sora',sans-serif", color: '#2D1F0E' }}>
+    <div style={{ minHeight: '100vh', background: '#FFFFFFAF6', fontFamily: "'Sora',sans-serif", color: '#2D1F0E' }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
         *, *::before, *::after { box-sizing: border-box; }
@@ -333,7 +333,7 @@ const KarigarDashboard = () => {
 
         {/* ── WELCOME HERO ── */}
         <div className="fu-1" style={{
-          background: '#FFFFFF', backdropFilter: 'blur(20px)',
+          background: '#2D1F0E', backdropFilter: 'blur(20px)',
           border: '1px solid #E8E0D8',
           borderRadius: 24, padding: '24px 28px', marginBottom: 28,
           display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap',

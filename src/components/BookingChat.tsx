@@ -85,7 +85,7 @@ const BookingChat = ({ bookingId }: { bookingId: string }) => {
               justifyContent: 'center', padding: '48px 0', gap: 8,
             }}>
               <div style={{ fontSize: '1.6rem' }}>💬</div>
-              <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.3)', fontWeight: 300 }}>
+              <p style={{ fontSize: '0.75rem', color: '#8B7355', fontWeight: 300 }}>
                 No messages yet. Start the conversation!
               </p>
             </div>
@@ -148,8 +148,8 @@ const BookingChat = ({ bookingId }: { bookingId: string }) => {
                     borderRadius: isMe ? '16px 4px 16px 16px' : '4px 16px 16px 16px',
                     background: isMe
                       ? 'linear-gradient(135deg,rgba(249,115,22,0.25),rgba(251,146,60,0.18))'
-                      : 'rgba(255,255,255,0.06)',
-                    border: `1px solid ${isMe ? 'rgba(251,146,60,0.25)' : 'rgba(255,255,255,0.08)'}`,
+                      : '#F0E8DE',
+                    border: `1px solid ${isMe ? 'rgba(251,146,60,0.25)' : '#E8E0D8'}`,
                     backdropFilter: 'blur(8px)',
                     boxShadow: isMe
                       ? '0 4px 16px rgba(249,115,22,0.1)'
@@ -158,7 +158,7 @@ const BookingChat = ({ bookingId }: { bookingId: string }) => {
                   }}>
                     <p style={{
                       fontSize: '0.875rem', lineHeight: 1.5, fontWeight: 400,
-                      color: isMe ? '#fff' : 'rgba(255,255,255,0.85)',
+                      color: isMe ? '#fff' : '#2D1F0E',
                       margin: 0,
                     }}>
                       {m.text}
@@ -199,10 +199,10 @@ const BookingChat = ({ bookingId }: { bookingId: string }) => {
           onBlur={() => setFocused(false)}
           style={{
             flex: 1, height: 38,
-            background: 'rgba(255,255,255,0.05)',
-            border: `1.5px solid ${focused ? 'rgba(56,189,248,0.45)' : 'rgba(255,255,255,0.08)'}`,
+            background: '#FFFFFF',
+            border: `1.5px solid ${focused ? 'rgba(56,189,248,0.45)' : '#E8E0D8'}`,
             borderRadius: 10, padding: '0 12px',
-            color: '#fff', fontSize: '0.875rem',
+            color: '#2D1F0E', fontSize: '0.875rem',
             fontFamily: "'Sora',sans-serif",
             outline: 'none',
             transition: 'border-color .2s, box-shadow .2s',
@@ -218,9 +218,9 @@ const BookingChat = ({ bookingId }: { bookingId: string }) => {
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             border: 'none', cursor: sending || !newMsg.trim() ? 'not-allowed' : 'pointer',
             background: sending || !newMsg.trim()
-              ? 'rgba(255,255,255,0.05)'
+              ? '#FFFFFF'
               : 'linear-gradient(135deg,#f97316,#fb923c)',
-            color: sending || !newMsg.trim() ? 'rgba(255,255,255,0.2)' : '#fff',
+            color: sending || !newMsg.trim() ? '#A89880' : '#fff',
             transition: 'all .2s',
             boxShadow: !sending && newMsg.trim() ? '0 4px 16px rgba(249,115,22,0.35)' : 'none',
           }}

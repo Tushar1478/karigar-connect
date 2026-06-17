@@ -24,9 +24,9 @@ const LanguageSelector = () => {
         style={{
           display: 'flex', alignItems: 'center', gap: 6,
           padding: '6px 10px', borderRadius: 10,
-          border: '1.5px solid rgba(255,255,255,0.12)',
-          background: open ? 'rgba(251,146,60,0.1)' : 'rgba(255,255,255,0.05)',
-          color: open ? '#fb923c' : 'rgba(255,255,255,0.6)',
+          border: '1.5px solid #D9CFC2',
+          background: open ? 'rgba(251,146,60,0.1)' : '#FFFFFF',
+          color: open ? '#fb923c' : '#4A3826',
           cursor: 'pointer', fontSize: '0.78rem', fontWeight: 600,
           fontFamily: "'Sora', sans-serif", transition: 'all .2s',
         }}
@@ -41,7 +41,7 @@ const LanguageSelector = () => {
           width: 200, maxHeight: 320, overflowY: 'auto',
           background: 'rgba(10,10,15,0.97)',
           borderRadius: 14,
-          border: '1px solid rgba(255,255,255,0.08)',
+          border: '1px solid #E8E0D8',
           boxShadow: '0 18px 60px rgba(0,0,0,0.6)',
           padding: 6, zIndex: 150,
         }}>
@@ -54,12 +54,12 @@ const LanguageSelector = () => {
                 width: '100%', padding: '8px 12px', borderRadius: 10,
                 border: 'none', cursor: 'pointer',
                 background: lang === l.code ? 'rgba(251,146,60,0.12)' : 'transparent',
-                color: lang === l.code ? '#fb923c' : 'rgba(255,255,255,0.7)',
+                color: lang === l.code ? '#fb923c' : '#3D2E1F',
                 fontSize: '0.82rem', fontWeight: lang === l.code ? 600 : 400,
                 fontFamily: "'Sora', sans-serif", transition: 'all .15s',
                 textAlign: 'left',
               }}
-              onMouseEnter={e => { if (lang !== l.code) e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; }}
+              onMouseEnter={e => { if (lang !== l.code) e.currentTarget.style.background = '#FFFFFF'; }}
               onMouseLeave={e => { if (lang !== l.code) e.currentTarget.style.background = 'transparent'; }}
             >
               <span>{l.native}</span>

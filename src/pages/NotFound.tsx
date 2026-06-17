@@ -52,7 +52,7 @@ function SnakeGame() {
     ctx.beginPath();
     ctx.arc(fx*CELL + CELL/2, fy*CELL + CELL/2, 6, 0, Math.PI*2);
     ctx.fill();
-    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.fillStyle = '#6B5744';
     ctx.beginPath();
     ctx.arc(fx*CELL + CELL/2 - 2, fy*CELL + CELL/2 - 2, 2.5, 0, Math.PI*2);
     ctx.fill();
@@ -148,7 +148,7 @@ function SnakeGame() {
         <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.8rem', fontWeight: 700, color: '#ea580c' }}>{score} pts</span>
       </div>
 
-      <div style={{ position: 'relative', borderRadius: 16, overflow: 'hidden', border: '1.5px solid rgba(255,255,255,0.75)', boxShadow: '0 4px 24px rgba(180,100,20,0.12)', cursor: 'pointer' }} onClick={() => !started && start()}>
+      <div style={{ position: 'relative', borderRadius: 16, overflow: 'hidden', border: '1.5px solid #3D2E1F', boxShadow: '0 4px 24px rgba(180,100,20,0.12)', cursor: 'pointer' }} onClick={() => !started && start()}>
         <canvas ref={canvasRef} width={COLS*CELL} height={ROWS*CELL} style={{ display: 'block' }} />
 
         {/* Overlay */}
@@ -165,7 +165,7 @@ function SnakeGame() {
               style={{
                 padding: '10px 28px', borderRadius: 10, border: 'none',
                 background: 'linear-gradient(90deg,#c2410c,#ea580c,#f97316)',
-                color: '#fff', fontWeight: 700, fontSize: '0.85rem',
+                color: '#2D1F0E', fontWeight: 700, fontSize: '0.85rem',
                 fontFamily: "'Sora',sans-serif", cursor: 'pointer',
                 boxShadow: '0 4px 16px rgba(234,88,12,0.3)',
               }}
@@ -192,9 +192,9 @@ function SnakeGame() {
 
 const dpad: React.CSSProperties = {
   width: 38, height: 38, borderRadius: 10,
-  background: 'rgba(255,255,255,0.55)',
+  background: '#4A3826',
   backdropFilter: 'blur(8px)',
-  border: '1.5px solid rgba(255,255,255,0.8)',
+  border: '1.5px solid #2D1F0E',
   color: 'rgba(180,90,20,0.7)', fontSize: '0.8rem',
   cursor: 'pointer', fontFamily: 'inherit',
   boxShadow: '0 2px 8px rgba(180,100,20,0.08)',
@@ -271,12 +271,12 @@ const NotFound = () => {
 
         {/* Glass card with game */}
         <div className="fu2" style={{
-          background: 'rgba(255,255,255,0.45)',
+          background: '#6B5744',
           backdropFilter: 'blur(24px)',
           WebkitBackdropFilter: 'blur(24px)',
-          border: '1.5px solid rgba(255,255,255,0.75)',
+          border: '1.5px solid #3D2E1F',
           borderRadius: 24, padding: '24px 24px 20px',
-          boxShadow: '0 8px 48px rgba(180,100,20,0.1), 0 2px 8px rgba(180,100,20,0.06), inset 0 1px 0 rgba(255,255,255,0.8)',
+          boxShadow: '0 8px 48px rgba(180,100,20,0.1), 0 2px 8px rgba(180,100,20,0.06), inset 0 1px 0 #2D1F0E',
           width: '100%',
         }}>
           <p style={{ textAlign: 'center', fontSize: '0.75rem', color: 'rgba(150,90,30,0.5)', marginBottom: 16, fontWeight: 300 }}>
@@ -294,7 +294,7 @@ const NotFound = () => {
               background: 'linear-gradient(90deg,#c2410c,#ea580c,#f97316,#ea580c,#c2410c)',
               backgroundSize: '300% auto',
               animation: 'shimmer 4s linear infinite',
-              color: '#fff', fontWeight: 700, fontSize: '0.85rem',
+              color: '#2D1F0E', fontWeight: 700, fontSize: '0.85rem',
               cursor: 'pointer', fontFamily: "'Sora',sans-serif",
               boxShadow: '0 4px 20px rgba(234,88,12,0.3)',
             }}
@@ -305,9 +305,9 @@ const NotFound = () => {
             href="/"
             style={{
               padding: '11px 24px', borderRadius: 12,
-              background: 'rgba(255,255,255,0.55)',
+              background: '#4A3826',
               backdropFilter: 'blur(8px)',
-              border: '1.5px solid rgba(255,255,255,0.8)',
+              border: '1.5px solid #2D1F0E',
               color: 'rgba(150,80,20,0.8)', fontWeight: 600, fontSize: '0.85rem',
               cursor: 'pointer', fontFamily: "'Sora',sans-serif",
               textDecoration: 'none',
