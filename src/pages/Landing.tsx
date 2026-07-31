@@ -38,7 +38,7 @@ const SERVICES = [
   { icon: Zap,        label: "Electrician" },
   { icon: Droplets,   label: "Plumber" },
   { icon: Paintbrush, label: "Painter" },
-  { icon: Utensils,   label: "Potter" },
+  { icon: Amphora,    label: "Potter" },
   { icon: Anvil,      label: "Blacksmith" },
   { icon: MoreHorizontal, label: "More" },
 ];
