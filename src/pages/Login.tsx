@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { Loader2, Check } from 'lucide-react';
@@ -46,12 +46,17 @@ const Login = () => {
   const { role } = useParams<{ role: string }>();
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   const normalizedRole = role === 'karigar' ? 'karigar' : 'customer';
   const isCustomer = normalizedRole === 'customer';
+
+  // Only allow same-origin relative paths as a post-login redirect target.
+  const rawNext = searchParams.get('next');
+  const nextPath = rawNext && rawNext.startsWith('/') && !rawNext.startsWith('//') ? rawNext : null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,9 +67,14 @@ const Login = () => {
       toast.error(result.error);
     } else {
       toast.success('Logged in!');
+      if (nextPath) {
+        window.location.href = nextPath;
+        return;
+      }
       navigate(isCustomer ? '/customer' : '/karigar-dashboard');
     }
   };
+
 
   return (
     <div style={{ minHeight: '100vh', background: '#FFFAF6', fontFamily: "'Sora', sans-serif", color: '#2D1F0E', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px 16px' }}>

@@ -16,7 +16,9 @@ import KarigarDashboard from "./pages/KarigarDashboard";
 import KarigarProfileEdit from "./pages/KarigarProfileEdit";
 import CustomerProfile from "./pages/CustomerProfile";
 import NotFound from "./pages/NotFound";
+import OAuthConsent from "./pages/OAuthConsent";
 import AIChatbot from "./components/AIChatbot";
+
 
 const queryClient = new QueryClient();
 
@@ -40,6 +42,8 @@ const App = () => (
               <Route path="/karigar-dashboard" element={<KarigarDashboard />} />
               <Route path="/karigar-profile-edit" element={<KarigarProfileEdit />} />
               <Route path="/customer-profile" element={<CustomerProfile />} />
+              <Route path="/.lovable/oauth/consent" element={<OAuthConsent />} />
+
               <Route path="*" element={<NotFound />} />
             </Routes>
             <AIChatbot />

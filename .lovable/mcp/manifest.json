@@ -1,0 +1,165 @@
+{
+  "version": 1,
+  "sdk_version": "0.26.1",
+  "path": "/functions/v1/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://rfqcfsdnlamimmohuwhg.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "karigar-connect",
+      "version": "0.1.0",
+      "title": "Karigar Connect"
+    },
+    "tools": [
+      {
+        "name": "search_karigars",
+        "title": "Search karigars",
+        "description": "Search available karigars (skilled workers) by skill, location, availability, and maximum hourly price.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "skill": {
+              "type": "string",
+              "description": "Skill to filter by, e.g. Electrician, Plumber, Carpenter."
+            },
+            "location": {
+              "type": "string",
+              "description": "Location substring to filter by."
+            },
+            "available_only": {
+              "type": "boolean",
+              "description": "Only return karigars marked available."
+            },
+            "max_price": {
+              "type": "number",
+              "description": "Maximum hourly price in INR."
+            },
+            "limit": {
+              "type": "number",
+              "description": "Maximum number of results (default 10)."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_my_bookings",
+        "title": "List my bookings",
+        "description": "List bookings visible to the signed-in user (as customer or as karigar), optionally filtered by status.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "description": "Filter by status, e.g. pending, accepted, completed, cancelled."
+            },
+            "limit": {
+              "type": "number",
+              "description": "Maximum number of bookings (default 20)."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "create_booking",
+        "title": "Create booking",
+        "description": "Create a booking request with a karigar for the signed-in customer. Use search_karigars first to get a karigar id.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "karigar_id": {
+              "type": "string",
+              "description": "The karigar's id from search_karigars."
+            },
+            "date": {
+              "type": "string",
+              "description": "Booking date in YYYY-MM-DD (IST)."
+            },
+            "time": {
+              "type": "string",
+              "description": "Booking time slot, e.g. 10:00 (IST, hourly between 06:00 and 21:00)."
+            },
+            "description": {
+              "type": "string",
+              "description": "What needs to be done."
+            }
+          },
+          "required": [
+            "karigar_id",
+            "date",
+            "time"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "cancel_booking",
+        "title": "Cancel booking",
+        "description": "Cancel one of the signed-in user's bookings by id.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "booking_id": {
+              "type": "string",
+              "description": "The booking id to cancel."
+            }
+          },
+          "required": [
+            "booking_id"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_my_profile",
+        "title": "Get my profile",
+        "description": "Get the signed-in user's KarigarHub profile, and their karigar listing if they are a karigar.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
