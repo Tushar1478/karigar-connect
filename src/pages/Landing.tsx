@@ -3,7 +3,7 @@ import { useState } from "react";
 import {
   Home, Compass, ClipboardList, MessageSquare, Bookmark, UserPlus, HelpCircle,
   MapPin, ChevronDown, Bell, Search, ArrowRight, Star, BadgeCheck, ShieldCheck,
-  CreditCard, Hammer, Scissors, Zap, Droplets, Paintbrush, Utensils, Anvil, MoreHorizontal,
+  CreditCard, Hammer, Scissors, Zap, Droplets, Paintbrush, Amphora, Anvil, MoreHorizontal,
 } from "lucide-react";
 
 import heroArtisan from "@/assets/hero-artisan.jpg";
