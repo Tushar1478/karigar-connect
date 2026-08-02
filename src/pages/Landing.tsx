@@ -315,7 +315,7 @@ export default function Landing() {
           background: linear-gradient(90deg,#f97316,#fb923c,#fdba74,#fb923c,#f97316);
           background-size: 200% auto;
           animation: shimmer 3s linear infinite;
-          color: #2D1F0EAF6 !important; font-weight: 700; border: none; cursor: pointer;
+          color: #FFFFFF !important; font-weight: 700; border: none; cursor: pointer;
           display: inline-flex; align-items: center; gap: 8px;
           border-radius: 12px; padding: 14px 28px;
           font-size: 1rem; font-family: 'Sora',sans-serif;
@@ -405,7 +405,7 @@ export default function Landing() {
       {/* ── HERO ── */}
       <section style={{ position:"relative", minHeight:"92vh", display:"flex", alignItems:"center", justifyContent:"center", overflow:"hidden", padding:"80px 16px" }}>
         <video autoPlay loop muted playsInline style={{ position:"absolute", inset:0, width:"100%", height:"100%", objectFit:"cover", opacity: dark ? 0.5 : 0.12, transition:"opacity .5s" }}>
-          <source src="/karigar-video.mp4" type="video/mp4" />
+          <source src="/karigar-video0.mp4" type="video/mp4" />
         </video>
 
         <div style={{
@@ -636,7 +636,7 @@ export default function Landing() {
         <div style={{ maxWidth:1100, margin:"0 auto", display:"flex", flexWrap:"wrap", alignItems:"center", justifyContent:"space-between", gap:24 }}>
           <div>
             <span style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.64rem", letterSpacing:"0.22em", textTransform:"uppercase", color:"#F4722B", display:"block", marginBottom:10 }}>For Workers</span>
-            <h2 style={{ fontSize:"clamp(1.4rem,3.5vw,1.9rem)", fontWeight:800, color:"#2D1F0EAF6", letterSpacing:"-0.02em", marginBottom:8 }}>
+            <h2 style={{ fontSize:"clamp(1.4rem,3.5vw,1.9rem)", fontWeight:800, color:"#FFFFFF", letterSpacing:"-0.02em", marginBottom:8 }}>
               Are you a karigar? <span style={{ color:"#F4722B" }}>Start earning today.</span>
             </h2>
             <p style={{ color:"#E8D8C4", fontSize:"0.9rem", fontWeight:300, maxWidth:520 }}>
@@ -646,7 +646,7 @@ export default function Landing() {
           <button
             onClick={() => navigate("/signup/karigar")}
             style={{
-              background:"#F4722B", color:"#2D1F0EAF6", fontWeight:700,
+              background:"#F4722B", color:"#FFFFFF", fontWeight:700,
               border:"none", cursor:"pointer", borderRadius:12,
               padding:"14px 28px", fontSize:"0.95rem", fontFamily:"'Sora',sans-serif",
               display:"inline-flex", alignItems:"center", gap:8,

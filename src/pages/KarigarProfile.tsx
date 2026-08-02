@@ -437,7 +437,7 @@ const KarigarProfile = () => {
                 background: 'linear-gradient(90deg,#f97316,#fb923c,#fdba74,#fb923c,#f97316)',
                 backgroundSize: '200% auto',
                 animation: 'shimmer 3s linear infinite',
-                color: '#2D1F0EAF6', fontWeight: 800, fontSize: '0.95rem',
+                color: '#FFFFFF', fontWeight: 800, fontSize: '0.95rem',
                 cursor: 'pointer', fontFamily: "'Sora',sans-serif",
                 letterSpacing: '0.01em',
               }}

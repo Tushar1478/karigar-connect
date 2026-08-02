@@ -387,7 +387,7 @@ const CustomerProfile = () => {
                   background: 'linear-gradient(90deg,#f97316,#fb923c,#fdba74,#fb923c,#f97316)',
                   backgroundSize: '200% auto',
                   animation: 'shimmer 3s linear infinite',
-                  color: '#2D1F0EAF6', fontWeight: 700, fontSize: '0.9rem',
+                  color: '#FFFFFF', fontWeight: 700, fontSize: '0.9rem',
                   cursor: saving ? 'not-allowed' : 'pointer',
                   fontFamily: "'Sora',sans-serif",
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
