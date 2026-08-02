@@ -312,7 +312,7 @@ export default function Landing() {
         .logo-idle  { animation: logoPulse 3s ease-in-out infinite; }
 
         .shimmer-btn {
-          background: linear-gradient(90deg,#f97316,#fb923c,#fdba74,#fb923c,#f97316);
+          background: linear-gradient(90deg,#e2600f,#f4722b,#fb923c,#f4722b,#e2600f);
           background-size: 200% auto;
           animation: shimmer 3s linear infinite;
           color: #FFFFFF !important; font-weight: 700; border: none; cursor: pointer;
@@ -326,14 +326,14 @@ export default function Landing() {
         .shimmer-btn-sm { padding: 9px 18px !important; font-size: .875rem !important; }
 
         .outline-btn {
-          border: 1.5px solid #A89880;
+          border: 1.5px solid #E8E0D8;
           background: #FFFFFF; backdrop-filter: blur(8px);
           font-weight: 600; cursor: pointer;
           display: inline-flex; align-items: center; gap: 8px;
           border-radius: 12px; padding: 14px 28px;
           font-size: 1rem; font-family: 'Sora',sans-serif;
           transition: all .2s ease;
-          color: var(--fg, #fff);
+          color: #2D1F0E;
         }
         .outline-btn:hover { border-color: rgba(251,146,60,.6); background: rgba(251,146,60,.1); color:#fb923c; transform:translateY(-3px); }
         .outline-btn-sm  { padding: 9px 18px !important; font-size: .875rem !important; }
