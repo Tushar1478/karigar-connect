@@ -1,281 +1,39 @@
-import { useState, useMemo, useEffect, useRef } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Search, SlidersHorizontal, Zap, Droplets, Hammer, Home, Wind, Brush, ChevronDown, X, ArrowRight } from 'lucide-react';
+import { Search, SlidersHorizontal, Zap, Droplets, Hammer, Home, Wind, Brush, X } from 'lucide-react';
 import Header from '@/components/Header';
 import KarigarCard from '@/components/KarigarCard';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 
 /* ─── CATEGORY DATA ─────────────────────────────────── */
 const CATEGORIES = [
-  {
-    label: 'Electrician',
-    icon: <Zap size={28} />,
-    color: '#f97316',
-    desc: 'Wiring, fitting & repairs',
-    
-  },
-  {
-    label: 'Plumber',
-    icon: <Droplets size={28} />,
-    color: '#38bdf8',
-    desc: 'Pipes, leaks & installation',
-    
-  },
-  {
-    label: 'Carpenter',
-    icon: <Hammer size={28} />,
-    color: '#a78bfa',
-    desc: 'Furniture, doors & woodwork',
-    
-  },
-  {
-    label: 'AC Repair',
-    icon: <Wind size={28} />,
-    color: '#34d399',
-    desc: 'Service, gas & installation',
-    
-  },
-  {
-    label: 'Mason',
-    icon: <Home size={28} />,
-    color: '#fbbf24',
-    desc: 'Tiles, walls & construction',
-    
-  },
-  {
-    label: 'Painter',
-    icon: <Brush size={28} />,
-    color: '#f472b6',
-    desc: 'Interior, exterior & textures',
-  },
+  { label: 'Electrician', icon: Zap, desc: 'Wiring, fitting & repairs' },
+  { label: 'Plumber', icon: Droplets, desc: 'Pipes, leaks & installation' },
+  { label: 'Carpenter', icon: Hammer, desc: 'Furniture, doors & woodwork' },
+  { label: 'AC Repair', icon: Wind, desc: 'Service, gas & installation' },
+  { label: 'Mason', icon: Home, desc: 'Tiles, walls & construction' },
+  { label: 'Painter', icon: Brush, desc: 'Interior, exterior & textures' },
 ];
 
-/* ─── SCROLL REVEAL HOOK ────────────────────────────── */
-function useScrollReveal(threshold = 0.1) {
-  const ref = useRef(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } },
-      { threshold }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [threshold]);
-  return [ref, visible] as const;
-}
-
-/* ─── CATEGORY CARD (big) ───────────────────────────── */
-function CategoryCard({ label, icon, color, desc, count, active, onClick, delay, visible }) {
-  const [hov, setHov] = useState(false);
-  const lit = active || hov;
-
+/* ─── CATEGORY TILE ─────────────────────────────────── */
+function CategoryCard({ label, icon: Icon, desc, active, onClick }) {
   return (
     <button
       onClick={onClick}
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      style={{
-        position: 'relative', overflow: 'hidden',
-        display: 'flex', flexDirection: 'column',
-        alignItems: 'flex-start', gap: 0,
-        padding: '24px 22px 20px',
-        borderRadius: 22,
-        border: `1.5px solid ${active ? color : hov ? color + '44' : '#E8E0D8'}`,
-        background: active
-          ? `linear-gradient(135deg, ${color}18, ${color}08)`
-          : hov
-            ? `linear-gradient(135deg, ${color}10, #F7F2ED)`
-            : '#F7F2ED',
-        backdropFilter: 'blur(16px)',
-        cursor: 'pointer',
-        transition: 'all 0.38s cubic-bezier(0.22,1,0.36,1)',
-        transitionDelay: visible ? `${delay}s` : '0s',
-        transform: visible
-          ? hov ? 'translateY(-6px) scale(1.01)' : active ? 'translateY(-3px)' : 'translateY(0)'
-          : 'translateY(36px)',
-        opacity: visible ? 1 : 0,
-        boxShadow: active
-          ? `0 12px 40px ${color}28, 0 0 0 1px ${color}28, inset 0 1px 0 ${color}20`
-          : hov
-            ? `0 16px 48px rgba(0,0,0,0.4), 0 0 0 1px ${color}18`
-            : 'none',
-        textAlign: 'left',
-        fontFamily: "'Sora', sans-serif",
-        width: '100%',
-        minHeight: 160,
-      }}
+      className={`uc-card uc-card-hover flex flex-col items-start gap-1 p-5 text-left ${active ? 'border-primary/60 bg-primary-soft/40' : ''}`}
     >
-      {/* Glow orb behind icon */}
-      <div style={{
-        position: 'absolute', top: -20, right: -20,
-        width: 100, height: 100, borderRadius: '50%',
-        background: `radial-gradient(circle, ${color}${lit ? '18' : '08'} 0%, transparent 70%)`,
-        transition: 'background .4s',
-        pointerEvents: 'none',
-      }} />
-
-      {/* Active top shimmer line */}
-      {active && (
-        <div style={{
-          position: 'absolute', top: 0, left: 0, right: 0, height: 2,
-          background: `linear-gradient(90deg, transparent, ${color}, transparent)`,
-          borderRadius: '22px 22px 0 0',
-        }} />
-      )}
-
-      {/* Icon box */}
-      <div style={{
-        width: 52, height: 52, borderRadius: 15, marginBottom: 16,
-        background: lit ? `${color}20` : '#FFFFFF',
-        border: `1.5px solid ${lit ? color + '40' : '#E8E0D8'}`,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        color: lit ? color : '#6B5744',
-        transition: 'all .35s',
-        boxShadow: lit ? `0 0 20px ${color}30` : 'none',
-        flexShrink: 0,
-      }}>
-        {icon}
+      <div className={`mb-3 grid h-12 w-12 place-items-center rounded-2xl ${active ? 'bg-primary text-primary-foreground' : 'bg-primary-soft text-primary'}`}>
+        <Icon className="h-6 w-6" />
       </div>
-
-      {/* Label */}
-      <span style={{
-        fontSize: '1rem', fontWeight: 700, lineHeight: 1.2,
-        color: active ? color : hov ? '#fff' : '#2D1F0E',
-        transition: 'color .3s', marginBottom: 5,
-      }}>
-        {label}
-      </span>
-
-      {/* Desc */}
-      <span style={{
-        fontSize: '0.75rem', fontWeight: 300,
-        color: lit ? '#6B5744' : '#8B7355',
-        transition: 'color .3s', lineHeight: 1.4, marginBottom: 14,
-      }}>
-        {desc}
-      </span>
-
-      {/* Footer row */}
-      <div style={{
-        marginTop: 'auto', width: '100%',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-      }}>
-        {/* Availability pill */}
-        <span style={{
-          fontSize: '0.65rem', fontWeight: 700,
-          color: lit ? color : '#A89880',
-          background: lit ? `${color}15` : '#FFFFFF',
-          border: `1px solid ${lit ? color + '30' : '#F0E8DE'}`,
-          padding: '3px 9px', borderRadius: 999,
-          transition: 'all .3s',
-          display: 'flex', alignItems: 'center', gap: 5,
-          fontFamily: "'Space Mono', monospace",
-        }}>
-          {active && (
-            <span style={{ width: 5, height: 5, borderRadius: '50%', background: color, display: 'inline-block', animation: 'dotPulse 1.5s infinite' }} />
-          )}
-          {count}
-        </span>
-
-        {/* Arrow */}
-        <div style={{
-          width: 28, height: 28, borderRadius: '50%',
-          background: lit ? `${color}18` : '#FFFFFF',
-          border: `1px solid ${lit ? color + '30' : '#F0E8DE'}`,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color: lit ? color : '#A89880',
-          transition: 'all .3s',
-          transform: hov ? 'translateX(2px)' : 'translateX(0)',
-          flexShrink: 0,
-        }}>
-          <ArrowRight size={13} />
-        </div>
-      </div>
-
-      {/* Active indicator dot */}
-      {active && (
-        <div style={{
-          position: 'absolute', top: 14, right: 14,
-          width: 8, height: 8, borderRadius: '50%',
-          background: color, boxShadow: `0 0 10px ${color}`,
-          animation: 'dotPulse 1.5s infinite',
-        }} />
-      )}
+      <span className="text-sm font-bold text-foreground">{label}</span>
+      <span className="text-xs text-muted-foreground">{desc}</span>
     </button>
-  );
-}
-
-/* ─── KARIGAR SKELETON ──────────────────────────────── */
-function Skeleton() {
-  return (
-    <div style={{
-      background: '#F7F2ED',
-      border: '1px solid #F0E8DE',
-      borderRadius: 20, padding: 24, height: 220,
-      animation: 'skeletonPulse 1.6s ease-in-out infinite',
-    }} />
-  );
-}
-
-/* ─── FILTER SELECT ─────────────────────────────────── */
-function FilterSelect({ value, onChange, placeholder, options }) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef(null);
-  useEffect(() => {
-    const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, []);
-  const selected = options.find(o => o.value === value);
-  return (
-    <div ref={ref} style={{ position: 'relative' }}>
-      <button
-        onClick={() => setOpen(!open)}
-        style={{
-          display: 'flex', alignItems: 'center', gap: 8,
-          padding: '9px 14px', borderRadius: 10,
-          border: `1.5px solid ${open ? 'rgba(251,146,60,0.5)' : '#E8E0D8'}`,
-          background: open ? 'rgba(251,146,60,0.08)' : '#FFFFFF',
-          backdropFilter: 'blur(12px)',
-          color: value && value !== 'all' && value !== 'none' ? '#fb923c' : '#4A3826',
-          fontSize: '0.875rem', fontWeight: 600,
-          cursor: 'pointer', transition: 'all 0.2s',
-          fontFamily: "'Sora', sans-serif", whiteSpace: 'nowrap',
-        }}
-      >
-        {selected?.label || placeholder}
-        <ChevronDown size={14} style={{ opacity: 0.5, transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
-      </button>
-      {open && (
-        <div style={{
-          position: 'absolute', top: 'calc(100% + 8px)', left: 0, zIndex: 50,
-          background: 'rgba(14,14,20,0.97)', backdropFilter: 'blur(24px)',
-          border: '1px solid rgba(251,146,60,0.2)',
-          borderRadius: 12, overflow: 'hidden', minWidth: 165,
-          boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
-          animation: 'dropIn 0.18s cubic-bezier(0.22,1,0.36,1)',
-        }}>
-          {options.map(opt => (
-            <button key={opt.value} onClick={() => { onChange(opt.value); setOpen(false); }} style={{
-              display: 'block', width: '100%', padding: '10px 16px', textAlign: 'left',
-              background: value === opt.value ? 'rgba(251,146,60,0.12)' : 'transparent',
-              color: value === opt.value ? '#fb923c' : '#3D2E1F',
-              fontSize: '0.875rem', fontWeight: value === opt.value ? 700 : 400,
-              border: 'none', cursor: 'pointer', transition: 'background 0.15s',
-              fontFamily: "'Sora', sans-serif",
-            }}
-              onMouseEnter={e => { if (value !== opt.value) (e.target as HTMLElement).style.background = '#FFFFFF'; }}
-              onMouseLeave={e => { if (value !== opt.value) (e.target as HTMLElement).style.background = 'transparent'; }}
-            >
-              {opt.label}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
   );
 }
 
@@ -285,19 +43,15 @@ function FilterSelect({ value, onChange, placeholder, options }) {
 const CustomerDashboard = () => {
   const [searchParams] = useSearchParams();
   const searchFromUrl = searchParams.get('search') || '';
-  const [search, setSearch]           = useState(searchFromUrl);
-  const [searchFocused, setSearchFocused] = useState(false);
+  const [search, setSearch] = useState(searchFromUrl);
 
   useEffect(() => { setSearch(searchFromUrl); }, [searchFromUrl]);
 
-  const [skillFilter, setSkillFilter]   = useState('all');
+  const [skillFilter, setSkillFilter] = useState('all');
   const [ratingFilter, setRatingFilter] = useState('all');
-  const [priceSort, setPriceSort]       = useState('none');
-  const [karigars, setKarigars]         = useState([]);
-  const [loading, setLoading]           = useState(true);
-
-  const [catRef,  catVisible]  = useScrollReveal(0.05);
-  const [cardRef, cardVisible] = useScrollReveal(0.05);
+  const [priceSort, setPriceSort] = useState('none');
+  const [karigars, setKarigars] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -311,10 +65,10 @@ const CustomerDashboard = () => {
 
   const filtered = useMemo(() => {
     let list = karigars.filter(k => (k as any).availability !== 'offline');
-    if (search)            list = list.filter(k => (k as any).name.toLowerCase().includes(search.toLowerCase()) || (k as any).skill.toLowerCase().includes(search.toLowerCase()));
-    if (skillFilter !== 'all')   list = list.filter(k => (k as any).skill === skillFilter);
-    if (ratingFilter !== 'all')  list = list.filter(k => Number((k as any).rating) >= Number(ratingFilter));
-    if (priceSort === 'low')  list = [...list].sort((a: any, b: any) => a.price - b.price);
+    if (search) list = list.filter(k => (k as any).name.toLowerCase().includes(search.toLowerCase()) || (k as any).skill.toLowerCase().includes(search.toLowerCase()));
+    if (skillFilter !== 'all') list = list.filter(k => (k as any).skill === skillFilter);
+    if (ratingFilter !== 'all') list = list.filter(k => Number((k as any).rating) >= Number(ratingFilter));
+    if (priceSort === 'low') list = [...list].sort((a: any, b: any) => a.price - b.price);
     if (priceSort === 'high') list = [...list].sort((a: any, b: any) => b.price - a.price);
     return list;
   }, [search, skillFilter, ratingFilter, priceSort, karigars]);
@@ -323,202 +77,131 @@ const CustomerDashboard = () => {
   const clearFilters = () => { setSkillFilter('all'); setRatingFilter('all'); setPriceSort('none'); };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#FFFAF6', fontFamily: "'Sora', sans-serif", color: '#2D1F0E' }}>
-
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
-
-        @keyframes fadeUp       { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
-        @keyframes dropIn       { from { opacity:0; transform:translateY(-8px) scale(.97); } to { opacity:1; transform:translateY(0) scale(1); } }
-        @keyframes skeletonPulse{ 0%,100% { opacity:.4; } 50% { opacity:.7; } }
-        @keyframes cardFadeUp   { from { opacity:0; transform:translateY(32px); } to { opacity:1; transform:translateY(0); } }
-        @keyframes dotPulse     { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.4; transform:scale(.8); } }
-
-        .fu-1 { animation: fadeUp .6s cubic-bezier(.22,1,.36,1) .05s both; }
-        .fu-2 { animation: fadeUp .6s cubic-bezier(.22,1,.36,1) .15s both; }
-        .fu-3 { animation: fadeUp .6s cubic-bezier(.22,1,.36,1) .25s both; }
-
-        .karigar-card-wrap { animation: cardFadeUp .55s cubic-bezier(.22,1,.36,1) both; }
-
-        .search-input {
-          width: 100%; height: 52px;
-          background: #FFFFFF !important;
-          border: 1.5px solid #E8E0D8 !important;
-          border-radius: 14px !important;
-          color: #2D1F0E !important; font-size: 0.95rem;
-          padding-left: 48px !important;
-          font-family: 'Sora', sans-serif;
-          transition: border-color .25s, box-shadow .25s !important;
-        }
-        .search-input:focus {
-          border-color: rgba(251,146,60,0.55) !important;
-          box-shadow: 0 0 0 3px rgba(251,146,60,0.1) !important;
-          outline: none !important;
-        }
-        .search-input::placeholder { color: #8B7355; }
-
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(251,146,60,.3); border-radius: 999px; }
-      `}</style>
-
+    <div className="min-h-screen bg-secondary/40">
       <Header />
 
-      <main style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 24px' }}>
-
+      <main className="uc-container py-8">
         {/* PAGE TITLE */}
-        <div className="fu-1" style={{ marginBottom: 28 }}>
-          <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.62rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#fb923c', display: 'block', marginBottom: 8 }}>
-            Customer Dashboard
-          </span>
-          <h1 style={{ fontSize: 'clamp(1.5rem,4vw,2rem)', fontWeight: 800, letterSpacing: '-0.025em', lineHeight: 1.1 }}>
-            Find a <span style={{ color: '#fb923c' }}>Karigar</span> Near You
+        <div className="mb-7 animate-fade-in">
+          <span className="uc-eyebrow mb-2 block">Customer Dashboard</span>
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+            Find a <span className="text-primary">Karigar</span> Near You
           </h1>
         </div>
 
         {/* SEARCH */}
-        <div className="fu-2" style={{ position: 'relative', marginBottom: 32 }}>
-          <Search size={18} style={{
-            position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)',
-            color: searchFocused ? '#fb923c' : '#6B5744',
-            transition: 'color .25s', zIndex: 1, pointerEvents: 'none',
-          }} />
-          <input
-            className="search-input"
+        <div className="uc-card mb-8 flex items-center gap-3 p-3">
+          <Search className="ml-2 h-5 w-5 shrink-0 text-muted-foreground" />
+          <Input
+            className="h-11 flex-1 rounded-xl border-none bg-transparent shadow-none focus-visible:ring-0"
             placeholder="Search for electrician, plumber, carpenter..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            onFocus={() => setSearchFocused(true)}
-            onBlur={() => setSearchFocused(false)}
           />
           {search && (
-            <button onClick={() => setSearch('')} style={{
-              position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)',
-              background: '#E8E0D8', border: 'none', borderRadius: '50%',
-              width: 22, height: 22, display: 'flex', alignItems: 'center', justifyContent: 'center',
-              cursor: 'pointer', color: '#6B5744',
-            }}>
-              <X size={12} />
-            </button>
+            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full" onClick={() => setSearch('')}>
+              <X className="h-4 w-4" />
+            </Button>
           )}
         </div>
 
         {/* SERVICE CATEGORIES */}
         {!search && (
-          <section style={{ marginBottom: 44 }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+          <section className="mb-10">
+            <div className="mb-5 flex items-center justify-between">
               <div>
-                <h2 style={{ fontSize: '1.05rem', fontWeight: 700, letterSpacing: '-0.01em', marginBottom: 3 }}>
-                  Service Categories
-                </h2>
-                <p style={{ fontSize: '0.75rem', color: '#8B7355', fontWeight: 300 }}>
-                  Tap a category to filter karigars
-                </p>
+                <h2 className="text-lg font-bold tracking-tight">Service Categories</h2>
+                <p className="text-xs text-muted-foreground">Tap a category to filter karigars</p>
               </div>
-              <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.65rem', color: '#8B7355', letterSpacing: '0.1em' }}>
-                {CATEGORIES.length} TRADES
-              </span>
+              <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{CATEGORIES.length} Trades</span>
             </div>
 
-            <div
-              ref={catRef}
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
-                gap: 14,
-              }}
-            >
-              {CATEGORIES.map((cat, i) => (
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+              {CATEGORIES.map(cat => (
                 <CategoryCard
-                  count={undefined} key={cat.label}
+                  key={cat.label}
                   {...cat}
                   active={skillFilter === cat.label}
                   onClick={() => setSkillFilter(skillFilter === cat.label ? 'all' : cat.label)}
-                  delay={i * 0.07}
-                  visible={catVisible}                />
+                />
               ))}
             </div>
           </section>
         )}
 
         {/* FILTERS */}
-        <section style={{ marginBottom: 32 }}>
-          <div style={{
-            display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 10,
-            padding: '14px 18px',
-            background: '#F7F2ED',
-            border: '1px solid #E8E0D8',
-            borderRadius: 16, backdropFilter: 'blur(12px)',
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginRight: 4 }}>
-              <SlidersHorizontal size={15} color="#6B5744" />
-              <span style={{ fontSize: '0.8rem', color: '#6B5744', fontWeight: 600 }}>Filters</span>
+        <section className="mb-8">
+          <div className="uc-card flex flex-wrap items-center gap-3 p-4">
+            <div className="mr-1 flex items-center gap-2">
+              <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm font-semibold text-muted-foreground">Filters</span>
               {activeFiltersCount > 0 && (
-                <span style={{
-                  background: 'rgba(251,146,60,0.2)', border: '1px solid rgba(251,146,60,0.4)',
-                  color: '#fb923c', fontSize: '0.65rem', fontWeight: 700,
-                  padding: '1px 7px', borderRadius: 999,
-                }}>{activeFiltersCount}</span>
+                <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-bold text-primary">{activeFiltersCount}</span>
               )}
             </div>
-            <div style={{ width: 1, height: 20, background: '#E8E0D8', margin: '0 4px' }} />
-            <FilterSelect value={skillFilter} onChange={setSkillFilter} placeholder="All Skills"
-              options={[{ value: 'all', label: 'All Skills' }, ...['Electrician','Plumber','Carpenter','AC Repair','Mason','Painter'].map(s => ({ value: s, label: s }))]} />
-            <FilterSelect value={ratingFilter} onChange={setRatingFilter} placeholder="All Ratings"
-              options={[{ value: 'all', label: 'All Ratings' }, { value: '4.5', label: '4.5+ ★' }, { value: '4', label: '4.0+ ★' }]} />
-            <FilterSelect value={priceSort} onChange={setPriceSort} placeholder="Sort by Price"
-              options={[{ value: 'none', label: 'Default Order' }, { value: 'low', label: 'Price: Low → High' }, { value: 'high', label: 'Price: High → Low' }]} />
+            <div className="h-5 w-px bg-border" />
+
+            <Select value={skillFilter} onValueChange={setSkillFilter}>
+              <SelectTrigger className="w-[150px] rounded-xl"><SelectValue placeholder="All Skills" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Skills</SelectItem>
+                {['Electrician','Plumber','Carpenter','AC Repair','Mason','Painter'].map(s => (
+                  <SelectItem key={s} value={s}>{s}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select value={ratingFilter} onValueChange={setRatingFilter}>
+              <SelectTrigger className="w-[150px] rounded-xl"><SelectValue placeholder="All Ratings" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Ratings</SelectItem>
+                <SelectItem value="4.5">4.5+ ★</SelectItem>
+                <SelectItem value="4">4.0+ ★</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select value={priceSort} onValueChange={setPriceSort}>
+              <SelectTrigger className="w-[170px] rounded-xl"><SelectValue placeholder="Sort by Price" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">Default Order</SelectItem>
+                <SelectItem value="low">Price: Low → High</SelectItem>
+                <SelectItem value="high">Price: High → Low</SelectItem>
+              </SelectContent>
+            </Select>
+
             {activeFiltersCount > 0 && (
-              <button onClick={clearFilters} style={{
-                marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6,
-                padding: '7px 12px', borderRadius: 8,
-                border: '1px solid #E8E0D8',
-                background: 'transparent', color: '#6B5744',
-                fontSize: '0.8rem', cursor: 'pointer', fontFamily: "'Sora',sans-serif", transition: 'all .2s',
-              }}
-                onMouseEnter={e => { e.currentTarget.style.color = '#fb923c'; e.currentTarget.style.borderColor = 'rgba(251,146,60,0.3)'; }}
-                onMouseLeave={e => { e.currentTarget.style.color = '#6B5744'; e.currentTarget.style.borderColor = '#E8E0D8'; }}
-              >
-                <X size={12} /> Clear all
-              </button>
+              <Button variant="outline" size="sm" className="ml-auto gap-1.5 rounded-xl" onClick={clearFilters}>
+                <X className="h-3.5 w-3.5" /> Clear all
+              </Button>
             )}
           </div>
         </section>
 
         {/* KARIGAR RESULTS */}
         <section>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-            <h2 style={{ fontSize: '1rem', fontWeight: 700, letterSpacing: '-0.01em' }}>
-              {search ? <span>Results for <span style={{ color: '#fb923c' }}>"{search}"</span></span> : 'Nearby Karigars'}
+          <div className="mb-5 flex items-center justify-between">
+            <h2 className="text-base font-bold tracking-tight">
+              {search ? <span>Results for <span className="text-primary">"{search}"</span></span> : 'Nearby Karigars'}
             </h2>
             {!loading && (
-              <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.65rem', color: '#8B7355', letterSpacing: '0.1em' }}>
-                {filtered.length} FOUND
-              </span>
+              <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{filtered.length} found</span>
             )}
           </div>
 
           {loading ? (
-            <div style={{ display: 'grid', gap: 16, gridTemplateColumns: 'repeat(auto-fill,minmax(300px,1fr))' }}>
-              {[...Array(6)].map((_, i) => <Skeleton key={i} />)}
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {[...Array(6)].map((_, i) => <Skeleton key={i} className="h-56 rounded-2xl" />)}
             </div>
           ) : filtered.length === 0 ? (
-            <div style={{
-              padding: '64px 24px', textAlign: 'center',
-              background: '#F7F2ED',
-              border: '1px solid #F0E8DE', borderRadius: 20,
-            }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: 16 }}>🔍</div>
-              <p style={{ color: '#6B5744', fontSize: '0.95rem', fontWeight: 300 }}>No karigars found.</p>
-              <p style={{ color: '#A89880', fontSize: '0.85rem', marginTop: 6 }}>Try adjusting your search or filters.</p>
+            <div className="uc-card p-16 text-center">
+              <div className="mb-4 text-4xl">🔍</div>
+              <p className="text-sm text-foreground">No karigars found.</p>
+              <p className="mt-1.5 text-sm text-muted-foreground">Try adjusting your search or filters.</p>
             </div>
           ) : (
-            <div ref={cardRef} style={{ display: 'grid', gap: 16, gridTemplateColumns: 'repeat(auto-fill,minmax(300px,1fr))' }}>
-              {filtered.map((k: any, i) => (
-                <div key={k.id} className="karigar-card-wrap"
-                  style={{ animationDelay: cardVisible ? `${i * 0.07}s` : '0s', opacity: cardVisible ? undefined : 0 }}>
-                  <KarigarCard karigar={k} />
-                </div>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {filtered.map((k: any) => (
+                <KarigarCard key={k.id} karigar={k} />
               ))}
             </div>
           )}
