@@ -7,163 +7,80 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useBookings } from '@/contexts/BookingContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import {
   User, Mail, Phone, MapPin, Pencil, X, Check,
-  Clock, Star, ChevronRight, Loader2
+  Clock, Star, ChevronRight, Loader2,
 } from 'lucide-react';
 
 /* ─── STATUS CONFIG ─────────────────────────────────── */
 const STATUS_META = {
-  pending:    { label: 'Pending',    color: '#fbbf24', bg: 'rgba(251,191,36,0.12)',  border: 'rgba(251,191,36,0.3)'  },
-  accepted:   { label: 'Accepted',   color: '#38bdf8', bg: 'rgba(56,189,248,0.12)', border: 'rgba(56,189,248,0.3)'  },
-  on_the_way: { label: 'On the Way', color: '#38bdf8', bg: 'rgba(56,189,248,0.12)', border: 'rgba(56,189,248,0.3)'  },
-  completed:  { label: 'Completed',  color: '#34d399', bg: 'rgba(52,211,153,0.12)', border: 'rgba(52,211,153,0.3)'  },
-  rejected:   { label: 'Rejected',   color: '#f87171', bg: 'rgba(248,113,113,0.12)',border: 'rgba(248,113,113,0.3)' },
+  pending:    { label: 'Pending',    className: 'bg-warning/15 text-warning' },
+  accepted:   { label: 'Accepted',   className: 'bg-info/15 text-info' },
+  on_the_way: { label: 'On the Way', className: 'bg-info/15 text-info' },
+  completed:  { label: 'Completed',  className: 'bg-success/15 text-success' },
+  rejected:   { label: 'Rejected',   className: 'bg-destructive/10 text-destructive' },
 };
-
-/* ─── GLASS INPUT ───────────────────────────────────── */
-function GlassInput({ label, value, onChange, type = 'text' }) {
-  const [focused, setFocused] = useState(false);
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-      <label style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6B5744', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-        {label}
-      </label>
-      <input
-        type={type}
-        value={value}
-        onChange={onChange}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-        style={{
-          background: '#FFFFFF',
-          border: `1.5px solid ${focused ? 'rgba(251,146,60,0.55)' : '#E8E0D8'}`,
-          borderRadius: 12,
-          padding: '10px 14px',
-          color: '#2D1F0E',
-          fontSize: '0.9rem',
-          fontFamily: "'Sora', sans-serif",
-          outline: 'none',
-          transition: 'border-color .25s, box-shadow .25s',
-          boxShadow: focused ? '0 0 0 3px rgba(251,146,60,0.1)' : 'none',
-          width: '100%',
-        }}
-      />
-    </div>
-  );
-}
 
 /* ─── PROFILE FIELD ROW ─────────────────────────────── */
 function ProfileField({ icon, label, value }) {
   return (
-    <div style={{
-      display: 'flex', alignItems: 'center', gap: 14,
-      padding: '12px 16px',
-      background: '#F7F2ED',
-      border: '1px solid #F0E8DE',
-      borderRadius: 12,
-    }}>
-      <div style={{
-        width: 34, height: 34, borderRadius: 10,
-        background: 'rgba(251,146,60,0.1)', border: '1px solid rgba(251,146,60,0.2)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-      }}>
+    <div className="flex items-center gap-3.5 rounded-xl border border-border bg-secondary/60 px-4 py-3">
+      <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-primary-soft text-primary">
         {icon}
       </div>
       <div>
-        <p style={{ fontSize: '0.68rem', color: '#6B5744', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 2 }}>{label}</p>
-        <p style={{ fontSize: '0.9rem', color: value ? '#fff' : '#8B7355', fontWeight: value ? 500 : 300 }}>
-          {value || 'Not set'}
-        </p>
+        <p className="mb-0.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</p>
+        <p className={`text-sm ${value ? 'font-medium text-foreground' : 'text-muted-foreground'}`}>{value || 'Not set'}</p>
       </div>
     </div>
   );
 }
 
 /* ─── BOOKING CARD ──────────────────────────────────── */
-function BookingCard({ b, onRate, index }) {
+function BookingCard({ b, onRate }) {
   const meta = STATUS_META[b.status] || STATUS_META.pending;
-  const [hov, setHov] = useState(false);
   return (
-    <div
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      style={{
-        background: '#F7F2ED',
-        backdropFilter: 'blur(16px)',
-        border: `1px solid ${hov ? 'rgba(251,146,60,0.2)' : '#E8E0D8'}`,
-        borderRadius: 20,
-        padding: 20,
-        transition: 'all 0.3s cubic-bezier(0.22,1,0.36,1)',
-        transform: hov ? 'translateY(-2px)' : 'translateY(0)',
-        boxShadow: hov ? '0 12px 40px rgba(0,0,0,0.3)' : 'none',
-        animation: `cardFadeUp .5s cubic-bezier(.22,1,.36,1) ${index * 0.08}s both`,
-      }}
-    >
-      {/* Top row */}
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, marginBottom: 14 }}>
+    <div className="uc-card uc-card-hover p-5">
+      <div className="mb-3.5 flex items-start justify-between gap-3">
         <div>
-          <h3 style={{ fontWeight: 700, fontSize: '1rem', marginBottom: 4 }}>{b.karigar_name}</h3>
-          <span style={{ fontSize: '0.8rem', color: '#fb923c', fontWeight: 600 }}>{b.skill}</span>
+          <h3 className="mb-1 text-base font-bold">{b.karigar_name}</h3>
+          <span className="text-sm font-semibold text-primary">{b.skill}</span>
         </div>
-        <span style={{
-          background: meta.bg, border: `1px solid ${meta.border}`,
-          color: meta.color, fontSize: '0.7rem', fontWeight: 700,
-          padding: '4px 12px', borderRadius: 999, whiteSpace: 'nowrap',
-          letterSpacing: '0.04em',
-        }}>
+        <span className={`whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-semibold ${meta.className}`}>
           {meta.label}
         </span>
       </div>
 
-      {/* Date/time */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 14 }}>
-        <Clock size={13} color="#8B7355" />
-        <span style={{ fontSize: '0.8rem', color: '#6B5744', fontWeight: 300 }}>
-          {b.date} · {b.time}
-        </span>
+      <div className="mb-3.5 flex items-center gap-1.5">
+        <Clock className="h-3.5 w-3.5 text-muted-foreground" />
+        <span className="text-sm text-muted-foreground">{b.date} · {b.time}</span>
       </div>
 
-      {/* Status tracker */}
       {b.status !== 'rejected' && (
-        <div style={{ marginBottom: 14 }}>
+        <div className="mb-3.5">
           <BookingStatusTracker status={b.status} />
         </div>
       )}
 
-      {/* Rating display */}
       {b.rating && (
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: 8,
-          padding: '10px 12px',
-          background: 'rgba(251,146,60,0.06)', border: '1px solid rgba(251,146,60,0.15)',
-          borderRadius: 10, marginBottom: 4,
-        }}>
+        <div className="mb-1 flex items-center gap-2 rounded-xl bg-primary/5 px-3 py-2.5">
           <StarRating rating={b.rating} size={13} />
-          {b.review && <span style={{ fontSize: '0.8rem', color: '#6B5744', fontWeight: 300 }}>{b.review}</span>}
+          {b.review && <span className="text-sm text-muted-foreground">{b.review}</span>}
         </div>
       )}
 
-      {/* Rate button */}
       {b.status === 'completed' && !b.rating && (
-        <button
-          onClick={onRate}
-          style={{
-            marginTop: 4,
-            display: 'flex', alignItems: 'center', gap: 6,
-            padding: '8px 14px', borderRadius: 10,
-            background: 'rgba(251,146,60,0.1)', border: '1px solid rgba(251,146,60,0.3)',
-            color: '#fb923c', fontSize: '0.8rem', fontWeight: 700,
-            cursor: 'pointer', transition: 'all .2s',
-            fontFamily: "'Sora', sans-serif",
-          }}
-          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(251,146,60,0.18)'; }}
-          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(251,146,60,0.1)'; }}
-        >
-          <Star size={13} fill="#fb923c" />
+        <Button variant="outline" size="sm" className="mt-1 gap-1.5 rounded-xl border-primary/30 text-primary hover:bg-primary/10" onClick={onRate}>
+          <Star className="h-3.5 w-3.5 fill-primary" />
           Rate this Service
-          <ChevronRight size={13} />
-        </button>
+          <ChevronRight className="h-3.5 w-3.5" />
+        </Button>
       )}
     </div>
   );
@@ -171,76 +88,29 @@ function BookingCard({ b, onRate, index }) {
 
 /* ─── RATING DIALOG ─────────────────────────────────── */
 function RatingDialog({ open, onClose, onSubmit, rating, setRating, review, setReview }) {
-  if (!open) return null;
   return (
-    <div style={{
-      position: 'fixed', inset: 0, zIndex: 200,
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)',
-      animation: 'fadeIn .2s ease',
-    }} onClick={onClose}>
-      <div
-        onClick={e => e.stopPropagation()}
-        style={{
-          background: 'rgba(14,14,20,0.98)', backdropFilter: 'blur(24px)',
-          border: '1px solid rgba(251,146,60,0.25)',
-          borderRadius: 24, padding: 32, width: '100%', maxWidth: 420, margin: 16,
-          boxShadow: '0 32px 80px rgba(0,0,0,0.6)',
-          animation: 'dialogPop .3s cubic-bezier(.22,1,.36,1)',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
-          <div>
-            <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.6rem', letterSpacing: '0.18em', color: '#fb923c', textTransform: 'uppercase', display: 'block', marginBottom: 6 }}>Review</span>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 800, letterSpacing: '-0.02em' }}>Rate this Service</h3>
-          </div>
-          <button onClick={onClose} style={{ background: '#F0E8DE', border: 'none', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#6B5744' }}>
-            <X size={15} />
-          </button>
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="max-w-md rounded-2xl">
+        <DialogHeader>
+          <span className="uc-eyebrow mb-1 block">Review</span>
+          <DialogTitle className="text-xl">Rate this Service</DialogTitle>
+        </DialogHeader>
+        <div className="flex flex-col items-center gap-5">
           <StarRatingInput value={rating} onChange={setRating} />
-          <textarea
+          <Textarea
             placeholder="Write a review (optional)..."
             value={review}
             onChange={e => setReview(e.target.value)}
             rows={3}
-            style={{
-              width: '100%', background: '#FFFFFF',
-              border: '1.5px solid #E8E0D8',
-              borderRadius: 12, padding: '10px 14px',
-              color: '#2D1F0E', fontSize: '0.875rem', resize: 'none',
-              fontFamily: "'Sora', sans-serif", outline: 'none',
-              transition: 'border-color .2s',
-            }}
-            onFocus={e => { e.target.style.borderColor = 'rgba(251,146,60,0.5)'; }}
-            onBlur={e => { e.target.style.borderColor = '#E8E0D8'; }}
+            className="resize-none rounded-xl"
           />
         </div>
-
-        <div style={{ display: 'flex', gap: 10, marginTop: 24 }}>
-          <button onClick={onClose} style={{
-            flex: 1, padding: '11px', borderRadius: 12,
-            border: '1.5px solid #E8E0D8',
-            background: 'transparent', color: '#6B5744',
-            fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer',
-            fontFamily: "'Sora',sans-serif", transition: 'all .2s',
-          }}>Cancel</button>
-          <button onClick={onSubmit} disabled={rating === 0} style={{
-            flex: 2, padding: '11px', borderRadius: 12, border: 'none',
-            background: rating === 0
-              ? '#F0E8DE'
-              : 'linear-gradient(90deg,#f97316,#fb923c,#fdba74,#fb923c,#f97316)',
-            backgroundSize: '200% auto',
-            color: rating === 0 ? '#A89880' : '#FFFAF6',
-            fontSize: '0.875rem', fontWeight: 700, cursor: rating === 0 ? 'not-allowed' : 'pointer',
-            fontFamily: "'Sora',sans-serif", transition: 'all .2s',
-            animation: rating > 0 ? 'shimmer 3s linear infinite' : 'none',
-          }}>Submit Rating</button>
-        </div>
-      </div>
-    </div>
+        <DialogFooter className="mt-2 flex-row gap-2 sm:justify-stretch">
+          <Button variant="outline" className="flex-1 rounded-xl" onClick={onClose}>Cancel</Button>
+          <Button className="flex-[2] rounded-xl font-semibold" disabled={rating === 0} onClick={onSubmit}>Submit Rating</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -280,160 +150,104 @@ const CustomerProfile = () => {
   };
 
   if (!profile) return (
-    <div style={{ minHeight: '100vh', background: '#FFFAF6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
-        <Loader2 size={32} color="#fb923c" style={{ animation: 'spin 1s linear infinite' }} />
-        <p style={{ color: '#6B5744', fontFamily: "'Sora',sans-serif" }}>Loading profile...</p>
+    <div className="flex min-h-screen items-center justify-center bg-secondary/40">
+      <div className="flex flex-col items-center gap-4">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <p className="text-muted-foreground">Loading profile...</p>
       </div>
     </div>
   );
 
-  const initials = profile.name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2) || 'U';
+  const initials = profile.name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'U';
 
   return (
-    <div style={{ minHeight: '100vh', background: '#FFFAF6', fontFamily: "'Sora', sans-serif", color: '#2D1F0E' }}>
-
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
-        *, *::before, *::after { box-sizing: border-box; }
-        @keyframes fadeUp    { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
-        @keyframes cardFadeUp{ from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
-        @keyframes fadeIn    { from { opacity:0; } to { opacity:1; } }
-        @keyframes dialogPop { from { opacity:0; transform:scale(.94) translateY(12px); } to { opacity:1; transform:scale(1) translateY(0); } }
-        @keyframes shimmer   { 0% { background-position:-200% center; } 100% { background-position:200% center; } }
-        @keyframes avatarGlow{ 0%,100% { box-shadow:0 0 0 4px rgba(251,146,60,0.15),0 0 24px rgba(251,146,60,0.1); } 50% { box-shadow:0 0 0 6px rgba(251,146,60,0.25),0 0 40px rgba(251,146,60,0.2); } }
-        @keyframes spin      { to { transform:rotate(360deg); } }
-
-        .fu-1 { animation: fadeUp .65s cubic-bezier(.22,1,.36,1) .05s both; }
-        .fu-2 { animation: fadeUp .65s cubic-bezier(.22,1,.36,1) .15s both; }
-        .fu-3 { animation: fadeUp .65s cubic-bezier(.22,1,.36,1) .25s both; }
-
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(251,146,60,.3); border-radius: 999px; }
-      `}</style>
-
+    <div className="min-h-screen bg-secondary/40">
       <Header />
 
-      <main style={{ maxWidth: 720, margin: '0 auto', padding: '32px 24px' }}>
-
+      <main className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6">
         {/* ── PAGE LABEL ── */}
-        <div className="fu-1" style={{ marginBottom: 28 }}>
-          <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.62rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#fb923c', display: 'block', marginBottom: 8 }}>
-            Account
-          </span>
-          <h1 style={{ fontSize: 'clamp(1.5rem,4vw,2rem)', fontWeight: 800, letterSpacing: '-0.025em' }}>
-            My <span style={{ color: '#fb923c' }}>Profile</span>
+        <div className="mb-7 animate-fade-in">
+          <span className="uc-eyebrow mb-2 block">Account</span>
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+            My <span className="text-primary">Profile</span>
           </h1>
         </div>
 
         {/* ── PROFILE CARD ── */}
-        <div className="fu-2" style={{
-          background: '#F7F2ED',
-          backdropFilter: 'blur(20px)',
-          border: '1px solid #E8E0D8',
-          borderRadius: 24, padding: 28, marginBottom: 32,
-        }}>
-          {/* Avatar row */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-              <div style={{
-                width: 58, height: 58, borderRadius: '50%',
-                background: 'linear-gradient(135deg,rgba(249,115,22,0.3),rgba(251,146,60,0.5))',
-                border: '2px solid rgba(251,146,60,0.4)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontFamily: "'Space Mono',monospace", fontWeight: 700, fontSize: '1.1rem',
-                color: '#fb923c', flexShrink: 0,
-                animation: 'avatarGlow 3s ease-in-out infinite',
-              }}>{initials}</div>
+        <div className="uc-card mb-8 p-6">
+          <div className="mb-6 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Avatar className="h-14 w-14 border-2 border-primary/30">
+                <AvatarFallback className="bg-primary-soft font-bold text-primary">{initials}</AvatarFallback>
+              </Avatar>
               <div>
-                <p style={{ fontWeight: 700, fontSize: '1.1rem', marginBottom: 3 }}>{profile.name}</p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#34d399', animation: 'pulse 2s infinite' }} />
-                  <span style={{ fontSize: '0.75rem', color: '#34d399', fontWeight: 600 }}>Active Customer</span>
+                <p className="mb-1 text-lg font-bold">{profile.name}</p>
+                <div className="flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-success" />
+                  <span className="text-xs font-semibold text-success">Active Customer</span>
                 </div>
               </div>
             </div>
 
-            <button
+            <Button
+              variant="outline"
+              size="sm"
+              className={`gap-1.5 rounded-xl ${editing ? 'border-destructive/40 text-destructive hover:bg-destructive/10' : ''}`}
               onClick={() => { setEditing(!editing); setForm({ name: profile.name, phone: profile.phone, location: profile.location }); }}
-              style={{
-                display: 'flex', alignItems: 'center', gap: 6,
-                padding: '8px 14px', borderRadius: 10,
-                border: `1.5px solid ${editing ? 'rgba(248,113,113,0.4)' : '#D9CFC2'}`,
-                background: editing ? 'rgba(248,113,113,0.08)' : '#FFFFFF',
-                color: editing ? '#f87171' : '#4A3826',
-                fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer',
-                transition: 'all .2s', fontFamily: "'Sora',sans-serif",
-              }}
             >
-              {editing ? <><X size={13}/>Cancel</> : <><Pencil size={13}/>Edit</>}
-            </button>
+              {editing ? <><X className="h-3.5 w-3.5" />Cancel</> : <><Pencil className="h-3.5 w-3.5" />Edit</>}
+            </Button>
           </div>
 
-          {/* Divider */}
-          <div style={{ height: 1, background: 'linear-gradient(90deg,transparent,#E8E0D8,transparent)', marginBottom: 20 }} />
+          <div className="mb-5 h-px bg-border" />
 
           {editing ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-              <GlassInput label="Name" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
-              <GlassInput label="Phone" value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} />
-              <GlassInput label="Location" value={form.location} onChange={e => setForm(f => ({ ...f, location: e.target.value }))} />
-              <button
-                onClick={handleSave}
-                disabled={saving}
-                style={{
-                  marginTop: 4, padding: '12px', borderRadius: 12, border: 'none',
-                  background: 'linear-gradient(90deg,#f97316,#fb923c,#fdba74,#fb923c,#f97316)',
-                  backgroundSize: '200% auto',
-                  animation: 'shimmer 3s linear infinite',
-                  color: '#FFFFFF', fontWeight: 700, fontSize: '0.9rem',
-                  cursor: saving ? 'not-allowed' : 'pointer',
-                  fontFamily: "'Sora',sans-serif",
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                  opacity: saving ? 0.7 : 1,
-                }}
-              >
-                {saving ? <><Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} />Saving...</> : <><Check size={16}/>Save Changes</>}
-              </button>
+            <div className="flex flex-col gap-3.5">
+              <div className="flex flex-col gap-1.5">
+                <Label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Name</Label>
+                <Input className="rounded-xl" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <Label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Phone</Label>
+                <Input className="rounded-xl" value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <Label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Location</Label>
+                <Input className="rounded-xl" value={form.location} onChange={e => setForm(f => ({ ...f, location: e.target.value }))} />
+              </div>
+              <Button className="mt-1 gap-2 rounded-xl font-semibold" disabled={saving} onClick={handleSave}>
+                {saving ? <><Loader2 className="h-4 w-4 animate-spin" />Saving...</> : <><Check className="h-4 w-4" />Save Changes</>}
+              </Button>
             </div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              <ProfileField icon={<User size={15} color="#fb923c" />}    label="Name"     value={profile.name} />
-              <ProfileField icon={<Mail size={15} color="#fb923c" />}    label="Email"    value={profile.email} />
-              <ProfileField icon={<Phone size={15} color="#fb923c" />}   label="Phone"    value={profile.phone} />
-              <ProfileField icon={<MapPin size={15} color="#fb923c" />}  label="Location" value={profile.location} />
+            <div className="flex flex-col gap-2.5">
+              <ProfileField icon={<User className="h-4 w-4" />} label="Name" value={profile.name} />
+              <ProfileField icon={<Mail className="h-4 w-4" />} label="Email" value={profile.email} />
+              <ProfileField icon={<Phone className="h-4 w-4" />} label="Phone" value={profile.phone} />
+              <ProfileField icon={<MapPin className="h-4 w-4" />} label="Location" value={profile.location} />
             </div>
           )}
         </div>
 
         {/* ── BOOKINGS ── */}
-        <div className="fu-3">
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-            <h2 style={{ fontSize: '1rem', fontWeight: 700, letterSpacing: '-0.01em' }}>My Bookings</h2>
-            <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.65rem', color: '#8B7355', letterSpacing: '0.1em' }}>
-              {myBookings.length} TOTAL
-            </span>
+        <div>
+          <div className="mb-5 flex items-center justify-between">
+            <h2 className="text-base font-bold tracking-tight">My Bookings</h2>
+            <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{myBookings.length} total</span>
           </div>
 
           {myBookings.length === 0 ? (
-            <div style={{
-              padding: '56px 24px', textAlign: 'center',
-              background: '#F7F2ED',
-              border: '1px solid #F0E8DE',
-              borderRadius: 20,
-            }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: 14 }}>📋</div>
-              <p style={{ color: '#6B5744', fontSize: '0.9rem', fontWeight: 300 }}>No bookings yet.</p>
-              <p style={{ color: '#A89880', fontSize: '0.8rem', marginTop: 6 }}>Book a karigar to get started.</p>
+            <div className="uc-card p-14 text-center">
+              <div className="mb-3.5 text-4xl">📋</div>
+              <p className="text-sm text-foreground">No bookings yet.</p>
+              <p className="mt-1.5 text-sm text-muted-foreground">Book a karigar to get started.</p>
             </div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-              {myBookings.map((b, i) => (
+            <div className="flex flex-col gap-3.5">
+              {myBookings.map(b => (
                 <BookingCard
                   key={b.id}
                   b={b}
-                  index={i}
                   onRate={() => setRatingDialog({ id: b.id, karigarId: b.karigar_id })}
                 />
               ))}
