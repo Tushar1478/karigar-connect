@@ -1,674 +1,325 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import { Users, Wrench, Zap, Droplets, Hammer, Home, CheckCircle, ArrowRight, Sun, Moon, Star } from "lucide-react";
+import {
+  Wrench, Zap, Droplets, Hammer, PaintRoller, Fan, Sparkles, Refrigerator,
+  Search, Star, ShieldCheck, Clock, BadgeIndianRupee, ArrowRight, CheckCircle2, MapPin,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Header from "@/components/Header";
 
-/* ─── KARIGAR MOCK DATA ─────────────────────────────── */
-const karigarData = {
-  Electricians:  { name: "Ramesh Kumar", exp: "8 yrs",  rating: 4.9, jobs: 312, avatar: "RK", color: "#f97316" },
-  Plumbers:      { name: "Suresh Verma", exp: "6 yrs",  rating: 4.8, jobs: 241, avatar: "SV", color: "#38bdf8" },
-  Carpenters:    { name: "Anil Sharma",  exp: "10 yrs", rating: 4.7, jobs: 198, avatar: "AS", color: "#a78bfa" },
-  "Home Repairs":{ name: "Vijay Singh",  exp: "5 yrs",  rating: 4.9, jobs: 289, avatar: "VS", color: "#34d399" },
-};
-
-const MAP_PINS = [
-  { top: "22%", left: "28%", name: "Ramesh K.", delay: 0   },
-  { top: "48%", left: "58%", name: "Suresh V.", delay: 0.4 },
-  { top: "62%", left: "23%", name: "Anil S.",   delay: 0.8 },
-  { top: "28%", left: "72%", name: "Priya M.",  delay: 1.2 },
-  { top: "72%", left: "62%", name: "Vijay S.",  delay: 0.6 },
-  { top: "18%", left: "50%", name: "Mohan L.",  delay: 1.0 },
+const CATEGORIES = [
+  { label: "Electrician", icon: Zap, note: "From ₹199" },
+  { label: "Plumber", icon: Droplets, note: "From ₹249" },
+  { label: "Carpenter", icon: Hammer, note: "From ₹299" },
+  { label: "Painter", icon: PaintRoller, note: "From ₹499" },
+  { label: "AC Repair", icon: Fan, note: "From ₹399" },
+  { label: "Cleaning", icon: Sparkles, note: "From ₹349" },
+  { label: "Appliance", icon: Refrigerator, note: "From ₹299" },
+  { label: "Home Repair", icon: Wrench, note: "From ₹199" },
 ];
 
-/* ─── HOOKS ─────────────────────────────────────────── */
-function useScrollReveal(threshold = 0.15) {
-  const ref = useRef(null);
+const STEPS = [
+  { title: "Tell us what you need", body: "Pick a service and share your address and preferred time slot.", icon: Search },
+  { title: "Get matched instantly", body: "We show verified karigars near you with ratings and upfront prices.", icon: MapPin },
+  { title: "Relax, it's done", body: "Track your karigar live, pay after the job and rate the experience.", icon: CheckCircle2 },
+];
+
+const WHY = [
+  { title: "Verified professionals", body: "Every karigar is ID-checked, skill-tested and background verified.", icon: ShieldCheck },
+  { title: "Upfront pricing", body: "See the price before you book. No surprises, no haggling.", icon: BadgeIndianRupee },
+  { title: "On-time arrival", body: "Live tracking and 60-minute arrival windows across your city.", icon: Clock },
+  { title: "Rated by neighbours", body: "Real reviews from customers in your locality, not stock ratings.", icon: Star },
+];
+
+const KARIGARS = [
+  { name: "Ramesh Kumar", trade: "Electrician", exp: "8 yrs", rating: 4.9, jobs: 312, initials: "RK" },
+  { name: "Suresh Verma", trade: "Plumber", exp: "6 yrs", rating: 4.8, jobs: 241, initials: "SV" },
+  { name: "Anil Sharma", trade: "Carpenter", exp: "10 yrs", rating: 4.7, jobs: 198, initials: "AS" },
+  { name: "Priya Mehta", trade: "Deep Cleaning", exp: "5 yrs", rating: 4.9, jobs: 289, initials: "PM" },
+];
+
+const STATS = [
+  { value: "2,400+", label: "Jobs completed" },
+  { value: "850+", label: "Verified karigars" },
+  { value: "4.8", label: "Average rating" },
+  { value: "18", label: "Cities served" },
+];
+
+function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+  const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
-      { threshold }
+      ([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } },
+      { threshold: 0.12 }
     );
     obs.observe(el);
     return () => obs.disconnect();
-  }, [threshold]);
-  return [ref, visible] as const;
-}
-
-function useCountUp(target, duration = 1800, visible) {
-  const [count, setCount] = useState(0);
-  const numeric = parseFloat(target.replace(/[^0-9.]/g, ""));
-  const suffix  = target.replace(/[0-9.]/g, "");
-  useEffect(() => {
-    if (!visible) return;
-    let start = null;
-    const step = (ts) => {
-      if (!start) start = ts;
-      const p = Math.min((ts - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      setCount(eased * numeric);
-      if (p < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }, [visible]);
-  const display = target.includes(".") ? count.toFixed(1) : Math.floor(count).toLocaleString();
-  return display + suffix;
-}
-
-/* ─── STAT ITEM ─────────────────────────────────────── */
-function StatItem({ value, label, visible }) {
-  const display = useCountUp(value, 1600, visible);
+  }, []);
   return (
-    <div style={{ textAlign: "center" }}>
-      <p style={{
-        fontFamily: "'Space Mono',monospace",
-        fontSize: "clamp(2rem,5vw,3rem)",
-        fontWeight: 700,
-        background: "linear-gradient(135deg,#fb923c,#fde68a)",
-        WebkitBackgroundClip: "text",
-        WebkitTextFillColor: "transparent",
-        backgroundClip: "text",
-        lineHeight: 1,
-      }}>{display}</p>
-      <p style={{ color: "var(--muted)", fontSize: "0.875rem", marginTop: 8, fontWeight: 300 }}>{label}</p>
-    </div>
-  );
-}
-
-/* ─── REVEAL WRAPPER ────────────────────────────────── */
-function Reveal({ children, delay = 0, dir = "up" }) {
-  const [ref, visible] = useScrollReveal();
-  const t = { up: "translateY(36px)", left: "translateX(-36px)", right: "translateX(36px)" };
-  return (
-    <div ref={ref} style={{
-      transition: `all 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}s`,
-      opacity: visible ? 1 : 0,
-      transform: visible ? "translate(0)" : t[dir],
-    }}>
+    <div
+      ref={ref}
+      className={`transition-all duration-700 ease-out ${visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
+      style={{ transitionDelay: `${delay}ms` }}
+    >
       {children}
     </div>
   );
 }
 
-/* ─── HOW IT WORKS CARD ─────────────────────────────── */
-function HowCard({ step, title, desc, delay, visible }) {
-  const [hov, setHov] = useState(false);
-  return (
-    <div
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      style={{
-        background: "var(--glass)",
-        backdropFilter: "blur(16px)",
-        border: `1px solid ${hov ? "rgba(251,146,60,0.45)" : "var(--glass-border)"}`,
-        borderRadius: 20, padding: "32px 28px",
-        textAlign: "left", cursor: "default",
-        transition: "all 0.4s cubic-bezier(0.22,1,0.36,1)",
-        transitionDelay: visible ? `${delay}s` : "0s",
-        transform: visible ? (hov ? "translateY(-6px)" : "translateY(0)") : "translateY(40px)",
-        opacity: visible ? 1 : 0,
-        boxShadow: hov ? "0 20px 60px rgba(0,0,0,0.35), 0 0 0 1px rgba(251,146,60,0.12)" : "none",
-        position: "relative", overflow: "hidden", minHeight: 160,
-      }}
-    >
-      <span style={{ fontFamily: "'Space Mono',monospace", fontSize: "0.65rem", color: "#fb923c", letterSpacing: "0.12em", fontWeight: 700, display: "block", marginBottom: 12 }}>{step}</span>
-      <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--fg)", marginBottom: 0 }}>{title}</h3>
+const SectionHead = ({ eyebrow, title, subtitle }: { eyebrow: string; title: string; subtitle?: string }) => (
+  <div className="mb-8 max-w-2xl">
+    <p className="uc-eyebrow">{eyebrow}</p>
+    <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">{title}</h2>
+    {subtitle && <p className="mt-2 text-sm text-muted-foreground sm:text-base">{subtitle}</p>}
+  </div>
+);
 
-      {/* Slide-in desc */}
-      <div style={{
-        maxHeight: hov ? "120px" : "0px",
-        opacity: hov ? 1 : 0,
-        transform: hov ? "translateX(0)" : "translateX(-18px)",
-        transition: "all 0.4s cubic-bezier(0.22,1,0.36,1)",
-        overflow: "hidden",
-        marginTop: hov ? 12 : 0,
-      }}>
-        <p style={{ color: "var(--muted)", lineHeight: 1.75, fontSize: "0.875rem", fontWeight: 300 }}>{desc}</p>
-      </div>
-
-      <ArrowRight size={15} style={{
-        position: "absolute", bottom: 20, right: 22,
-        color: "#fb923c", opacity: hov ? 0 : 0.3,
-        transition: "opacity 0.3s",
-      }} />
-    </div>
-  );
-}
-
-/* ─── SERVICE CARD WITH KARIGAR POPUP ───────────────── */
-function ServiceCard({ label, icon, delay, visible }) {
-  const [hov, setHov] = useState(false);
-  const k = karigarData[label];
-  return (
-    <div style={{ position: "relative" }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
-      <div style={{
-        background: "var(--glass)", backdropFilter: "blur(16px)",
-        border: `1px solid ${hov ? "rgba(251,146,60,0.4)" : "var(--glass-border)"}`,
-        borderRadius: 20, padding: "28px 20px", textAlign: "center", cursor: "default",
-        transition: "all 0.35s cubic-bezier(0.22,1,0.36,1)",
-        transitionDelay: visible ? `${delay}s` : "0s",
-        transform: visible ? (hov ? "translateY(-6px)" : "translateY(0)") : "translateY(40px)",
-        opacity: visible ? 1 : 0,
-        boxShadow: hov ? "0 16px 48px rgba(0,0,0,0.35)" : "none",
-      }}>
-        <div style={{
-          width: 52, height: 52, borderRadius: 14,
-          background: "rgba(251,146,60,0.1)", border: "1px solid rgba(251,146,60,0.2)",
-          display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px",
-        }}>{icon}</div>
-        <p style={{ color: "var(--fg)", fontWeight: 600, fontSize: "1rem" }}>{label}</p>
-      </div>
-
-      {/* Karigar popup */}
-      <div style={{
-        position: "absolute", bottom: "calc(100% + 14px)", left: "50%",
-        transform: hov ? "translateX(-50%) translateY(0) scale(1)" : "translateX(-50%) translateY(10px) scale(0.94)",
-        opacity: hov ? 1 : 0,
-        pointerEvents: "none",
-        transition: "all 0.3s cubic-bezier(0.22,1,0.36,1)",
-        zIndex: 50, width: 224,
-      }}>
-        <div style={{
-          background: "var(--popup-bg)", backdropFilter: "blur(24px)",
-          border: "1px solid rgba(251,146,60,0.25)", borderRadius: 16, padding: 16,
-          boxShadow: "0 24px 64px rgba(0,0,0,0.5)",
-        }}>
-          <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 12 }}>
-            <span style={{
-              background: "rgba(52,211,153,0.12)", border: "1px solid rgba(52,211,153,0.4)",
-              color: "#34d399", fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.08em",
-              padding: "3px 10px", borderRadius: 999, display: "flex", alignItems: "center", gap: 5,
-            }}>
-              <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#34d399", display: "inline-block", animation: "blink 1.5s infinite" }} />
-              AVAILABLE NOW
-            </span>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <div style={{
-              width: 44, height: 44, borderRadius: "50%",
-              background: `linear-gradient(135deg,${k.color}30,${k.color}60)`,
-              border: `2px solid ${k.color}55`,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontFamily: "'Space Mono',monospace", fontWeight: 700, fontSize: "0.7rem",
-              color: k.color, flexShrink: 0,
-            }}>{k.avatar}</div>
-            <div>
-              <p style={{ color: "var(--fg)", fontWeight: 700, fontSize: "0.9rem", marginBottom: 3 }}>{k.name}</p>
-              <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                <Star size={11} fill="#fb923c" color="#fb923c" />
-                <span style={{ color: "#fb923c", fontSize: "0.75rem", fontWeight: 700 }}>{k.rating}</span>
-                <span style={{ color: "var(--muted)", fontSize: "0.7rem" }}>· {k.jobs} jobs</span>
-              </div>
-            </div>
-          </div>
-          <div style={{ marginTop: 12, paddingTop: 12, borderTop: "1px solid var(--glass-border)", display: "flex", justifyContent: "space-between" }}>
-            <span style={{ color: "var(--muted)", fontSize: "0.75rem" }}>Experience</span>
-            <span style={{ color: "var(--fg)", fontSize: "0.75rem", fontWeight: 600 }}>{k.exp}</span>
-          </div>
-        </div>
-        <div style={{
-          width: 10, height: 10, background: "var(--popup-bg)",
-          border: "1px solid rgba(251,146,60,0.25)", borderTop: "none", borderLeft: "none",
-          transform: "rotate(45deg)", margin: "-5px auto 0",
-        }} />
-      </div>
-    </div>
-  );
-}
-
-/* ─── MAP PIN ───────────────────────────────────────── */
-function MapPinItem({ top, left, name, delay }) {
-  const [hov, setHov] = useState(false);
-  return (
-    <div style={{ position: "absolute", top, left, transform: "translate(-50%,-100%)" }}
-      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
-      {[40, 60].map((s, i) => (
-        <div key={i} style={{
-          position: "absolute", top: "50%", left: "50%",
-          transform: "translate(-50%,-50%)",
-          width: s, height: s, borderRadius: "50%",
-          border: `${i === 0 ? 2 : 1.5}px solid rgba(251,146,60,${i === 0 ? 0.45 : 0.22})`,
-          animation: `mapPulse 2.2s ease-out ${delay + i * 0.35}s infinite`,
-          pointerEvents: "none",
-        }} />
-      ))}
-      <div style={{
-        width: 30, height: 30, borderRadius: "50% 50% 50% 0",
-        background: "linear-gradient(135deg,#f97316,#fb923c)",
-        transform: hov ? "rotate(-45deg) scale(1.25)" : "rotate(-45deg)",
-        boxShadow: "0 4px 20px rgba(249,115,22,0.65)",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        cursor: "pointer", transition: "transform 0.2s ease",
-      }}>
-        <Wrench size={11} style={{ transform: "rotate(45deg)", color: "#2D1F0E" }} />
-      </div>
-      <div style={{
-        position: "absolute", bottom: "calc(100% + 10px)", left: "50%",
-        transform: hov ? "translateX(-50%) translateY(0)" : "translateX(-50%) translateY(5px)",
-        opacity: hov ? 1 : 0, transition: "all 0.22s ease",
-        background: "rgba(10,10,15,0.92)", backdropFilter: "blur(12px)",
-        border: "1px solid rgba(251,146,60,0.3)", borderRadius: 8,
-        padding: "3px 10px", whiteSpace: "nowrap",
-        fontSize: "0.68rem", color: "#2D1F0E", fontWeight: 600,
-        pointerEvents: "none",
-      }}>{name}</div>
-    </div>
-  );
-}
-
-/* ══════════════════════════════════════════════════════
-   MAIN COMPONENT
-══════════════════════════════════════════════════════ */
-export default function Landing() {
+const Landing = () => {
   const navigate = useNavigate();
-  const [dark, setDark] = useState(false);
-  const [logoSpin, setLogoSpin] = useState(true);
-  const [statsRef, statsVisible] = useScrollReveal(0.3);
-  const [howRef,  howVisible]  = useScrollReveal(0.1);
-  const [svcRef,  svcVisible]  = useScrollReveal(0.1);
-  const [whyRef,  whyVisible]  = useScrollReveal(0.1);
-
-  useEffect(() => { const t = setTimeout(() => setLogoSpin(false), 1000); return () => clearTimeout(t); }, []);
+  const [query, setQuery] = useState("");
 
   return (
-    <div style={{
-      "--bg":          dark ? "#FFFAF6"                  : "#FFFAF6",
-      "--fg":          dark ? "#ffffff"                  : "#2D1F0E",
-      "--muted":       dark ? "#6B5744"   : "#6B5744",
-      "--glass":       dark ? "#FFFFFF"   : "#2D1F0E",
-      "--glass-border":dark ? "#E8E0D8"   : "#E8E0D8",
-      "--popup-bg":    dark ? "rgba(14,14,20,0.96)"      : "#2D1F0E",
-      "--header-bg":   dark ? "rgba(10,10,15,0.78)"      : "rgba(255,250,246,0.92)",
-      "--sec-alt":     dark ? "rgba(255,255,255,0.015)"  : "#F7F2ED",
-      fontFamily: "'Sora',sans-serif",
-      background: "var(--bg)",
-      color: "var(--fg)",
-      minHeight: "100vh",
-      transition: "background 0.5s, color 0.5s",
-    } as React.CSSProperties}>
+    <div className="min-h-screen bg-background">
+      <Header />
 
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        @keyframes fadeUp    { from { opacity:0; transform:translateY(32px); } to { opacity:1; transform:translateY(0); } }
-        @keyframes glowPulse { 0%,100% { text-shadow:0 0 20px rgba(251,146,60,.5),0 0 60px rgba(251,146,60,.2); } 50% { text-shadow:0 0 40px rgba(251,146,60,.9),0 0 100px rgba(251,146,60,.4); } }
-        @keyframes shimmer   { 0% { background-position:-200% center; } 100% { background-position:200% center; } }
-        @keyframes logoSpin  { 0% { transform:rotate(0) scale(0.4); opacity:0; } 65% { transform:rotate(385deg) scale(1.1); opacity:1; } 100% { transform:rotate(360deg) scale(1); opacity:1; } }
-        @keyframes logoPulse { 0%,100% { filter:drop-shadow(0 0 6px rgba(251,146,60,.4)); } 50% { filter:drop-shadow(0 0 14px rgba(251,146,60,.8)); } }
-        @keyframes mapPulse  { 0% { transform:translate(-50%,-50%) scale(1); opacity:.8; } 100% { transform:translate(-50%,-50%) scale(2.6); opacity:0; } }
-        @keyframes particleDrift { 0% { transform:translateY(0) translateX(0); opacity:0; } 10% { opacity:1; } 90% { opacity:.5; } 100% { transform:translateY(-110px) translateX(25px); opacity:0; } }
-        @keyframes blink     { 0%,100% { opacity:1; } 50% { opacity:.3; } }
-        @keyframes pulse     { 0%,100% { opacity:1; } 50% { opacity:.4; } }
-
-        .fu1 { animation: fadeUp .7s cubic-bezier(.22,1,.36,1) .1s  both; }
-        .fu2 { animation: fadeUp .7s cubic-bezier(.22,1,.36,1) .25s both; }
-        .fu3 { animation: fadeUp .7s cubic-bezier(.22,1,.36,1) .4s  both; }
-        .fu4 { animation: fadeUp .7s cubic-bezier(.22,1,.36,1) .55s both; }
-
-        .glow-text  { animation: glowPulse 3s ease-in-out infinite; color:#fb923c; }
-        .logo-spin  { animation: logoSpin  1s cubic-bezier(.22,1,.36,1) forwards; }
-        .logo-idle  { animation: logoPulse 3s ease-in-out infinite; }
-
-        .shimmer-btn {
-          background: linear-gradient(90deg,#e2600f,#f4722b,#fb923c,#f4722b,#e2600f);
-          background-size: 200% auto;
-          animation: shimmer 3s linear infinite;
-          color: #FFFFFF !important; font-weight: 700; border: none; cursor: pointer;
-          display: inline-flex; align-items: center; gap: 8px;
-          border-radius: 12px; padding: 14px 28px;
-          font-size: 1rem; font-family: 'Sora',sans-serif;
-          transition: transform .2s ease, box-shadow .2s ease;
-          letter-spacing: .01em;
-        }
-        .shimmer-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 36px rgba(249,115,22,.5); }
-        .shimmer-btn-sm { padding: 9px 18px !important; font-size: .875rem !important; }
-
-        .outline-btn {
-          border: 1.5px solid #E8E0D8;
-          background: #FFFFFF; backdrop-filter: blur(8px);
-          font-weight: 600; cursor: pointer;
-          display: inline-flex; align-items: center; gap: 8px;
-          border-radius: 12px; padding: 14px 28px;
-          font-size: 1rem; font-family: 'Sora',sans-serif;
-          transition: all .2s ease;
-          color: #2D1F0E;
-        }
-        .outline-btn:hover { border-color: rgba(251,146,60,.6); background: rgba(251,146,60,.1); color:#fb923c; transform:translateY(-3px); }
-        .outline-btn-sm  { padding: 9px 18px !important; font-size: .875rem !important; }
-
-        .divider { height:1px; background:linear-gradient(90deg,transparent,#E8E0D8,transparent); }
-
-        .map-grid {
-          background-image:
-            linear-gradient(rgba(251,146,60,.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(251,146,60,.04) 1px, transparent 1px);
-          background-size: 42px 42px;
-        }
-
-        ::-webkit-scrollbar { width:6px; }
-        ::-webkit-scrollbar-track { background:transparent; }
-        ::-webkit-scrollbar-thumb { background:rgba(251,146,60,.3); border-radius:999px; }
-      `}</style>
-
-      {/* ── HEADER ── */}
-      <header style={{
-        position:"sticky", top:0, zIndex:100,
-        background:"var(--header-bg)", backdropFilter:"blur(20px)",
-        borderBottom:"1px solid var(--glass-border)", transition:"background .5s",
-      }}>
-        <div style={{ maxWidth:1200, margin:"0 auto", padding:"0 24px", height:64, display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-
-          {/* Logo */}
-          <div style={{ display:"flex", alignItems:"center", gap:10 }}>
-            <div className={logoSpin ? "logo-spin" : "logo-idle"} style={{ width:36, height:36 }}>
-              <img src="/icon.png" alt="KarigarHub" style={{ width:"100%", height:"100%", objectFit:"contain" }} />
-            </div>
-            <span style={{ fontWeight:800, fontSize:"1.2rem", letterSpacing:"-0.01em" }}>
-              Karigar<span style={{ color:"#fb923c" }}>Hub</span>
+      {/* HERO */}
+      <section className="gradient-hero border-b border-border">
+        <div className="uc-container grid items-center gap-10 py-14 lg:grid-cols-2 lg:py-20">
+          <div>
+            <span className="uc-chip bg-card">
+              <ShieldCheck className="h-3.5 w-3.5 text-success" /> Verified karigars near you
             </span>
-          </div>
+            <h1 className="mt-5 text-4xl font-extrabold leading-[1.08] tracking-tight text-foreground sm:text-5xl">
+              Home services,
+              <br />
+              <span className="text-gradient-primary">delivered by experts</span>
+            </h1>
+            <p className="mt-4 max-w-md text-base text-muted-foreground">
+              Book trusted electricians, plumbers, carpenters and cleaners in minutes. Upfront pricing, on-time arrival and a service guarantee.
+            </p>
 
-          {/* Controls */}
-          <div style={{ display:"flex", alignItems:"center", gap:14 }}>
-
-            {/* Toggle */}
-            <div style={{ display:"flex", alignItems:"center", gap:7 }}>
-              <Sun  size={13} style={{ color: dark ? "var(--muted)" : "#fb923c", transition:"color .3s" }} />
-              <div onClick={() => setDark(!dark)} style={{
-                width:50, height:26, borderRadius:999, cursor:"pointer", position:"relative",
-                background:"#E8E0D8", border:"1.5px solid rgba(251,146,60,.35)",
-                display:"flex", alignItems:"center",
-              }}>
-                <div style={{
-                  width:18, height:18, borderRadius:"50%",
-                  background:"linear-gradient(135deg,#f97316,#fbbf24)",
-                  position:"absolute", top:3,
-                  left: dark ? "25px" : "3px",
-                  transition:"left .35s cubic-bezier(.34,1.56,.64,1)",
-                  boxShadow:"0 2px 8px rgba(249,115,22,.5)",
-                  display:"flex", alignItems:"center", justifyContent:"center",
-                }}>
-                  {dark ? <Moon size={9} color="#fff" /> : <Sun size={9} color="#fff" />}
-                </div>
-              </div>
-              <Moon size={13} style={{ color: dark ? "#fb923c" : "var(--muted)", transition:"color .3s" }} />
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Button size="lg" className="rounded-xl font-semibold" onClick={() => navigate("/login/customer")}>
+                Book a service <ArrowRight className="ml-1 h-4 w-4" />
+              </Button>
+              <Button size="lg" variant="outline" className="rounded-xl font-semibold" onClick={() => navigate("/login/karigar")}>
+                I'm a karigar
+              </Button>
             </div>
 
-            <button className="outline-btn outline-btn-sm" onClick={() => navigate("/login/customer")}>Sign In</button>
-            <button className="shimmer-btn shimmer-btn-sm" onClick={() => navigate("/signup/customer")}>Get Started</button>
-          </div>
-        </div>
-      </header>
-
-      {/* ── HERO ── */}
-      <section style={{ position:"relative", minHeight:"92vh", display:"flex", alignItems:"center", justifyContent:"center", overflow:"hidden", padding:"80px 16px" }}>
-        <video autoPlay loop muted playsInline style={{ position:"absolute", inset:0, width:"100%", height:"100%", objectFit:"cover", opacity: dark ? 0.5 : 0.12, transition:"opacity .5s" }}>
-          <source src="/karigar-video0.mp4" type="video/mp4" />
-        </video>
-
-        <div style={{
-          position:"absolute", inset:0,
-          background: dark
-            ? "linear-gradient(to bottom,rgba(10,10,15,.2) 0%,rgba(10,10,15,.05) 40%,rgba(10,10,15,.6) 82%,rgba(10,10,15,1) 100%)"
-            : "linear-gradient(to bottom,rgba(245,240,235,.3) 0%,rgba(245,240,235,.1) 40%,rgba(245,240,235,.65) 82%,rgba(245,240,235,1) 100%)",
-          transition:"background .5s",
-        }} />
-
-        {/* Floating sparks - dark mode only */}
-        {dark && [...Array(14)].map((_,i) => (
-          <div key={i} style={{
-            position:"absolute",
-            bottom: `${8 + (i*7)%40}%`,
-            left: `${4 + i*6.5}%`,
-            width: 2 + (i%3),
-            height: 2 + (i%3),
-            borderRadius:"50%",
-            background:"#fb923c",
-            boxShadow:"0 0 6px rgba(251,146,60,.9)",
-            opacity:0,
-            animation:`particleDrift ${4 + (i%4)}s ease-in-out ${i * 0.45}s infinite`,
-          }} />
-        ))}
-
-        <div style={{ position:"absolute", inset:0, backgroundImage:"radial-gradient(circle,rgba(251,146,60,.04) 1px,transparent 1px)", backgroundSize:"40px 40px" }} />
-
-        <div style={{ position:"relative", zIndex:2, textAlign:"center", maxWidth:820 }}>
-          <span className="fu1" style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.64rem", letterSpacing:"0.22em", textTransform:"uppercase", color:"#fb923c", display:"block", marginBottom:20 }}>
-            Trusted Home Services Platform
-          </span>
-
-          <h1 className="fu2" style={{ fontSize:"clamp(2.5rem,7vw,5rem)", fontWeight:800, lineHeight:1.08, letterSpacing:"-0.03em", marginBottom:24 }}>
-            Find Trusted <span className="glow-text">Karigars</span><br />Near You
-          </h1>
-
-          <p className="fu3" style={{ fontSize:"1.1rem", color:"var(--muted)", maxWidth:500, margin:"0 auto 40px", lineHeight:1.75, fontWeight:300 }}>
-            Connecting households with skilled electricians, plumbers, carpenters and home repair experts. Reliable service at your doorstep, fast.
-          </p>
-
-          <div className="fu4" style={{ display:"flex", flexWrap:"wrap", justifyContent:"center", gap:16, marginBottom:28 }}>
-            <button className="shimmer-btn" onClick={() => navigate("/login/customer")}><Users size={20}/>Login as Customer<ArrowRight size={16}/></button>
-            <button className="outline-btn"  onClick={() => navigate("/login/karigar")}><Wrench size={20}/>Login as Karigar</button>
+            <p className="mt-5 text-sm text-muted-foreground">
+              New here?{" "}
+              <button onClick={() => navigate("/signup/customer")} className="font-semibold text-primary hover:underline">
+                Sign up as customer
+              </button>{" "}
+              ·{" "}
+              <button onClick={() => navigate("/signup/karigar")} className="font-semibold text-primary hover:underline">
+                Join as karigar
+              </button>
+            </p>
           </div>
 
-          <p className="fu4" style={{ fontSize:"0.85rem", color:"var(--muted)" }}>
-            New here?{" "}
-            <button onClick={() => navigate("/signup/customer")} style={{ color:"#fb923c", fontWeight:600, background:"none", border:"none", cursor:"pointer", fontFamily:"inherit", fontSize:"inherit" }}>Sign up as Customer</button>
-            <span style={{ margin:"0 8px", opacity:.3 }}>·</span>
-            <button onClick={() => navigate("/signup/karigar")} style={{ color:"#fb923c", fontWeight:600, background:"none", border:"none", cursor:"pointer", fontFamily:"inherit", fontSize:"inherit" }}>Join as Karigar</button>
-          </p>
-        </div>
+          {/* Search card */}
+          <div className="uc-card p-6 shadow-lg sm:p-7">
+            <p className="text-sm font-bold text-foreground">What do you need help with?</p>
+            <div className="mt-3 flex items-center gap-2 rounded-xl border border-input bg-background px-3 py-2.5 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20">
+              <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
+              <input
+                value={query}
+                onChange={e => setQuery(e.target.value)}
+                placeholder="Try 'fan not working' or 'leaking tap'"
+                className="w-full bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground/70"
+              />
+            </div>
 
-        <div style={{ position:"absolute", bottom:0, left:0, right:0, height:120, background:"linear-gradient(to bottom,transparent,var(--bg))", transition:"background .5s" }} />
+            <div className="mt-5 grid grid-cols-4 gap-3">
+              {CATEGORIES.slice(0, 8).map(c => (
+                <button
+                  key={c.label}
+                  onClick={() => navigate("/login/customer")}
+                  className="group flex flex-col items-center gap-2 rounded-xl p-2 text-center transition-colors hover:bg-secondary"
+                >
+                  <span className="grid h-11 w-11 place-items-center rounded-2xl bg-primary-soft text-primary transition-transform group-hover:-translate-y-0.5">
+                    <c.icon className="h-5 w-5" />
+                  </span>
+                  <span className="text-[11px] font-semibold leading-tight text-muted-foreground">{c.label}</span>
+                </button>
+              ))}
+            </div>
+
+            <Button className="mt-5 w-full rounded-xl font-semibold" onClick={() => navigate("/login/customer")}>
+              Find karigars near me
+            </Button>
+          </div>
+        </div>
       </section>
 
-      {/* ── SOCIAL PROOF STRIP ── */}
-      <section style={{ background: '#2D1F0E', padding:"32px 16px" }}>
-        <div style={{ maxWidth:1100, margin:"0 auto", display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:24, textAlign:"center" }}>
-          {[
-            { num:"2,400+", label:"Jobs completed" },
-            { num:"240+",   label:"Verified karigars" },
-            { num:"4.8★",   label:"Average rating" },
-            { num:"30 min", label:"Avg response time" },
-          ].map(s => (
-            <div key={s.label}>
-              <p style={{ fontFamily:"'Space Mono',monospace", fontSize:"clamp(1.4rem,3vw,1.9rem)", fontWeight:800, color:"#F4722B", lineHeight:1 }}>{s.num}</p>
-              <p style={{ color:"#E8D8C4", fontSize:"0.78rem", marginTop:6, fontWeight:400, letterSpacing:"0.04em" }}>{s.label}</p>
+      {/* STATS STRIP */}
+      <section className="border-b border-border bg-card">
+        <div className="uc-container grid grid-cols-2 gap-6 py-8 sm:grid-cols-4">
+          {STATS.map(s => (
+            <div key={s.label} className="text-center">
+              <p className="text-2xl font-extrabold text-primary sm:text-3xl">{s.value}</p>
+              <p className="mt-1 text-xs font-medium text-muted-foreground sm:text-sm">{s.label}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ── STATS ── */}
-      <section style={{ background:"var(--bg)", padding:"60px 16px", transition:"background .5s" }}>
-        <div className="divider" style={{ marginBottom:56 }} />
-        <div ref={statsRef} style={{ maxWidth:760, margin:"0 auto", display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:32 }}>
-          <StatItem value="500+"   label="Verified Karigars" visible={statsVisible} />
-          <StatItem value="10000+" label="Jobs Completed"    visible={statsVisible} />
-          <StatItem value="4.8★"   label="Customer Rating"   visible={statsVisible} />
-        </div>
-        <div className="divider" style={{ marginTop:56 }} />
-      </section>
-
-      {/* ── HOW IT WORKS ── */}
-      <section style={{ background:"var(--bg)", padding:"80px 16px", transition:"background .5s" }}>
-        <div style={{ maxWidth:1100, margin:"0 auto", textAlign:"center" }}>
-          <Reveal>
-            <span style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.64rem", letterSpacing:"0.22em", textTransform:"uppercase", color:"#fb923c", display:"block", marginBottom:14 }}>Process</span>
-            <h2 style={{ fontSize:"clamp(1.75rem,4vw,2.5rem)", fontWeight:700, letterSpacing:"-0.02em", marginBottom:12 }}>How KarigarHub Works</h2>
-            <p style={{ color:"var(--muted)", marginBottom:48, fontWeight:300 }}>Hover each step to reveal details</p>
-          </Reveal>
-          <div ref={howRef} style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))", gap:20 }}>
-            {[
-              { step:"01", title:"Post Your Job",    desc:"Tell us what you need — electrical work, plumbing, carpentry, or any installation and repair." },
-              { step:"02", title:"Karigars Accept",  desc:"Nearby skilled workers receive your request instantly and accept the job quickly." },
-              { step:"03", title:"Work Gets Done",   desc:"The karigar arrives at your doorstep and completes the work professionally and efficiently." },
-            ].map((c,i) => <HowCard key={c.step} {...c} delay={i*.15} visible={howVisible} />)}
-          </div>
+      {/* CATEGORIES */}
+      <section className="uc-container py-14">
+        <SectionHead eyebrow="Services" title="Everything your home needs" subtitle="Pick a category and get matched with a rated professional in your area." />
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          {CATEGORIES.map((c, i) => (
+            <Reveal key={c.label} delay={i * 50}>
+              <button
+                onClick={() => navigate("/login/customer")}
+                className="uc-card uc-card-hover flex w-full flex-col items-start gap-3 p-5 text-left"
+              >
+                <span className="grid h-12 w-12 place-items-center rounded-2xl bg-primary-soft text-primary">
+                  <c.icon className="h-5 w-5" />
+                </span>
+                <span className="text-sm font-bold text-foreground">{c.label}</span>
+                <span className="text-xs text-muted-foreground">{c.note}</span>
+              </button>
+            </Reveal>
+          ))}
         </div>
       </section>
 
-      {/* ── SERVICES ── */}
-      <section style={{ background:"var(--sec-alt)", padding:"80px 16px", transition:"background .5s" }}>
-        <div style={{ maxWidth:1100, margin:"0 auto", textAlign:"center" }}>
-          <Reveal>
-            <span style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.64rem", letterSpacing:"0.22em", textTransform:"uppercase", color:"#fb923c", display:"block", marginBottom:14 }}>What We Offer</span>
-            <h2 style={{ fontSize:"clamp(1.75rem,4vw,2.5rem)", fontWeight:700, letterSpacing:"-0.02em", marginBottom:12 }}>Services Available</h2>
-            <p style={{ color:"var(--muted)", marginBottom:52, fontWeight:300 }}>Hover a service to meet your karigar</p>
-          </Reveal>
-          <div ref={svcRef} style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:20 }}>
-            {[
-              { label:"Electricians",  icon:<Zap     size={22} color="#fb923c"/> },
-              { label:"Plumbers",      icon:<Droplets size={22} color="#fb923c"/> },
-              { label:"Carpenters",    icon:<Hammer  size={22} color="#fb923c"/> },
-              { label:"Home Repairs",  icon:<Home    size={22} color="#fb923c"/> },
-            ].map((s,i) => <ServiceCard key={s.label} {...s} delay={i*.12} visible={svcVisible} />)}
-          </div>
-        </div>
-      </section>
-
-      {/* ── MAP ── */}
-      <section style={{ background:"var(--bg)", padding:"80px 16px", transition:"background .5s" }}>
-        <div style={{ maxWidth:1100, margin:"0 auto" }}>
-          <Reveal>
-            <div style={{ textAlign:"center", marginBottom:48 }}>
-              <span style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.64rem", letterSpacing:"0.22em", textTransform:"uppercase", color:"#fb923c", display:"block", marginBottom:14 }}>Live Map</span>
-              <h2 style={{ fontSize:"clamp(1.75rem,4vw,2.5rem)", fontWeight:700, letterSpacing:"-0.02em", marginBottom:12 }}>Karigars Near You</h2>
-              <p style={{ color:"var(--muted)", fontWeight:300 }}>Hover the pins to see who's available in your area</p>
-            </div>
-          </Reveal>
-          <Reveal delay={0.2}>
-            <div style={{
-              position:"relative", height:420, borderRadius:24, overflow:"hidden",
-              border:"1px solid var(--glass-border)",
-              background: dark ? "#0d1117" : "#e8e3dc",
-              transition:"background .5s",
-            }}>
-              <div className="map-grid" style={{ position:"absolute", inset:0 }} />
-
-              {/* Glow */}
-              <div style={{ position:"absolute", top:"50%", left:"50%", transform:"translate(-50%,-50%)", width:320, height:320, borderRadius:"50%", background:"radial-gradient(circle,rgba(251,146,60,.07) 0%,transparent 70%)", pointerEvents:"none" }} />
-
-              {/* Roads */}
-              <svg style={{ position:"absolute", inset:0, width:"100%", height:"100%", opacity:.22 }}>
-                <line x1="0" y1="40%" x2="100%" y2="46%" stroke="#fb923c" strokeWidth="1.5" strokeDasharray="9,7"/>
-                <line x1="0" y1="65%" x2="100%" y2="59%" stroke="#fb923c" strokeWidth="1"   strokeDasharray="7,9"/>
-                <line x1="34%" y1="0" x2="37%" y2="100%" stroke="#fb923c" strokeWidth="1.5" strokeDasharray="9,7"/>
-                <line x1="66%" y1="0" x2="63%" y2="100%" stroke="#fb923c" strokeWidth="1"   strokeDasharray="7,9"/>
-              </svg>
-
-              {/* You */}
-              <div style={{ position:"absolute", top:"49%", left:"50%", transform:"translate(-50%,-50%)" }}>
-                <div style={{ width:14, height:14, borderRadius:"50%", background:"#38bdf8", boxShadow:"0 0 0 4px rgba(56,189,248,.2),0 0 20px rgba(56,189,248,.45)", animation:"pulse 2s infinite" }} />
-                <div style={{ position:"absolute", bottom:"calc(100% + 6px)", left:"50%", transform:"translateX(-50%)", background:"rgba(56,189,248,.14)", border:"1px solid rgba(56,189,248,.4)", color:"#38bdf8", fontSize:"0.58rem", fontWeight:700, padding:"2px 8px", borderRadius:999, whiteSpace:"nowrap", letterSpacing:"0.06em" }}>YOU ARE HERE</div>
-              </div>
-
-              {MAP_PINS.map((p,i) => <MapPinItem key={i} {...p} />)}
-
-              {/* Legend */}
-              <div style={{ position:"absolute", bottom:16, right:16, background: dark ? "rgba(10,10,15,.88)" : "rgba(245,240,235,.92)", backdropFilter:"blur(12px)", border:"1px solid var(--glass-border)", borderRadius:12, padding:"10px 14px", display:"flex", flexDirection:"column", gap:8 }}>
-                {[{ c:"#fb923c", l:"Available Karigar" },{ c:"#38bdf8", l:"Your Location" }].map(({ c, l }) => (
-                  <div key={l} style={{ display:"flex", alignItems:"center", gap:8 }}>
-                    <div style={{ width:9, height:9, borderRadius:"50%", background:c, boxShadow:`0 0 8px ${c}88` }} />
-                    <span style={{ color:"var(--muted)", fontSize:"0.7rem" }}>{l}</span>
+      {/* HOW IT WORKS */}
+      <section className="border-y border-border bg-secondary/50 py-14">
+        <div className="uc-container">
+          <SectionHead eyebrow="How it works" title="Booked in three simple steps" />
+          <div className="grid gap-4 md:grid-cols-3">
+            {STEPS.map((s, i) => (
+              <Reveal key={s.title} delay={i * 90}>
+                <div className="uc-card h-full p-6">
+                  <div className="flex items-center gap-3">
+                    <span className="grid h-11 w-11 place-items-center rounded-2xl bg-primary text-primary-foreground">
+                      <s.icon className="h-5 w-5" />
+                    </span>
+                    <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                      Step {i + 1}
+                    </span>
                   </div>
-                ))}
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ── WHY US ── */}
-      <section style={{ background:"var(--sec-alt)", padding:"80px 16px", transition:"background .5s" }}>
-        <div style={{ maxWidth:1100, margin:"0 auto", textAlign:"center" }}>
-          <Reveal>
-            <span style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.64rem", letterSpacing:"0.22em", textTransform:"uppercase", color:"#fb923c", display:"block", marginBottom:14 }}>Why KarigarHub</span>
-            <h2 style={{ fontSize:"clamp(1.75rem,4vw,2.5rem)", fontWeight:700, letterSpacing:"-0.02em", marginBottom:48 }}>Built on Trust & Reliability</h2>
-          </Reveal>
-          <div ref={whyRef} style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))", gap:20 }}>
-            {[
-              { title:"Verified Professionals", desc:"Every karigar is background-checked and skill-verified before joining the platform." },
-              { title:"Fast Response",           desc:"Get a skilled karigar at your door within minutes of posting your job." },
-              { title:"Transparent Pricing",     desc:"No hidden charges. Know the full cost upfront before any work begins." },
-            ].map((item,i) => (
-              <div key={item.title} style={{
-                background:"var(--glass)", backdropFilter:"blur(16px)",
-                border:"1px solid var(--glass-border)", borderRadius:20, padding:28, textAlign:"left",
-                transition:`all .4s cubic-bezier(.22,1,.36,1) ${i*.12}s`,
-                transform: whyVisible ? "translateY(0)" : "translateY(40px)",
-                opacity: whyVisible ? 1 : 0,
-              }}>
-                <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:12 }}>
-                  <CheckCircle size={17} color="#fb923c" />
-                  <h3 style={{ fontWeight:700, fontSize:"1rem" }}>{item.title}</h3>
+                  <h3 className="mt-4 text-base font-bold text-foreground">{s.title}</h3>
+                  <p className="mt-1.5 text-sm text-muted-foreground">{s.body}</p>
                 </div>
-                <p style={{ color:"var(--muted)", fontSize:"0.875rem", lineHeight:1.75, fontWeight:300 }}>{item.desc}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── CTA ── */}
-      <section style={{ padding:"80px 16px", background:"var(--bg)", transition:"background .5s" }}>
-        <div style={{ maxWidth:680, margin:"0 auto" }}>
-          <Reveal>
-            <div style={{
-              background:"linear-gradient(135deg,rgba(251,146,60,.12),rgba(251,146,60,.04))",
-              border:"1px solid rgba(251,146,60,.25)",
-              borderRadius:28, padding:"56px 40px", textAlign:"center",
-              backdropFilter:"blur(16px)",
-            }}>
-              <h2 style={{ fontSize:"clamp(1.5rem,4vw,2rem)", fontWeight:800, marginBottom:12, letterSpacing:"-0.02em" }}>Ready to get started?</h2>
-              <p style={{ color:"var(--muted)", marginBottom:32, fontWeight:300 }}>Join thousands of happy customers who trust KarigarHub.</p>
-              <button className="shimmer-btn" style={{ margin:"0 auto" }} onClick={() => navigate("/signup/customer")}>
-                <Users size={20}/>Sign Up for Free<ArrowRight size={16}/>
-              </button>
-            </div>
-          </Reveal>
+      {/* TOP KARIGARS */}
+      <section className="uc-container py-14">
+        <SectionHead eyebrow="Top rated" title="Meet karigars people love" subtitle="Highest rated professionals this month, based on verified customer reviews." />
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {KARIGARS.map((k, i) => (
+            <Reveal key={k.name} delay={i * 60}>
+              <div className="uc-card uc-card-hover h-full p-5">
+                <div className="flex items-center gap-3">
+                  <span className="grid h-12 w-12 place-items-center rounded-full bg-primary-soft text-sm font-bold text-primary">
+                    {k.initials}
+                  </span>
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-bold text-foreground">{k.name}</p>
+                    <p className="text-xs text-muted-foreground">{k.trade} · {k.exp}</p>
+                  </div>
+                </div>
+                <div className="mt-4 flex items-center justify-between">
+                  <span className="inline-flex items-center gap-1 text-sm font-bold text-foreground">
+                    <Star className="h-4 w-4 fill-warning text-warning" /> {k.rating}
+                  </span>
+                  <span className="text-xs text-muted-foreground">{k.jobs} jobs</span>
+                </div>
+                <div className="mt-3 inline-flex items-center gap-1 rounded-full bg-success/10 px-2.5 py-1 text-xs font-semibold text-success">
+                  <ShieldCheck className="h-3.5 w-3.5" /> Verified
+                </div>
+              </div>
+            </Reveal>
+          ))}
         </div>
       </section>
 
-      {/* ── KARIGAR CTA STRIP ── */}
-      <section style={{ background: '#2D1F0E', padding:"56px 16px" }}>
-        <div style={{ maxWidth:1100, margin:"0 auto", display:"flex", flexWrap:"wrap", alignItems:"center", justifyContent:"space-between", gap:24 }}>
-          <div>
-            <span style={{ fontFamily:"'Space Mono',monospace", fontSize:"0.64rem", letterSpacing:"0.22em", textTransform:"uppercase", color:"#F4722B", display:"block", marginBottom:10 }}>For Workers</span>
-            <h2 style={{ fontSize:"clamp(1.4rem,3.5vw,1.9rem)", fontWeight:800, color:"#FFFFFF", letterSpacing:"-0.02em", marginBottom:8 }}>
-              Are you a karigar? <span style={{ color:"#F4722B" }}>Start earning today.</span>
-            </h2>
-            <p style={{ color:"#E8D8C4", fontSize:"0.9rem", fontWeight:300, maxWidth:520 }}>
-              Join 240+ verified workers getting steady jobs through KarigarHub. Free to sign up. Get paid fast.
+      {/* WHY US */}
+      <section className="border-y border-border bg-secondary/50 py-14">
+        <div className="uc-container">
+          <SectionHead eyebrow="Why KarigarHub" title="A service experience you can trust" />
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {WHY.map((w, i) => (
+              <Reveal key={w.title} delay={i * 60}>
+                <div className="uc-card h-full p-6">
+                  <span className="grid h-11 w-11 place-items-center rounded-2xl bg-primary-soft text-primary">
+                    <w.icon className="h-5 w-5" />
+                  </span>
+                  <h3 className="mt-4 text-sm font-bold text-foreground">{w.title}</h3>
+                  <p className="mt-1.5 text-sm text-muted-foreground">{w.body}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CUSTOMER CTA */}
+      <section className="uc-container py-16">
+        <div className="uc-card gradient-primary p-10 text-center">
+          <h2 className="text-2xl font-extrabold tracking-tight text-primary-foreground sm:text-3xl">
+            Your next home fix is one tap away
+          </h2>
+          <p className="mx-auto mt-3 max-w-md text-sm text-primary-foreground/85">
+            Join thousands of households booking verified karigars every week.
+          </p>
+          <Button
+            size="lg"
+            variant="secondary"
+            className="mt-6 rounded-xl font-bold"
+            onClick={() => navigate("/signup/customer")}
+          >
+            Get started free <ArrowRight className="ml-1 h-4 w-4" />
+          </Button>
+        </div>
+      </section>
+
+      {/* KARIGAR CTA STRIP */}
+      <section className="border-t border-border bg-secondary">
+        <div className="uc-container flex flex-col items-center justify-between gap-6 py-12 sm:flex-row sm:text-left">
+          <div className="text-center sm:text-left">
+            <p className="uc-eyebrow">For professionals</p>
+            <h2 className="mt-2 text-xl font-extrabold text-foreground sm:text-2xl">Are you a karigar?</h2>
+            <p className="mt-1.5 max-w-md text-sm text-muted-foreground">
+              Get steady work near you, set your own availability and get paid on time.
             </p>
           </div>
-          <button
-            onClick={() => navigate("/signup/karigar")}
-            style={{
-              background:"#F4722B", color:"#FFFFFF", fontWeight:700,
-              border:"none", cursor:"pointer", borderRadius:12,
-              padding:"14px 28px", fontSize:"0.95rem", fontFamily:"'Sora',sans-serif",
-              display:"inline-flex", alignItems:"center", gap:8,
-              boxShadow:"0 8px 24px rgba(244,114,43,0.35)",
-              transition:"transform .2s, box-shadow .2s",
-            }}
-            onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 12px 30px rgba(244,114,43,0.5)"; }}
-            onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 8px 24px rgba(244,114,43,0.35)"; }}
-          >
-            <Wrench size={18}/> Join as Karigar <ArrowRight size={16}/>
-          </button>
+          <Button size="lg" className="rounded-xl font-semibold" onClick={() => navigate("/signup/karigar")}>
+            Join as a karigar <ArrowRight className="ml-1 h-4 w-4" />
+          </Button>
         </div>
       </section>
 
-
-      {/* ── FOOTER ── */}
-      <footer style={{ borderTop:"1px solid var(--glass-border)", padding:"28px 16px", textAlign:"center", color:"var(--muted)", fontSize:"0.8rem", background:"var(--bg)", fontWeight:300, transition:"background .5s" }}>
-        © {new Date().getFullYear()}{" "}
-        <span style={{ fontWeight:600 }}>KarigarHub</span>
-        {" "}— Connecting skilled hands with homes.
+      {/* FOOTER */}
+      <footer className="border-t border-border bg-card">
+        <div className="uc-container flex flex-col items-center justify-between gap-4 py-8 sm:flex-row">
+          <div className="flex items-center gap-2.5">
+            <span className="grid h-8 w-8 place-items-center rounded-xl bg-primary text-primary-foreground">
+              <Wrench className="h-4 w-4" />
+            </span>
+            <span className="font-extrabold tracking-tight text-foreground">
+              Karigar<span className="text-primary">Hub</span>
+            </span>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            © {new Date().getFullYear()} KarigarHub. Trusted home services across India.
+          </p>
+        </div>
       </footer>
-
     </div>
   );
-}
+};
+
+export default Landing;

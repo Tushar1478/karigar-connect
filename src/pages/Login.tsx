@@ -2,42 +2,10 @@ import { useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
-import { Loader2, Check } from 'lucide-react';
-
-/* ─── GLASS INPUT ───────────────────────────────────── */
-function GlassInput({ label, id, type = 'text', value, onChange, placeholder }) {
-  const [focused, setFocused] = useState(false);
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-      <label htmlFor={id} style={{ fontSize: '0.72rem', fontWeight: 600, color: '#6B5744', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-        {label}
-      </label>
-      <input
-        id={id}
-        type={type}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-        required
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-        style={{
-          background: '#FFFFFF',
-          border: `1.5px solid ${focused ? 'rgba(251,146,60,0.55)' : '#E8E0D8'}`,
-          borderRadius: 12,
-          padding: '11px 14px',
-          color: '#2D1F0E',
-          fontSize: '0.9rem',
-          fontFamily: "'Sora', sans-serif",
-          outline: 'none',
-          transition: 'border-color .25s, box-shadow .25s',
-          boxShadow: focused ? '0 0 0 3px rgba(251,146,60,0.1)' : 'none',
-          width: '100%',
-        }}
-      />
-    </div>
-  );
-}
+import { Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 /* ══════════════════════════════════════════════════════
    MAIN COMPONENT
@@ -75,136 +43,69 @@ const Login = () => {
     }
   };
 
-
   return (
-    <div style={{ minHeight: '100vh', background: '#FFFAF6', fontFamily: "'Sora', sans-serif", color: '#2D1F0E', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px 16px' }}>
-
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
-        *, *::before, *::after { box-sizing: border-box; }
-        @keyframes fadeUp  { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
-        @keyframes shimmer { 0% { background-position:-200% center; } 100% { background-position:200% center; } }
-        @keyframes logoGlow{ 0%,100% { box-shadow:0 0 0 4px rgba(251,146,60,0.15),0 0 24px rgba(251,146,60,0.1); } 50% { box-shadow:0 0 0 8px rgba(251,146,60,0.22),0 0 40px rgba(251,146,60,0.18); } }
-        @keyframes spin    { to { transform:rotate(360deg); } }
-
-        .login-card { animation: fadeUp .65s cubic-bezier(.22,1,.36,1) .05s both; }
-
-        ::placeholder { color: #A89880 !important; }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background: rgba(251,146,60,.3); border-radius: 999px; }
-      `}</style>
-
-      <div className="login-card" style={{ width: '100%', maxWidth: 420 }}>
-
-        {/* ── LOGO + HEADING ── */}
-        <div style={{ textAlign: 'center', marginBottom: 36 }}>
-          <div style={{
-            width: 58, height: 58, borderRadius: '50%',
-            background: 'linear-gradient(135deg,rgba(249,115,22,0.35),rgba(251,146,60,0.55))',
-            border: '2px solid rgba(251,146,60,0.45)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            margin: '0 auto 20px',
-            animation: 'logoGlow 3s ease-in-out infinite',
-            fontFamily: "'Space Mono',monospace", fontWeight: 700, fontSize: '1.3rem', color: '#fb923c',
-          }}>
+    <main className="min-h-screen bg-secondary/40 flex items-center justify-center px-4 py-10 animate-fade-in">
+      <div className="w-full max-w-md">
+        {/* Logo + heading */}
+        <div className="text-center mb-8">
+          <div className="mx-auto mb-5 h-14 w-14 rounded-full bg-primary text-primary-foreground grid place-items-center font-extrabold text-xl shadow-md">
             K
           </div>
-
-          <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.62rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#fb923c', display: 'block', marginBottom: 10 }}>
-            {isCustomer ? 'Customer' : 'Karigar'} Portal
-          </span>
-          <h1 style={{ fontSize: 'clamp(1.5rem,4vw,2rem)', fontWeight: 800, letterSpacing: '-0.025em', marginBottom: 8 }}>
-            Welcome <span style={{ color: '#fb923c' }}>Back</span>
-          </h1>
-          <p style={{ fontSize: '0.85rem', color: '#6B5744', fontWeight: 300 }}>Enter your credentials to continue</p>
+          <span className="uc-eyebrow block mb-2">{isCustomer ? 'Customer' : 'Karigar'} Portal</span>
+          <h1 className="text-3xl font-extrabold tracking-tight mb-2">Welcome Back</h1>
+          <p className="text-sm text-muted-foreground">Enter your credentials to continue</p>
         </div>
 
-        {/* ── FORM CARD ── */}
-        <div style={{
-          background: '#F7F2ED',
-          backdropFilter: 'blur(20px)',
-          border: '1px solid #E8E0D8',
-          borderRadius: 24, padding: 28,
-        }}>
-          {/* Divider label */}
-          <div style={{ height: 1, background: 'linear-gradient(90deg,transparent,#E8E0D8,transparent)', marginBottom: 24 }} />
+        {/* Form card */}
+        <div className="uc-card p-8">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                required
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+              />
+            </div>
 
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-            <GlassInput
-              label="Email"
-              id="email"
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              placeholder="you@example.com"
-            />
-            <GlassInput
-              label="Password"
-              id="password"
-              type="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              placeholder="••••••••"
-            />
-
-            <button
-              type="submit"
-              disabled={loading}
-              style={{
-                marginTop: 6,
-                width: '100%', padding: '13px', borderRadius: 12, border: 'none',
-                background: loading
-                  ? '#F0E8DE'
-                  : 'linear-gradient(90deg,#f97316,#fb923c,#fdba74,#fb923c,#f97316)',
-                backgroundSize: '200% auto',
-                animation: loading ? 'none' : 'shimmer 3s linear infinite',
-                color: loading ? '#A89880' : '#FFFAF6',
-                fontWeight: 800, fontSize: '0.9rem',
-                cursor: loading ? 'not-allowed' : 'pointer',
-                fontFamily: "'Sora',sans-serif",
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                opacity: loading ? 0.7 : 1,
-                transition: 'opacity .2s',
-                letterSpacing: '0.01em',
-              }}
-            >
-              {loading
-                ? <><Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} />Logging in...</>
-                : <><Check size={16} />Login</>
-              }
-            </button>
+            <Button type="submit" disabled={loading} className="w-full mt-1 font-semibold">
+              {loading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" /> Logging in...
+                </>
+              ) : (
+                'Login'
+              )}
+            </Button>
           </form>
 
-          {/* Divider */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '22px 0' }}>
-            <div style={{ flex: 1, height: 1, background: '#E8E0D8' }} />
-            <span style={{ fontSize: '0.7rem', color: '#A89880', fontFamily: "'Space Mono',monospace", letterSpacing: '0.08em' }}>OR</span>
-            <div style={{ flex: 1, height: 1, background: '#E8E0D8' }} />
-          </div>
-
-          {/* Sign up link */}
-          <p style={{ textAlign: 'center', fontSize: '0.82rem', color: '#6B5744' }}>
+          <p className="text-center text-sm text-muted-foreground mt-6">
             Don't have an account?{' '}
             <button
               type="button"
               onClick={() => navigate(isCustomer ? '/signup/customer' : '/signup/karigar')}
-              style={{
-                background: 'none', border: 'none', padding: 0,
-                color: '#fb923c', fontWeight: 700, fontSize: '0.82rem',
-                cursor: 'pointer', fontFamily: "'Sora',sans-serif",
-                textDecoration: 'underline', textDecorationColor: 'rgba(251,146,60,0.4)',
-                textUnderlineOffset: 3,
-                transition: 'color .2s',
-              }}
-              onMouseEnter={e => { e.currentTarget.style.color = '#fdba74'; }}
-              onMouseLeave={e => { e.currentTarget.style.color = '#fb923c'; }}
+              className="text-primary font-semibold underline underline-offset-4 hover:text-primary/80 transition-colors"
             >
               Sign up
             </button>
           </p>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 

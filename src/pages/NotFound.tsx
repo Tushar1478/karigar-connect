@@ -1,5 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useEffect, useRef, useState, useCallback } from "react";
+import { Button } from "@/components/ui/button";
 
 /* ── SNAKE GAME ─────────────────────────────────────── */
 const COLS = 20;
@@ -37,22 +38,22 @@ function SnakeGame() {
     const ctx = canvas.getContext('2d')!;
     const s = stateRef.current;
 
-    ctx.fillStyle = 'rgba(255,248,240,0.9)';
+    ctx.fillStyle = 'hsl(var(--secondary))';
     ctx.fillRect(0, 0, COLS*CELL, ROWS*CELL);
 
     // Grid dots
-    ctx.fillStyle = 'rgba(180,120,60,0.08)';
+    ctx.fillStyle = 'hsl(var(--muted-foreground) / 0.15)';
     for (let x = 0; x < COLS; x++)
       for (let y = 0; y < ROWS; y++)
         ctx.fillRect(x*CELL + CELL/2 - 1, y*CELL + CELL/2 - 1, 2, 2);
 
     // Food
     const [fx, fy] = s.food;
-    ctx.fillStyle = '#ea580c';
+    ctx.fillStyle = 'hsl(var(--primary))';
     ctx.beginPath();
     ctx.arc(fx*CELL + CELL/2, fy*CELL + CELL/2, 6, 0, Math.PI*2);
     ctx.fill();
-    ctx.fillStyle = '#6B5744';
+    ctx.fillStyle = 'hsl(var(--foreground))';
     ctx.beginPath();
     ctx.arc(fx*CELL + CELL/2 - 2, fy*CELL + CELL/2 - 2, 2.5, 0, Math.PI*2);
     ctx.fill();
@@ -60,21 +61,21 @@ function SnakeGame() {
     // Snake
     s.snake.forEach(([x,y], i) => {
       const alpha = i === 0 ? 1 : 0.75 - (i / s.snake.length) * 0.3;
-      ctx.fillStyle = i === 0 ? '#c2410c' : `rgba(234,88,12,${alpha})`;
+      ctx.fillStyle = i === 0 ? 'hsl(var(--primary))' : `hsl(var(--primary) / ${alpha})`;
       const pad = i === 0 ? 1 : 2;
       ctx.beginPath();
       ctx.roundRect(x*CELL+pad, y*CELL+pad, CELL-pad*2, CELL-pad*2, 4);
       ctx.fill();
       // Eye on head
       if (i === 0) {
-        ctx.fillStyle = '#fff';
+        ctx.fillStyle = 'hsl(var(--primary-foreground))';
         const [dx, dy] = s.dir;
         const ex = x*CELL + CELL/2 + dx*4 + dy*3;
         const ey = y*CELL + CELL/2 + dy*4 - dx*3;
         ctx.beginPath();
         ctx.arc(ex, ey, 2.5, 0, Math.PI*2);
         ctx.fill();
-        ctx.fillStyle = '#1a1008';
+        ctx.fillStyle = 'hsl(var(--foreground))';
         ctx.beginPath();
         ctx.arc(ex + dx*0.8, ey + dy*0.8, 1.2, 0, Math.PI*2);
         ctx.fill();
@@ -142,64 +143,42 @@ function SnakeGame() {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: COLS*CELL, marginBottom: 2 }}>
-        <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.65rem', letterSpacing: '0.12em', color: 'rgba(150,90,30,0.5)', textTransform: 'uppercase' }}>Snake</span>
-        <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.8rem', fontWeight: 700, color: '#ea580c' }}>{score} pts</span>
+    <div className="flex flex-col items-center gap-3">
+      <div className="flex items-center justify-between mb-0.5" style={{ width: COLS*CELL }}>
+        <span className="uc-eyebrow">Snake</span>
+        <span className="text-sm font-bold text-primary">{score} pts</span>
       </div>
 
-      <div style={{ position: 'relative', borderRadius: 16, overflow: 'hidden', border: '1.5px solid #E8E0D8', boxShadow: '0 4px 24px rgba(180,100,20,0.12)', cursor: 'pointer' }} onClick={() => !started && start()}>
-        <canvas ref={canvasRef} width={COLS*CELL} height={ROWS*CELL} style={{ display: 'block' }} />
+      <div
+        className="relative rounded-2xl overflow-hidden border border-border shadow-sm cursor-pointer"
+        onClick={() => !started && start()}
+      >
+        <canvas ref={canvasRef} width={COLS*CELL} height={ROWS*CELL} className="block" />
 
         {/* Overlay */}
         {(!started || dead) && (
-          <div style={{
-            position: 'absolute', inset: 0,
-            background: 'rgba(255,248,240,0.82)',
-            backdropFilter: 'blur(6px)',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 10,
-          }}>
-            {dead && <p style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.75rem', color: '#ea580c', fontWeight: 700, letterSpacing: '0.1em' }}>GAME OVER · {score} pts</p>}
-            <button
-              onClick={start}
-              style={{
-                padding: '10px 28px', borderRadius: 10, border: 'none',
-                background: 'linear-gradient(90deg,#c2410c,#ea580c,#f97316)',
-                color: '#2D1F0E', fontWeight: 700, fontSize: '0.85rem',
-                fontFamily: "'Sora',sans-serif", cursor: 'pointer',
-                boxShadow: '0 4px 16px rgba(234,88,12,0.3)',
-              }}
-            >
+          <div className="absolute inset-0 bg-secondary/80 backdrop-blur-sm flex flex-col items-center justify-center gap-2.5">
+            {dead && <p className="text-xs font-bold text-primary tracking-wide">GAME OVER · {score} pts</p>}
+            <Button onClick={start} size="sm" className="font-semibold">
               {dead ? 'Play Again' : 'Start Game'}
-            </button>
-            <p style={{ fontSize: '0.72rem', color: 'rgba(150,90,30,0.5)', fontFamily: "'Sora',sans-serif" }}>Arrow keys or buttons below</p>
+            </Button>
+            <p className="text-xs text-muted-foreground">Arrow keys or buttons below</p>
           </div>
         )}
       </div>
 
       {/* Mobile D-pad */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, marginTop: 4 }}>
-        <button onClick={() => press('ArrowUp')} style={dpad}>▲</button>
-        <div style={{ display: 'flex', gap: 4 }}>
-          <button onClick={() => press('ArrowLeft')} style={dpad}>◀</button>
-          <button onClick={() => press('ArrowDown')} style={dpad}>▼</button>
-          <button onClick={() => press('ArrowRight')} style={dpad}>▶</button>
+      <div className="flex flex-col items-center gap-1 mt-1">
+        <button onClick={() => press('ArrowUp')} className="uc-dpad-btn">▲</button>
+        <div className="flex gap-1">
+          <button onClick={() => press('ArrowLeft')} className="uc-dpad-btn">◀</button>
+          <button onClick={() => press('ArrowDown')} className="uc-dpad-btn">▼</button>
+          <button onClick={() => press('ArrowRight')} className="uc-dpad-btn">▶</button>
         </div>
       </div>
     </div>
   );
 }
-
-const dpad: React.CSSProperties = {
-  width: 38, height: 38, borderRadius: 10,
-  background: '#FFFFFF',
-  backdropFilter: 'blur(8px)',
-  border: '1.5px solid #E8E0D8',
-  color: 'rgba(180,90,20,0.7)', fontSize: '0.8rem',
-  cursor: 'pointer', fontFamily: 'inherit',
-  boxShadow: '0 2px 8px rgba(180,100,20,0.08)',
-  display: 'flex', alignItems: 'center', justifyContent: 'center',
-};
 
 /* ══════════════════════════════════════════════════════
    NOT FOUND PAGE
@@ -218,107 +197,49 @@ const NotFound = () => {
   }, []);
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: 'linear-gradient(135deg, #fdf6ee 0%, #faecd8 40%, #fdf0e0 70%, #fff5e6 100%)',
-      fontFamily: "'Sora', sans-serif",
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      padding: '32px 16px',
-      position: 'relative', overflow: 'hidden',
-    }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        @keyframes fadeUp  { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-        @keyframes blob1   { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(30px,-20px) scale(1.08); } }
-        @keyframes blob2   { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-20px,25px) scale(1.06); } }
-        @keyframes pulse   { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
-        @keyframes shimmer { 0% { background-position: 200% center; } 100% { background-position: -200% center; } }
-        .fu { animation: fadeUp .6s cubic-bezier(.22,1,.36,1) both; }
-        .fu2 { animation: fadeUp .6s cubic-bezier(.22,1,.36,1) .15s both; }
-        .fu3 { animation: fadeUp .6s cubic-bezier(.22,1,.36,1) .28s both; }
-      `}</style>
-
-      {/* Blobs */}
-      <div style={{ position: 'absolute', top: '-10%', right: '-8%', width: 420, height: 420, borderRadius: '50%', background: 'radial-gradient(circle, rgba(251,146,60,0.18) 0%, transparent 70%)', animation: 'blob1 8s ease-in-out infinite', pointerEvents: 'none' }} />
-      <div style={{ position: 'absolute', bottom: '-12%', left: '-6%', width: 380, height: 380, borderRadius: '50%', background: 'radial-gradient(circle, rgba(249,115,22,0.12) 0%, transparent 70%)', animation: 'blob2 10s ease-in-out infinite', pointerEvents: 'none' }} />
-
-      <div style={{ width: '100%', maxWidth: 520, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24, position: 'relative', zIndex: 1 }}>
-
+    <main className="min-h-screen bg-secondary/40 flex items-center justify-center px-4 py-10 animate-fade-in">
+      <div className="w-full max-w-lg flex flex-col items-center gap-6">
         {/* Status message */}
-        <div className="fu" style={{ textAlign: 'center' }}>
+        <div className="text-center">
           {/* Signal icon */}
-          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: 4, marginBottom: 20, height: 28 }}>
+          <div className="flex items-end justify-center gap-1 mb-5 h-7">
             {[0.3, 0.55, 0.8, 1].map((h, i) => (
-              <div key={i} style={{
-                width: 8, height: `${h * 100}%`, borderRadius: 3,
-                background: i < 2 ? '#ea580c' : 'rgba(180,120,60,0.2)',
-                animation: i < 2 ? `pulse ${1 + i*0.3}s ease-in-out infinite` : 'none',
-              }} />
+              <div
+                key={i}
+                className={`w-2 rounded ${i < 2 ? 'bg-primary animate-pulse' : 'bg-muted'}`}
+                style={{ height: `${h * 100}%` }}
+              />
             ))}
           </div>
 
-          <p style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.6rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(180,90,20,0.55)', marginBottom: 10 }}>
-            Connection Issue
-          </p>
-          <h1 style={{ fontSize: 'clamp(1.6rem,4vw,2.2rem)', fontWeight: 800, letterSpacing: '-0.03em', color: '#1c0f00', marginBottom: 10, lineHeight: 1.2 }}>
-            Your connection<br />seems <span style={{ color: '#ea580c' }}>unstable.</span>
+          <p className="uc-eyebrow mb-2">Connection Issue</p>
+          <h1 className="text-3xl font-extrabold tracking-tight mb-2 leading-tight">
+            Your connection seems <span className="text-primary">unstable.</span>
           </h1>
-          <p style={{ fontSize: '0.85rem', color: 'rgba(100,60,20,0.55)', fontWeight: 300, maxWidth: 320, margin: '0 auto', lineHeight: 1.6 }}>
+          <p className="text-sm text-muted-foreground max-w-xs mx-auto leading-relaxed">
             We're having trouble reaching this page. Check your Wi-Fi or try again in a moment{dots}
           </p>
         </div>
 
-        {/* Glass card with game */}
-        <div className="fu2" style={{
-          background: '#6B5744',
-          backdropFilter: 'blur(24px)',
-          WebkitBackdropFilter: 'blur(24px)',
-          border: '1.5px solid #E8E0D8',
-          borderRadius: 24, padding: '24px 24px 20px',
-          boxShadow: '0 8px 48px rgba(180,100,20,0.1), 0 2px 8px rgba(180,100,20,0.06), inset 0 1px 0 #2D1F0E',
-          width: '100%',
-        }}>
-          <p style={{ textAlign: 'center', fontSize: '0.75rem', color: 'rgba(150,90,30,0.5)', marginBottom: 16, fontWeight: 300 }}>
+        {/* Card with game */}
+        <div className="uc-card p-6 w-full">
+          <p className="text-center text-sm text-muted-foreground mb-4">
             While you wait — play a quick game 🐍
           </p>
           <SnakeGame />
         </div>
 
         {/* Actions */}
-        <div className="fu3" style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}>
-          <button
-            onClick={() => window.location.reload()}
-            style={{
-              padding: '11px 24px', borderRadius: 12, border: 'none',
-              background: 'linear-gradient(90deg,#c2410c,#ea580c,#f97316,#ea580c,#c2410c)',
-              backgroundSize: '300% auto',
-              animation: 'shimmer 4s linear infinite',
-              color: '#2D1F0E', fontWeight: 700, fontSize: '0.85rem',
-              cursor: 'pointer', fontFamily: "'Sora',sans-serif",
-              boxShadow: '0 4px 20px rgba(234,88,12,0.3)',
-            }}
-          >
+        <div className="flex gap-3 flex-wrap justify-center">
+          <Button onClick={() => window.location.reload()} className="font-semibold">
             Try Again
-          </button>
-          <a
-            href="/"
-            style={{
-              padding: '11px 24px', borderRadius: 12,
-              background: '#FFFFFF',
-              backdropFilter: 'blur(8px)',
-              border: '1.5px solid #E8E0D8',
-              color: 'rgba(150,80,20,0.8)', fontWeight: 600, fontSize: '0.85rem',
-              cursor: 'pointer', fontFamily: "'Sora',sans-serif",
-              textDecoration: 'none',
-              boxShadow: '0 2px 8px rgba(180,100,20,0.08)',
-            }}
-          >
-            Go Home
-          </a>
+          </Button>
+          <Button asChild variant="outline" className="font-semibold">
+            <a href="/">Go Home</a>
+          </Button>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 

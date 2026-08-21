@@ -3,72 +3,12 @@ import Header from '@/components/Header';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { Camera, Plus, Trash2, Check, Loader2 } from 'lucide-react';
-
-/* ─── GLASS INPUT ───────────────────────────────────── */
-function GlassInput({ label, value, onChange, type = 'text', colSpan = false }) {
-  const [focused, setFocused] = useState(false);
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 6, gridColumn: colSpan ? 'span 2' : 'span 1' }}>
-      <label style={{ fontSize: '0.72rem', fontWeight: 600, color: '#6B5744', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-        {label}
-      </label>
-      <input
-        type={type}
-        value={value}
-        onChange={onChange}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-        style={{
-          background: '#FFFFFF',
-          border: `1.5px solid ${focused ? 'rgba(251,146,60,0.55)' : '#E8E0D8'}`,
-          borderRadius: 12,
-          padding: '10px 14px',
-          color: '#2D1F0E',
-          fontSize: '0.9rem',
-          fontFamily: "'Sora', sans-serif",
-          outline: 'none',
-          transition: 'border-color .25s, box-shadow .25s',
-          boxShadow: focused ? '0 0 0 3px rgba(251,146,60,0.1)' : 'none',
-          width: '100%',
-        }}
-      />
-    </div>
-  );
-}
-
-/* ─── GLASS TEXTAREA ────────────────────────────────── */
-function GlassTextarea({ label, value, onChange, rows = 3 }) {
-  const [focused, setFocused] = useState(false);
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 6, gridColumn: 'span 2' }}>
-      <label style={{ fontSize: '0.72rem', fontWeight: 600, color: '#6B5744', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-        {label}
-      </label>
-      <textarea
-        value={value}
-        onChange={onChange}
-        rows={rows}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-        style={{
-          background: '#FFFFFF',
-          border: `1.5px solid ${focused ? 'rgba(251,146,60,0.55)' : '#E8E0D8'}`,
-          borderRadius: 12,
-          padding: '10px 14px',
-          color: '#2D1F0E',
-          fontSize: '0.9rem',
-          fontFamily: "'Sora', sans-serif",
-          outline: 'none',
-          resize: 'none',
-          transition: 'border-color .25s, box-shadow .25s',
-          boxShadow: focused ? '0 0 0 3px rgba(251,146,60,0.1)' : 'none',
-          width: '100%',
-        }}
-      />
-    </div>
-  );
-}
+import { Camera, Plus, Trash2, Check, Loader2, ImageIcon } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 
 /* ══════════════════════════════════════════════════════
    MAIN COMPONENT
@@ -85,7 +25,6 @@ const KarigarProfileEdit = () => {
   const [portfolioImages, setPortfolioImages] = useState<{ id: string; image_url: string; caption: string }[]>([]);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const [hoveredPortfolio, setHoveredPortfolio] = useState<string | null>(null);
 
   useEffect(() => {
     if (karigar) {
@@ -155,10 +94,10 @@ const KarigarProfileEdit = () => {
   };
 
   if (!karigar) return (
-    <div style={{ minHeight: '100vh', background: '#FFFAF6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
-        <Loader2 size={32} color="#fb923c" style={{ animation: 'spin 1s linear infinite' }} />
-        <p style={{ color: '#6B5744', fontFamily: "'Sora',sans-serif" }}>Loading...</p>
+    <div className="grid min-h-screen place-items-center bg-secondary/40">
+      <div className="flex flex-col items-center gap-4">
+        <Loader2 size={32} className="animate-spin text-primary" />
+        <p className="text-muted-foreground">Loading...</p>
       </div>
     </div>
   );
@@ -166,275 +105,159 @@ const KarigarProfileEdit = () => {
   const initials = form.name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'K';
 
   return (
-    <div style={{ minHeight: '100vh', background: '#FFFAF6', fontFamily: "'Sora', sans-serif", color: '#2D1F0E' }}>
-
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
-        *, *::before, *::after { box-sizing: border-box; }
-        @keyframes fadeUp    { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
-        @keyframes cardFadeUp{ from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
-        @keyframes shimmer   { 0% { background-position:-200% center; } 100% { background-position:200% center; } }
-        @keyframes avatarGlow{ 0%,100% { box-shadow:0 0 0 4px rgba(251,146,60,0.15),0 0 24px rgba(251,146,60,0.1); } 50% { box-shadow:0 0 0 6px rgba(251,146,60,0.25),0 0 40px rgba(251,146,60,0.2); } }
-        @keyframes spin      { to { transform:rotate(360deg); } }
-        @keyframes pulse     { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
-
-        .fu-1 { animation: fadeUp .65s cubic-bezier(.22,1,.36,1) .05s both; }
-        .fu-2 { animation: fadeUp .65s cubic-bezier(.22,1,.36,1) .15s both; }
-        .fu-3 { animation: fadeUp .65s cubic-bezier(.22,1,.36,1) .25s both; }
-
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(251,146,60,.3); border-radius: 999px; }
-      `}</style>
-
+    <div className="min-h-screen bg-secondary/40">
       <Header />
 
-      <main style={{ maxWidth: 720, margin: '0 auto', padding: '32px 24px' }}>
-
+      <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
         {/* ── PAGE LABEL ── */}
-        <div className="fu-1" style={{ marginBottom: 28 }}>
-          <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.62rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#fb923c', display: 'block', marginBottom: 8 }}>
-            Account
-          </span>
-          <h1 style={{ fontSize: 'clamp(1.5rem,4vw,2rem)', fontWeight: 800, letterSpacing: '-0.025em' }}>
-            Edit <span style={{ color: '#fb923c' }}>Profile</span>
+        <div className="mb-7 animate-fade-in">
+          <span className="uc-eyebrow mb-2 block">Account</span>
+          <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">
+            Edit <span className="text-primary">Profile</span>
           </h1>
         </div>
 
         {/* ── PHOTO CARD ── */}
-        <div className="fu-2" style={{
-          background: '#FFFFFF',
-          backdropFilter: 'blur(20px)',
-          border: '1px solid #E8E0D8',
-          borderRadius: 24, padding: 28, marginBottom: 24,
-        }}>
-          <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.6rem', letterSpacing: '0.18em', color: '#fb923c', textTransform: 'uppercase', display: 'block', marginBottom: 20 }}>Profile Photo</span>
+        <div className="uc-card mb-6 p-7 animate-fade-in">
+          <span className="uc-eyebrow mb-5 block">Profile Photo</span>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-            {/* Avatar */}
-            <div style={{ position: 'relative', flexShrink: 0 }}>
-              {form.photo ? (
-                <img
-                  src={form.photo}
-                  alt="Profile"
-                  style={{
-                    width: 80, height: 80, borderRadius: '50%',
-                    objectFit: 'cover',
-                    border: '2px solid rgba(251,146,60,0.4)',
-                    animation: 'avatarGlow 3s ease-in-out infinite',
-                  }}
-                />
-              ) : (
-                <div style={{
-                  width: 80, height: 80, borderRadius: '50%',
-                  background: 'linear-gradient(135deg,rgba(249,115,22,0.3),rgba(251,146,60,0.5))',
-                  border: '2px solid rgba(251,146,60,0.4)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontFamily: "'Space Mono',monospace", fontWeight: 700, fontSize: '1.3rem',
-                  color: '#fb923c',
-                  animation: 'avatarGlow 3s ease-in-out infinite',
-                }}>{initials}</div>
-              )}
-              {/* Camera button */}
+          <div className="flex items-center gap-5">
+            <div className="relative flex-shrink-0">
+              <Avatar className="h-20 w-20 border-2 border-primary/30">
+                <AvatarImage src={form.photo} alt="Profile" />
+                <AvatarFallback className="bg-primary-soft text-lg font-bold text-primary">{initials}</AvatarFallback>
+              </Avatar>
               <button
                 onClick={() => fileInputRef.current?.click()}
-                style={{
-                  position: 'absolute', bottom: -4, right: -4,
-                  width: 28, height: 28, borderRadius: '50%',
-                  background: 'linear-gradient(135deg,#f97316,#fb923c)',
-                  border: '2px solid #E8E0D8',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  cursor: 'pointer',
-                }}
+                className="absolute -bottom-1 -right-1 grid h-7 w-7 place-items-center rounded-full border-2 border-card bg-primary text-primary-foreground transition hover:bg-primary/90"
               >
-                <Camera size={13} color="#FFFAF6" />
+                <Camera size={13} />
               </button>
-              <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handlePhotoUpload} />
+              <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} />
             </div>
 
             <div>
-              <p style={{ fontWeight: 700, fontSize: '1rem', marginBottom: 4 }}>{form.name || 'Your Name'}</p>
-              <p style={{ fontSize: '0.8rem', color: '#fb923c', fontWeight: 600, marginBottom: 8 }}>{form.skill || 'Your Skill'}</p>
+              <p className="mb-1 font-bold text-foreground">{form.name || 'Your Name'}</p>
+              <p className="mb-2 text-sm font-semibold text-primary">{form.skill || 'Your Skill'}</p>
               {uploading ? (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <Loader2 size={12} color="#fb923c" style={{ animation: 'spin 1s linear infinite' }} />
-                  <span style={{ fontSize: '0.75rem', color: '#6B5744' }}>Uploading...</span>
+                <div className="flex items-center gap-1.5">
+                  <Loader2 size={12} className="animate-spin text-primary" />
+                  <span className="text-xs text-muted-foreground">Uploading...</span>
                 </div>
               ) : (
-                <button
+                <Button
                   onClick={() => fileInputRef.current?.click()}
-                  style={{
-                    padding: '6px 12px', borderRadius: 8,
-                    border: '1.5px solid rgba(251,146,60,0.3)',
-                    background: 'rgba(251,146,60,0.08)',
-                    color: '#fb923c', fontSize: '0.75rem', fontWeight: 600,
-                    cursor: 'pointer', fontFamily: "'Sora',sans-serif",
-                    transition: 'all .2s',
-                  }}
+                  variant="outline"
+                  size="sm"
+                  className="rounded-lg border-primary/30 text-primary hover:bg-primary/10 hover:text-primary"
                 >
                   Change Photo
-                </button>
+                </Button>
               )}
             </div>
           </div>
         </div>
 
         {/* ── FORM CARD ── */}
-        <div className="fu-2" style={{
-          background: '#FFFFFF',
-          backdropFilter: 'blur(20px)',
-          border: '1px solid #E8E0D8',
-          borderRadius: 24, padding: 28, marginBottom: 24,
-        }}>
-          <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.6rem', letterSpacing: '0.18em', color: '#fb923c', textTransform: 'uppercase', display: 'block', marginBottom: 20 }}>Details</span>
+        <div className="uc-card mb-6 p-7 animate-fade-in">
+          <span className="uc-eyebrow mb-5 block">Details</span>
 
-          {/* Divider */}
-          <div style={{ height: 1, background: 'linear-gradient(90deg,transparent,#E8E0D8,transparent)', marginBottom: 20 }} />
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-            <GlassInput label="Name" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
-            <GlassInput label="Skill Category" value={form.skill} onChange={e => setForm(f => ({ ...f, skill: e.target.value }))} />
-            <GlassInput label="Years of Experience" type="number" value={form.experience} onChange={e => setForm(f => ({ ...f, experience: Number(e.target.value) }))} />
-            <GlassInput label="Service Price (₹)" type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: Number(e.target.value) }))} />
-            <GlassInput label="Location" value={form.location} onChange={e => setForm(f => ({ ...f, location: e.target.value }))} colSpan />
-            <GlassTextarea label="Description" value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} rows={3} />
+          <div className="grid grid-cols-2 gap-4">
+            <div className="col-span-1 space-y-1.5">
+              <Label>Name</Label>
+              <Input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} className="rounded-xl" />
+            </div>
+            <div className="col-span-1 space-y-1.5">
+              <Label>Skill Category</Label>
+              <Input value={form.skill} onChange={e => setForm(f => ({ ...f, skill: e.target.value }))} className="rounded-xl" />
+            </div>
+            <div className="col-span-1 space-y-1.5">
+              <Label>Years of Experience</Label>
+              <Input type="number" value={form.experience} onChange={e => setForm(f => ({ ...f, experience: Number(e.target.value) }))} className="rounded-xl" />
+            </div>
+            <div className="col-span-1 space-y-1.5">
+              <Label>Service Price (₹)</Label>
+              <Input type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: Number(e.target.value) }))} className="rounded-xl" />
+            </div>
+            <div className="col-span-2 space-y-1.5">
+              <Label>Location</Label>
+              <Input value={form.location} onChange={e => setForm(f => ({ ...f, location: e.target.value }))} className="rounded-xl" />
+            </div>
+            <div className="col-span-2 space-y-1.5">
+              <Label>Description</Label>
+              <Textarea rows={3} value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} className="rounded-xl resize-none" />
+            </div>
           </div>
 
-          <button
+          <Button
             onClick={handleSave}
             disabled={saving}
-            style={{
-              marginTop: 24,
-              width: '100%', padding: '13px', borderRadius: 12, border: 'none',
-              background: saving
-                ? '#F0E8DE'
-                : 'linear-gradient(90deg,#f97316,#fb923c,#fdba74,#fb923c,#f97316)',
-              backgroundSize: '200% auto',
-              animation: saving ? 'none' : 'shimmer 3s linear infinite',
-              color: saving ? '#6B5744' : '#FFFAF6',
-              fontWeight: 700, fontSize: '0.9rem',
-              cursor: saving ? 'not-allowed' : 'pointer',
-              fontFamily: "'Sora',sans-serif",
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-              opacity: saving ? 0.7 : 1,
-              transition: 'opacity .2s',
-            }}
+            className="mt-6 w-full rounded-xl font-semibold"
+            size="lg"
           >
             {saving
-              ? <><Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} />Saving...</>
-              : <><Check size={16} />Save Profile</>
+              ? <><Loader2 size={16} className="mr-2 animate-spin" />Saving...</>
+              : <><Check size={16} className="mr-2" />Save Profile</>
             }
-          </button>
+          </Button>
         </div>
 
         {/* ── PORTFOLIO CARD ── */}
-        <div className="fu-3" style={{
-          background: '#FFFFFF',
-          backdropFilter: 'blur(20px)',
-          border: '1px solid #E8E0D8',
-          borderRadius: 24, padding: 28,
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+        <div className="uc-card p-7 animate-fade-in">
+          <div className="mb-5 flex items-center justify-between">
             <div>
-              <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.6rem', letterSpacing: '0.18em', color: '#fb923c', textTransform: 'uppercase', display: 'block', marginBottom: 4 }}>Gallery</span>
-              <h2 style={{ fontSize: '1rem', fontWeight: 700, letterSpacing: '-0.01em' }}>Work Portfolio</h2>
+              <span className="uc-eyebrow mb-1 block">Gallery</span>
+              <h2 className="text-base font-bold tracking-tight">Work Portfolio</h2>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div className="flex items-center gap-2.5">
               {portfolioImages.length > 0 && (
-                <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.65rem', color: '#6B5744', letterSpacing: '0.1em' }}>
-                  {portfolioImages.length} PHOTOS
+                <span className="text-xs font-medium text-muted-foreground">
+                  {portfolioImages.length} photos
                 </span>
               )}
-              <button
+              <Button
                 onClick={() => portfolioInputRef.current?.click()}
                 disabled={uploading}
-                style={{
-                  display: 'flex', alignItems: 'center', gap: 6,
-                  padding: '8px 14px', borderRadius: 10,
-                  border: '1.5px solid rgba(251,146,60,0.3)',
-                  background: 'rgba(251,146,60,0.08)',
-                  color: uploading ? 'rgba(251,146,60,0.4)' : '#fb923c',
-                  fontSize: '0.78rem', fontWeight: 700,
-                  cursor: uploading ? 'not-allowed' : 'pointer',
-                  fontFamily: "'Sora',sans-serif", transition: 'all .2s',
-                }}
-                onMouseEnter={e => { if (!uploading) e.currentTarget.style.background = 'rgba(251,146,60,0.15)'; }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(251,146,60,0.08)'; }}
+                variant="outline"
+                size="sm"
+                className="rounded-lg border-primary/30 text-primary hover:bg-primary/10 hover:text-primary"
               >
                 {uploading
-                  ? <><Loader2 size={13} style={{ animation: 'spin 1s linear infinite' }} />Uploading...</>
-                  : <><Plus size={13} />Add Images</>
+                  ? <><Loader2 size={13} className="mr-1.5 animate-spin" />Uploading...</>
+                  : <><Plus size={13} className="mr-1.5" />Add Images</>
                 }
-              </button>
-              <input ref={portfolioInputRef} type="file" accept="image/*" multiple style={{ display: 'none' }} onChange={handlePortfolioUpload} />
+              </Button>
+              <input ref={portfolioInputRef} type="file" accept="image/*" multiple className="hidden" onChange={handlePortfolioUpload} />
             </div>
           </div>
-
-          {/* Divider */}
-          <div style={{ height: 1, background: 'linear-gradient(90deg,transparent,#E8E0D8,transparent)', marginBottom: 20 }} />
 
           {portfolioImages.length === 0 ? (
             <div
               onClick={() => portfolioInputRef.current?.click()}
-              style={{
-                padding: '48px 24px', textAlign: 'center',
-                background: '#F7F2ED',
-                border: '1.5px dashed #E8E0D8',
-                borderRadius: 16, cursor: 'pointer',
-                transition: 'border-color .2s, background .2s',
-              }}
-              onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(251,146,60,0.3)'; (e.currentTarget as HTMLDivElement).style.background = 'rgba(251,146,60,0.03)'; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = '#E8E0D8'; (e.currentTarget as HTMLDivElement).style.background = '#F7F2ED'; }}
+              className="cursor-pointer rounded-2xl border border-dashed border-border bg-secondary/60 px-6 py-12 text-center transition hover:border-primary/30 hover:bg-primary-soft/40"
             >
-              <div style={{ fontSize: '2rem', marginBottom: 12 }}>🖼️</div>
-              <p style={{ color: '#6B5744', fontSize: '0.875rem', fontWeight: 300, marginBottom: 4 }}>No portfolio images yet.</p>
-              <p style={{ color: 'rgba(251,146,60,0.5)', fontSize: '0.78rem', fontWeight: 600 }}>Click to upload your previous work</p>
+              <ImageIcon className="mx-auto mb-3 text-muted-foreground" size={32} />
+              <p className="mb-1 text-sm text-muted-foreground">No portfolio images yet.</p>
+              <p className="text-xs font-semibold text-primary/70">Click to upload your previous work</p>
             </div>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
-              {portfolioImages.map((img, i) => (
+            <div className="grid grid-cols-3 gap-2.5">
+              {portfolioImages.map((img) => (
                 <div
                   key={img.id}
-                  onMouseEnter={() => setHoveredPortfolio(img.id)}
-                  onMouseLeave={() => setHoveredPortfolio(null)}
-                  style={{
-                    position: 'relative', overflow: 'hidden',
-                    borderRadius: 14,
-                    border: `1px solid ${hoveredPortfolio === img.id ? 'rgba(251,146,60,0.25)' : '#E8E0D8'}`,
-                    transition: 'border-color .2s',
-                    animation: `cardFadeUp .5s cubic-bezier(.22,1,.36,1) ${i * 0.07}s both`,
-                  }}
+                  className="group relative overflow-hidden rounded-xl border border-border transition hover:border-primary/30"
                 >
                   <img
                     src={img.image_url}
                     alt="Portfolio"
-                    style={{
-                      width: '100%', aspectRatio: '1', objectFit: 'cover', display: 'block',
-                      transition: 'transform .3s',
-                      transform: hoveredPortfolio === img.id ? 'scale(1.05)' : 'scale(1)',
-                    }}
+                    className="aspect-square w-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
-                  {/* Delete overlay */}
-                  <div style={{
-                    position: 'absolute', inset: 0,
-                    background: 'rgba(0,0,0,0.5)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    opacity: hoveredPortfolio === img.id ? 1 : 0,
-                    transition: 'opacity .2s',
-                  }}>
+                  <div className="absolute inset-0 flex items-center justify-center bg-foreground/50 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
                     <button
                       onClick={() => handleDeletePortfolio(img.id)}
-                      style={{
-                        width: 36, height: 36, borderRadius: '50%',
-                        background: 'rgba(248,113,113,0.2)',
-                        border: '1.5px solid rgba(248,113,113,0.5)',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        cursor: 'pointer', transition: 'all .2s',
-                      }}
-                      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(248,113,113,0.4)'; }}
-                      onMouseLeave={e => { e.currentTarget.style.background = 'rgba(248,113,113,0.2)'; }}
+                      className="grid h-9 w-9 place-items-center rounded-full border border-destructive/50 bg-destructive/20 transition hover:bg-destructive/40"
                     >
-                      <Trash2 size={15} color="#f87171" />
+                      <Trash2 size={15} className="text-destructive" />
                     </button>
                   </div>
                 </div>
@@ -442,7 +265,6 @@ const KarigarProfileEdit = () => {
             </div>
           )}
         </div>
-
       </main>
     </div>
   );

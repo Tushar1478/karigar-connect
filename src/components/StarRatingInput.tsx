@@ -16,7 +16,7 @@ const StarRatingInput = ({ value, onChange }: { value: number; onChange: (v: num
           className="transition-transform hover:scale-110"
         >
           <Star
-            className={`h-8 w-8 ${i <= (hover || value) ? 'fill-accent text-accent' : 'text-muted-foreground/30'}`}
+            className={`h-8 w-8 ${i <= (hover || value) ? 'fill-warning text-warning' : 'text-muted-foreground/30'}`}
           />
         </button>
       ))}

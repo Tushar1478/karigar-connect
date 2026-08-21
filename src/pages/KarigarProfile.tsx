@@ -1,10 +1,15 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import { MapPin, Clock, IndianRupee, Briefcase, Navigation, Star, Loader2 } from 'lucide-react';
+import { MapPin, Clock, IndianRupee, Briefcase, Navigation, Loader2 } from 'lucide-react';
 import Header from '@/components/Header';
 import StarRating from '@/components/StarRating';
 import TrustBadges from '@/components/TrustBadges';
 import AvailabilityBadge from '@/components/AvailabilityBadge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { supabase } from '@/integrations/supabase/client';
 import { useBookings } from '@/contexts/BookingContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -40,93 +45,49 @@ const getISTHour = () => {
 /* ─── STAT PILL ─────────────────────────────────────── */
 function StatPill({ icon, value }) {
   return (
-    <div style={{
-      display: 'flex', alignItems: 'center', gap: 6,
-      padding: '6px 12px',
-      background: '#FFFFFF',
-      border: '1px solid #E8E0D8',
-      borderRadius: 999,
-    }}>
+    <div className="uc-chip">
       {icon}
-      <span style={{ fontSize: '0.8rem', color: '#4A3826', fontWeight: 500 }}>{value}</span>
+      <span>{value}</span>
     </div>
   );
 }
 
 /* ─── BOOKING DIALOG ─────────────────────────────────── */
 function BookingDialog({ open, onClose, karigar, date, setDate, time, setTime, description, setDescription, availableSlots, todayIST, maxDate, onConfirm }) {
-  if (!open) return null;
   return (
-    <div style={{
-      position: 'fixed', inset: 0, zIndex: 200,
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(10px)',
-      animation: 'fadeIn .2s ease',
-    }} onClick={onClose}>
-      <div
-        onClick={e => e.stopPropagation()}
-        style={{
-          background: 'rgba(14,14,20,0.98)',
-          backdropFilter: 'blur(24px)',
-          border: '1px solid rgba(251,146,60,0.25)',
-          borderRadius: 24, padding: 32,
-          width: '100%', maxWidth: 460, margin: 16,
-          boxShadow: '0 32px 80px rgba(0,0,0,0.6)',
-          animation: 'dialogPop .3s cubic-bezier(.22,1,.36,1)',
-          fontFamily: "'Sora', sans-serif",
-        }}
-      >
-        <div style={{ marginBottom: 24 }}>
-          <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.6rem', letterSpacing: '0.18em', color: '#fb923c', textTransform: 'uppercase', display: 'block', marginBottom: 6 }}>Schedule</span>
-          <h3 style={{ fontSize: '1.2rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#2D1F0E' }}>Book {karigar?.name}</h3>
-        </div>
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="max-w-md rounded-2xl">
+        <DialogHeader>
+          <span className="uc-eyebrow mb-1 block">Schedule</span>
+          <DialogTitle className="text-xl">Book {karigar?.name}</DialogTitle>
+        </DialogHeader>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-          {/* Date */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <label style={{ fontSize: '0.72rem', fontWeight: 600, color: '#6B5744', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Date</label>
+        <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-2">
+            <Label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Date</Label>
             <input
               type="date"
               value={date}
               onChange={e => { setDate(e.target.value); setTime(''); }}
               min={todayIST}
               max={maxDate}
-              style={{
-                background: '#FFFFFF',
-                border: '1.5px solid #E8E0D8',
-                borderRadius: 12, padding: '10px 14px',
-                color: '#2D1F0E', fontSize: '0.9rem',
-                fontFamily: "'Sora', sans-serif", outline: 'none',
-                width: '100%', colorScheme: 'dark',
-              }}
-              onFocus={e => { e.target.style.borderColor = 'rgba(251,146,60,0.55)'; e.target.style.boxShadow = '0 0 0 3px rgba(251,146,60,0.1)'; }}
-              onBlur={e => { e.target.style.borderColor = '#E8E0D8'; e.target.style.boxShadow = 'none'; }}
+              className="uc-input"
             />
           </div>
 
-          {/* Time Slots */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <label style={{ fontSize: '0.72rem', fontWeight: 600, color: '#6B5744', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Time Slot</label>
+          <div className="flex flex-col gap-2">
+            <Label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Time Slot</Label>
             {!date ? (
-              <p style={{ fontSize: '0.82rem', color: '#8B7355' }}>Select a date first</p>
+              <p className="text-sm text-muted-foreground">Select a date first</p>
             ) : availableSlots.length === 0 ? (
-              <p style={{ fontSize: '0.82rem', color: '#f87171' }}>No available slots for this date</p>
+              <p className="text-sm text-destructive">No available slots for this date</p>
             ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
+              <div className="grid grid-cols-4 gap-2">
                 {availableSlots.map(slot => (
                   <button
                     key={slot}
                     onClick={() => setTime(slot)}
-                    style={{
-                      padding: '8px 4px',
-                      borderRadius: 10,
-                      border: `1.5px solid ${time === slot ? 'rgba(251,146,60,0.6)' : '#E8E0D8'}`,
-                      background: time === slot ? 'rgba(251,146,60,0.15)' : '#F7F2ED',
-                      color: time === slot ? '#fb923c' : '#4A3826',
-                      fontSize: '0.75rem', fontWeight: 600,
-                      cursor: 'pointer', fontFamily: "'Sora',sans-serif",
-                      transition: 'all .2s',
-                    }}
+                    className={`rounded-xl border px-1 py-2 text-xs font-semibold transition-all duration-200 ${time === slot ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-secondary text-foreground hover:border-primary/30'}`}
                   >
                     {formatSlot(slot)}
                   </button>
@@ -135,57 +96,28 @@ function BookingDialog({ open, onClose, karigar, date, setDate, time, setTime, d
             )}
           </div>
 
-          {/* Description */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <label style={{ fontSize: '0.72rem', fontWeight: 600, color: '#6B5744', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Job Description <span style={{ color: '#A89880', fontWeight: 400 }}>(optional)</span></label>
-            <textarea
+          <div className="flex flex-col gap-2">
+            <Label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Job Description <span className="font-normal normal-case text-muted-foreground/70">(optional)</span>
+            </Label>
+            <Textarea
               placeholder="Describe the work needed..."
               value={description}
               onChange={e => setDescription(e.target.value)}
               rows={3}
-              style={{
-                background: '#FFFFFF',
-                border: '1.5px solid #E8E0D8',
-                borderRadius: 12, padding: '10px 14px',
-                color: '#2D1F0E', fontSize: '0.875rem', resize: 'none',
-                fontFamily: "'Sora', sans-serif", outline: 'none',
-                transition: 'border-color .2s',
-              }}
-              onFocus={e => { e.target.style.borderColor = 'rgba(251,146,60,0.5)'; }}
-              onBlur={e => { e.target.style.borderColor = '#E8E0D8'; }}
+              className="rounded-xl resize-none"
             />
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: 10, marginTop: 24 }}>
-          <button onClick={onClose} style={{
-            flex: 1, padding: '11px', borderRadius: 12,
-            border: '1.5px solid #E8E0D8',
-            background: 'transparent', color: '#6B5744',
-            fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer',
-            fontFamily: "'Sora',sans-serif",
-          }}>Cancel</button>
-          <button
-            onClick={onConfirm}
-            disabled={!date || !time}
-            style={{
-              flex: 2, padding: '11px', borderRadius: 12, border: 'none',
-              background: (!date || !time)
-                ? '#F0E8DE'
-                : 'linear-gradient(90deg,#f97316,#fb923c,#fdba74,#fb923c,#f97316)',
-              backgroundSize: '200% auto',
-              color: (!date || !time) ? '#A89880' : '#FFFAF6',
-              fontSize: '0.875rem', fontWeight: 700,
-              cursor: (!date || !time) ? 'not-allowed' : 'pointer',
-              fontFamily: "'Sora',sans-serif",
-              animation: (date && time) ? 'shimmer 3s linear infinite' : 'none',
-            }}
-          >
+        <DialogFooter className="mt-2 flex-row gap-2 sm:justify-stretch">
+          <Button variant="outline" className="flex-1 rounded-xl" onClick={onClose}>Cancel</Button>
+          <Button className="flex-[2] rounded-xl font-semibold" disabled={!date || !time} onClick={onConfirm}>
             Confirm Booking
-          </button>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -255,17 +187,17 @@ const KarigarProfile = () => {
   }, [id]);
 
   if (loading) return (
-    <div style={{ minHeight: '100vh', background: '#FFFAF6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
-        <Loader2 size={32} color="#fb923c" style={{ animation: 'spin 1s linear infinite' }} />
-        <p style={{ color: '#6B5744', fontFamily: "'Sora',sans-serif" }}>Loading profile...</p>
+    <div className="flex min-h-screen items-center justify-center bg-secondary/40">
+      <div className="flex flex-col items-center gap-4">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <p className="text-muted-foreground">Loading profile...</p>
       </div>
     </div>
   );
 
   if (!karigar) return (
-    <div style={{ minHeight: '100vh', background: '#FFFAF6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <p style={{ color: '#6B5744', fontFamily: "'Sora',sans-serif" }}>Karigar not found</p>
+    <div className="flex min-h-screen items-center justify-center bg-secondary/40">
+      <p className="text-muted-foreground">Karigar not found</p>
     </div>
   );
 
@@ -303,171 +235,88 @@ const KarigarProfile = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#FFFAF6', fontFamily: "'Sora', sans-serif", color: '#2D1F0E' }}>
-
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
-        *, *::before, *::after { box-sizing: border-box; }
-        @keyframes fadeUp    { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
-        @keyframes cardFadeUp{ from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
-        @keyframes fadeIn    { from { opacity:0; } to { opacity:1; } }
-        @keyframes dialogPop { from { opacity:0; transform:scale(.94) translateY(12px); } to { opacity:1; transform:scale(1) translateY(0); } }
-        @keyframes shimmer   { 0% { background-position:-200% center; } 100% { background-position:200% center; } }
-        @keyframes avatarGlow{ 0%,100% { box-shadow:0 0 0 4px rgba(251,146,60,0.15),0 0 24px rgba(251,146,60,0.1); } 50% { box-shadow:0 0 0 6px rgba(251,146,60,0.25),0 0 40px rgba(251,146,60,0.2); } }
-        @keyframes spin      { to { transform:rotate(360deg); } }
-        @keyframes pulse     { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
-
-        .fu-1 { animation: fadeUp .65s cubic-bezier(.22,1,.36,1) .05s both; }
-        .fu-2 { animation: fadeUp .65s cubic-bezier(.22,1,.36,1) .15s both; }
-        .fu-3 { animation: fadeUp .65s cubic-bezier(.22,1,.36,1) .25s both; }
-        .fu-4 { animation: fadeUp .65s cubic-bezier(.22,1,.36,1) .35s both; }
-
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(251,146,60,.3); border-radius: 999px; }
-      `}</style>
-
+    <div className="min-h-screen bg-secondary/40">
       <Header />
 
-      <main style={{ maxWidth: 720, margin: '0 auto', padding: '32px 24px' }}>
-
+      <main className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6">
         {/* ── PAGE LABEL ── */}
-        <div className="fu-1" style={{ marginBottom: 28 }}>
-          <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.62rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#fb923c', display: 'block', marginBottom: 8 }}>
-            Karigar
-          </span>
-          <h1 style={{ fontSize: 'clamp(1.5rem,4vw,2rem)', fontWeight: 800, letterSpacing: '-0.025em' }}>
-            Service <span style={{ color: '#fb923c' }}>Profile</span>
+        <div className="mb-7 animate-fade-in">
+          <span className="uc-eyebrow mb-2 block">Karigar</span>
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+            Service <span className="text-primary">Profile</span>
           </h1>
         </div>
 
         {/* ── PROFILE CARD ── */}
-        <div className="fu-2" style={{
-          background: '#F7F2ED',
-          backdropFilter: 'blur(20px)',
-          border: '1px solid #E8E0D8',
-          borderRadius: 24, padding: 28, marginBottom: 24,
-        }}>
-          {/* Avatar + name row */}
-          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 24 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-              {/* Avatar — use photo if available, else initials */}
-              {karigar.photo ? (
-                <img
-                  src={karigar.photo}
-                  alt={karigar.name}
-                  style={{
-                    width: 58, height: 58, borderRadius: '50%',
-                    objectFit: 'cover',
-                    border: '2px solid rgba(251,146,60,0.4)',
-                    flexShrink: 0,
-                    animation: 'avatarGlow 3s ease-in-out infinite',
-                  }}
-                />
-              ) : (
-                <div style={{
-                  width: 58, height: 58, borderRadius: '50%',
-                  background: 'linear-gradient(135deg,rgba(249,115,22,0.3),rgba(251,146,60,0.5))',
-                  border: '2px solid rgba(251,146,60,0.4)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontFamily: "'Space Mono',monospace", fontWeight: 700, fontSize: '1.1rem',
-                  color: '#fb923c', flexShrink: 0,
-                  animation: 'avatarGlow 3s ease-in-out infinite',
-                }}>{initials}</div>
-              )}
+        <div className="uc-card mb-6 p-6">
+          <div className="mb-6 flex items-start justify-between">
+            <div className="flex items-center gap-4">
+              <Avatar className="h-14 w-14 border-2 border-primary/30">
+                <AvatarImage src={karigar.photo ?? undefined} alt={karigar.name} />
+                <AvatarFallback className="bg-primary-soft font-bold text-primary">{initials}</AvatarFallback>
+              </Avatar>
               <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                  <p style={{ fontWeight: 700, fontSize: '1.1rem' }}>{karigar.name}</p>
+                <div className="mb-1 flex items-center gap-2">
+                  <p className="text-lg font-bold">{karigar.name}</p>
                   <AvailabilityBadge status={(karigar as any).availability || 'available'} />
                 </div>
-                <p style={{ fontSize: '0.85rem', color: '#fb923c', fontWeight: 600, marginBottom: 6 }}>{karigar.skill}</p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#34d399', animation: 'pulse 2s infinite' }} />
-                  <span style={{ fontSize: '0.72rem', color: '#34d399', fontWeight: 600 }}>Available for Hire</span>
+                <p className="mb-1.5 text-sm font-semibold text-primary">{karigar.skill}</p>
+                <div className="flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-success" />
+                  <span className="text-xs font-semibold text-success">Available for Hire</span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Divider */}
-          <div style={{ height: 1, background: 'linear-gradient(90deg,transparent,#E8E0D8,transparent)', marginBottom: 20 }} />
+          <div className="mb-5 h-px bg-border" />
 
-          {/* Trust badges */}
-          <div style={{ marginBottom: 16 }}>
+          <div className="mb-4">
             <TrustBadges rating={Number(karigar.rating)} reviewCount={karigar.review_count} completedJobs={karigar.completed_jobs} size="md" />
           </div>
 
-          {/* Star rating */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20 }}>
+          <div className="mb-5 flex items-center gap-2">
             <StarRating rating={Number(karigar.rating)} />
-            <span style={{ fontSize: '0.82rem', color: '#6B5744' }}>
+            <span className="text-sm text-muted-foreground">
               {Number(karigar.rating).toFixed(1)} ({karigar.review_count} reviews)
             </span>
           </div>
 
-          {/* Stat pills row */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-            <StatPill icon={<Clock size={13} color="#fb923c" />} value={`${karigar.experience} yrs exp`} />
-            <StatPill icon={<Briefcase size={13} color="#fb923c" />} value={`${karigar.completed_jobs} jobs`} />
-            <StatPill icon={<IndianRupee size={13} color="#fb923c" />} value={`₹${karigar.price}/visit`} />
-            <StatPill icon={<MapPin size={13} color="#fb923c" />} value={karigar.location} />
-            <StatPill icon={<Navigation size={13} color="#38bdf8" />} value={`${distance} km away`} />
+          <div className="flex flex-wrap gap-2">
+            <StatPill icon={<Clock className="h-3.5 w-3.5 text-primary" />} value={`${karigar.experience} yrs exp`} />
+            <StatPill icon={<Briefcase className="h-3.5 w-3.5 text-primary" />} value={`${karigar.completed_jobs} jobs`} />
+            <StatPill icon={<IndianRupee className="h-3.5 w-3.5 text-primary" />} value={`₹${karigar.price}/visit`} />
+            <StatPill icon={<MapPin className="h-3.5 w-3.5 text-primary" />} value={karigar.location} />
+            <StatPill icon={<Navigation className="h-3.5 w-3.5 text-info" />} value={`${distance} km away`} />
           </div>
         </div>
 
         {/* ── ABOUT ── */}
-        <div className="fu-2" style={{
-          background: '#F7F2ED',
-          backdropFilter: 'blur(20px)',
-          border: '1px solid #E8E0D8',
-          borderRadius: 24, padding: 24, marginBottom: 24,
-        }}>
-          <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.6rem', letterSpacing: '0.18em', color: '#fb923c', textTransform: 'uppercase', display: 'block', marginBottom: 10 }}>Bio</span>
-          <p style={{ fontSize: '0.875rem', color: '#6B5744', lineHeight: 1.7, fontWeight: 300 }}>{karigar.description}</p>
+        <div className="uc-card mb-6 p-6">
+          <span className="uc-eyebrow mb-2.5 block">Bio</span>
+          <p className="text-sm leading-relaxed text-muted-foreground">{karigar.description}</p>
         </div>
 
         {/* ── BOOK BUTTON ── */}
         {user?.role === 'customer' && (
-          <div className="fu-3" style={{ marginBottom: 32 }}>
-            <button
-              onClick={() => setBookingOpen(true)}
-              style={{
-                width: '100%', padding: '14px',
-                borderRadius: 14, border: 'none',
-                background: 'linear-gradient(90deg,#f97316,#fb923c,#fdba74,#fb923c,#f97316)',
-                backgroundSize: '200% auto',
-                animation: 'shimmer 3s linear infinite',
-                color: '#FFFFFF', fontWeight: 800, fontSize: '0.95rem',
-                cursor: 'pointer', fontFamily: "'Sora',sans-serif",
-                letterSpacing: '0.01em',
-              }}
-            >
+          <div className="mb-8">
+            <Button className="w-full rounded-xl py-6 text-base font-bold" onClick={() => setBookingOpen(true)}>
               Book Service
-            </button>
+            </Button>
           </div>
         )}
 
         {/* ── PORTFOLIO ── */}
         {portfolioImages.length > 0 && (
-          <div className="fu-3" style={{ marginBottom: 32 }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-              <h2 style={{ fontSize: '1rem', fontWeight: 700, letterSpacing: '-0.01em' }}>Previous Work</h2>
-              <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.65rem', color: '#8B7355', letterSpacing: '0.1em' }}>
-                {portfolioImages.length} PHOTOS
-              </span>
+          <div className="mb-8">
+            <div className="mb-5 flex items-center justify-between">
+              <h2 className="text-base font-bold tracking-tight">Previous Work</h2>
+              <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{portfolioImages.length} photos</span>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
-              {portfolioImages.map((img, i) => (
-                <div
-                  key={img.id}
-                  style={{
-                    overflow: 'hidden', borderRadius: 16,
-                    border: '1px solid #E8E0D8',
-                    background: '#F7F2ED',
-                    animation: `cardFadeUp .5s cubic-bezier(.22,1,.36,1) ${i * 0.07}s both`,
-                  }}
-                >
-                  <img src={img.image_url} alt="Portfolio work" style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', display: 'block' }} />
+            <div className="grid grid-cols-3 gap-2.5">
+              {portfolioImages.map(img => (
+                <div key={img.id} className="overflow-hidden rounded-2xl border border-border bg-secondary">
+                  <img src={img.image_url} alt="Portfolio work" className="aspect-square w-full object-cover" />
                 </div>
               ))}
             </div>
@@ -475,29 +324,22 @@ const KarigarProfile = () => {
         )}
 
         {/* ── REVIEWS ── */}
-        <div className="fu-4">
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-            <h2 style={{ fontSize: '1rem', fontWeight: 700, letterSpacing: '-0.01em' }}>Customer Reviews</h2>
-            <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.65rem', color: '#8B7355', letterSpacing: '0.1em' }}>
-              {reviews.length} TOTAL
-            </span>
+        <div>
+          <div className="mb-5 flex items-center justify-between">
+            <h2 className="text-base font-bold tracking-tight">Customer Reviews</h2>
+            <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{reviews.length} total</span>
           </div>
 
           {reviews.length === 0 ? (
-            <div style={{
-              padding: '56px 24px', textAlign: 'center',
-              background: '#F7F2ED',
-              border: '1px solid #F0E8DE',
-              borderRadius: 20,
-            }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: 14 }}>⭐</div>
-              <p style={{ color: '#6B5744', fontSize: '0.9rem', fontWeight: 300 }}>No reviews yet.</p>
-              <p style={{ color: '#A89880', fontSize: '0.8rem', marginTop: 6 }}>Be the first to book and leave a review!</p>
+            <div className="uc-card p-14 text-center">
+              <div className="mb-3.5 text-4xl">⭐</div>
+              <p className="text-sm text-foreground">No reviews yet.</p>
+              <p className="mt-1.5 text-sm text-muted-foreground">Be the first to book and leave a review!</p>
             </div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              {reviews.map((r, i) => (
-                <ReviewCard key={r.id} r={r} index={i} />
+            <div className="flex flex-col gap-3">
+              {reviews.map(r => (
+                <ReviewCard key={r.id} r={r} />
               ))}
             </div>
           )}
@@ -525,40 +367,22 @@ const KarigarProfile = () => {
 };
 
 /* ─── REVIEW CARD ────────────────────────────────────── */
-function ReviewCard({ r, index }) {
-  const [hov, setHov] = useState(false);
+function ReviewCard({ r }) {
   return (
-    <div
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      style={{
-        background: '#F7F2ED',
-        backdropFilter: 'blur(16px)',
-        border: `1px solid ${hov ? 'rgba(251,146,60,0.2)' : '#E8E0D8'}`,
-        borderRadius: 20, padding: 20,
-        transition: 'all 0.3s cubic-bezier(0.22,1,0.36,1)',
-        transform: hov ? 'translateY(-2px)' : 'translateY(0)',
-        boxShadow: hov ? '0 12px 40px rgba(0,0,0,0.3)' : 'none',
-        animation: `cardFadeUp .5s cubic-bezier(.22,1,.36,1) ${index * 0.08}s both`,
-      }}
-    >
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{
-            width: 32, height: 32, borderRadius: '50%',
-            background: 'linear-gradient(135deg,rgba(249,115,22,0.25),rgba(251,146,60,0.4))',
-            border: '1.5px solid rgba(251,146,60,0.3)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontFamily: "'Space Mono',monospace", fontSize: '0.65rem', fontWeight: 700, color: '#fb923c',
-          }}>
-            {r.customer_name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'U'}
-          </div>
-          <span style={{ fontWeight: 700, fontSize: '0.9rem' }}>{r.customer_name}</span>
+    <div className="uc-card uc-card-hover p-5">
+      <div className="mb-2.5 flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <Avatar className="h-8 w-8 border border-primary/30">
+            <AvatarFallback className="bg-primary-soft text-xs font-bold text-primary">
+              {r.customer_name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'U'}
+            </AvatarFallback>
+          </Avatar>
+          <span className="text-sm font-bold">{r.customer_name}</span>
         </div>
         <StarRating rating={r.rating} size={13} />
       </div>
-      <p style={{ fontSize: '0.82rem', color: '#6B5744', lineHeight: 1.6, fontWeight: 300, marginBottom: 8 }}>{r.text}</p>
-      <p style={{ fontSize: '0.72rem', color: '#A89880', fontFamily: "'Space Mono',monospace" }}>
+      <p className="mb-2 text-sm leading-relaxed text-muted-foreground">{r.text}</p>
+      <p className="text-xs text-muted-foreground/70">
         {new Date(r.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
       </p>
     </div>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
 
 type OAuthNamespace = {
   getAuthorizationDetails: (id: string) => Promise<{ data: any; error: any }>;
@@ -9,26 +10,6 @@ type OAuthNamespace = {
 };
 
 const oauth = (supabase.auth as unknown as { oauth: OAuthNamespace }).oauth;
-
-const card: React.CSSProperties = {
-  background: "#FFFFFF",
-  border: "1px solid #E8E0D8",
-  borderRadius: 24,
-  padding: 32,
-  maxWidth: 460,
-  width: "100%",
-};
-
-const page: React.CSSProperties = {
-  minHeight: "100vh",
-  background: "#FFFAF6",
-  color: "#2D1F0E",
-  fontFamily: "'Sora', sans-serif",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  padding: "24px 16px",
-};
 
 export default function OAuthConsent() {
   const [params] = useSearchParams();
@@ -90,81 +71,38 @@ export default function OAuthConsent() {
   const clientName = details?.client?.name ?? "an app";
 
   return (
-    <main style={page}>
-      <div style={card}>
-        <div
-          style={{
-            width: 52,
-            height: 52,
-            borderRadius: "50%",
-            background: "linear-gradient(135deg,#f97316,#fb923c)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "#fff",
-            fontWeight: 700,
-            fontSize: "1.25rem",
-            marginBottom: 20,
-          }}
-        >
+    <main className="min-h-screen bg-secondary/40 flex items-center justify-center px-4 py-10">
+      <div className="uc-card p-8 max-w-md w-full">
+        <div className="mx-auto mb-5 h-[52px] w-[52px] rounded-full bg-primary text-primary-foreground grid place-items-center font-bold text-xl">
           K
         </div>
 
         {error ? (
           <>
-            <h1 style={{ fontSize: "1.25rem", fontWeight: 800, margin: "0 0 8px" }}>
-              Could not load this request
-            </h1>
-            <p style={{ color: "#6B5744", fontSize: "0.9rem", margin: 0 }}>{error}</p>
+            <h1 className="text-xl font-extrabold mb-2">Could not load this request</h1>
+            <p className="text-sm text-muted-foreground">{error}</p>
           </>
         ) : !details ? (
-          <p style={{ color: "#6B5744", fontSize: "0.9rem", margin: 0 }}>Loading…</p>
+          <p className="text-sm text-muted-foreground">Loading…</p>
         ) : (
           <>
-            <h1 style={{ fontSize: "1.35rem", fontWeight: 800, margin: "0 0 10px" }}>
-              Connect {clientName} to KarigarHub
-            </h1>
-            <p style={{ color: "#6B5744", fontSize: "0.9rem", lineHeight: 1.6, margin: "0 0 24px" }}>
+            <h1 className="text-2xl font-extrabold mb-2.5">Connect {clientName} to KarigarHub</h1>
+            <p className="text-sm text-muted-foreground leading-relaxed mb-6">
               {clientName} will be able to search karigars, view and create your bookings, and read your
               profile — acting as you. You can revoke access at any time.
             </p>
-            <div style={{ display: "flex", gap: 12 }}>
-              <button
-                disabled={busy}
-                onClick={() => decide(true)}
-                style={{
-                  flex: 1,
-                  padding: "12px 16px",
-                  borderRadius: 12,
-                  border: "none",
-                  background: "linear-gradient(135deg,#f97316,#fb923c)",
-                  color: "#fff",
-                  fontWeight: 700,
-                  fontSize: "0.9rem",
-                  fontFamily: "'Sora', sans-serif",
-                  cursor: busy ? "not-allowed" : "pointer",
-                }}
-              >
+            <div className="flex gap-3">
+              <Button disabled={busy} onClick={() => decide(true)} className="flex-1 font-semibold">
                 Approve
-              </button>
-              <button
+              </Button>
+              <Button
                 disabled={busy}
                 onClick={() => decide(false)}
-                style={{
-                  flex: 1,
-                  padding: "12px 16px",
-                  borderRadius: 12,
-                  border: "1px solid #E8E0D8",
-                  background: "#F7F2ED",
-                  color: "#6B5744",
-                  fontWeight: 600,
-                  fontSize: "0.9rem",
-                  fontFamily: "'Sora', sans-serif",
-                  cursor: busy ? "not-allowed" : "pointer",
-                }}
+                variant="outline"
+                className="flex-1 font-semibold"
               >
                 Deny
-              </button>
+              </Button>
             </div>
           </>
         )}
