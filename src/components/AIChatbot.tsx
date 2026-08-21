@@ -165,95 +165,60 @@ const AIChatbot = () => {
       {!open && (
         <button
           onClick={() => setOpen(true)}
-          style={{
-            position: 'fixed', bottom: 24, right: 24, zIndex: 9999,
-            width: 56, height: 56, borderRadius: '50%', border: 'none',
-            background: 'linear-gradient(135deg, #f97316, #fb923c)',
-            color: '#2D1F0E', cursor: 'pointer',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 8px 32px rgba(249,115,22,0.4)',
-            transition: 'transform .2s',
-          }}
-          onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.1)')}
-          onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
+          className="fixed bottom-6 right-6 z-[9999] flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform duration-200 hover:scale-110"
         >
-          <MessageCircle size={24} />
+          <MessageCircle className="h-6 w-6" />
         </button>
       )}
 
       {open && (
-        <div style={{
-          position: 'fixed', bottom: 24, right: 24, zIndex: 9999,
-          width: 380, maxWidth: 'calc(100vw - 32px)',
-          height: 540, maxHeight: 'calc(100vh - 48px)',
-          borderRadius: 20, overflow: 'hidden',
-          background: 'rgba(10,10,15,0.97)',
-          border: '1px solid #E8E0D8',
-          boxShadow: '0 24px 80px rgba(0,0,0,0.6)',
-          display: 'flex', flexDirection: 'column',
-          fontFamily: "'Sora', sans-serif",
-        }}>
+        <div className="fixed bottom-6 right-6 z-[9999] flex h-[540px] max-h-[calc(100vh-48px)] w-[380px] max-w-[calc(100vw-32px)] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-xl">
           {/* Header */}
-          <div style={{
-            padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 10,
-            borderBottom: '1px solid #E8E0D8',
-            background: 'linear-gradient(135deg, rgba(249,115,22,0.12), rgba(251,146,60,0.06))',
-          }}>
-            <div style={{
-              width: 34, height: 34, borderRadius: '50%',
-              background: 'linear-gradient(135deg, #f97316, #fb923c)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              <Bot size={18} color="#fff" />
+          <div className="flex items-center gap-2.5 border-b border-border bg-primary-soft px-4 py-3.5">
+            <div className="flex h-[34px] w-[34px] items-center justify-center rounded-full bg-primary">
+              <Bot className="h-[18px] w-[18px] text-primary-foreground" />
             </div>
-            <div style={{ flex: 1 }}>
-              <p style={{ fontSize: '0.85rem', fontWeight: 700, color: '#2D1F0E', margin: 0 }}>KarigarHub AI</p>
-              <p style={{ fontSize: '0.65rem', color: '#6B5744', margin: 0 }}>
+            <div className="flex-1">
+              <p className="m-0 text-sm font-bold text-foreground">KarigarHub AI</p>
+              <p className="m-0 text-xs text-muted-foreground">
                 {isListening ? '🎤 Listening...' : t('chatbot_subtitle')}
               </p>
             </div>
             {/* TTS toggle */}
-            <button onClick={() => { setTtsEnabled(e => !e); window.speechSynthesis.cancel(); }} style={{
-              background: ttsEnabled ? 'rgba(251,146,60,0.15)' : '#F0E8DE',
-              border: `1px solid ${ttsEnabled ? 'rgba(251,146,60,0.3)' : '#E8E0D8'}`,
-              borderRadius: 8, width: 30, height: 30, cursor: 'pointer',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: ttsEnabled ? '#fb923c' : '#6B5744',
-            }} title={ttsEnabled ? 'Disable voice' : 'Enable voice'}>
-              <Volume2 size={13} />
+            <button
+              onClick={() => { setTtsEnabled(e => !e); window.speechSynthesis.cancel(); }}
+              className={`flex h-[30px] w-[30px] items-center justify-center rounded-lg border transition-colors ${
+                ttsEnabled ? 'border-primary/30 bg-primary/10 text-primary' : 'border-border bg-muted text-muted-foreground'
+              }`}
+              title={ttsEnabled ? 'Disable voice' : 'Enable voice'}
+            >
+              <Volume2 className="h-[13px] w-[13px]" />
             </button>
-            <button onClick={() => setOpen(false)} style={{
-              background: '#F0E8DE', border: '1px solid #E8E0D8',
-              borderRadius: 8, width: 30, height: 30, cursor: 'pointer',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6B5744',
-            }}>
-              <X size={14} />
+            <button
+              onClick={() => setOpen(false)}
+              className="flex h-[30px] w-[30px] items-center justify-center rounded-lg border border-border bg-muted text-muted-foreground"
+            >
+              <X className="h-3.5 w-3.5" />
             </button>
           </div>
 
           {/* Messages */}
-          <div style={{ flex: 1, overflowY: 'auto', padding: '14px 14px 8px' }}>
+          <div className="flex-1 overflow-y-auto px-3.5 pb-2 pt-3.5">
             {messages.length === 0 && (
-              <div style={{ textAlign: 'center', padding: '24px 12px' }}>
-                <div style={{ fontSize: '2rem', marginBottom: 8 }}>🤖</div>
-                <p style={{ color: '#4A3826', fontSize: '0.85rem', fontWeight: 500, margin: '0 0 4px' }}>
+              <div className="p-3 text-center">
+                <div className="mb-2 text-3xl">🤖</div>
+                <p className="m-0 mb-1 text-sm font-medium text-foreground">
                   {t('chatbot_greeting')}
                 </p>
-                <p style={{ color: '#8B7355', fontSize: '0.75rem', margin: '0 0 16px' }}>
+                <p className="m-0 mb-4 text-xs text-muted-foreground">
                   {t('chatbot_subtitle')}
                 </p>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, justifyContent: 'center' }}>
+                <div className="flex flex-wrap justify-center gap-1.5">
                   {quickPrompts.map(p => (
-                    <button key={p} onClick={() => send(p)}
-                      style={{
-                        padding: '6px 12px', borderRadius: 999,
-                        background: '#FFFFFF',
-                        border: '1px solid #E8E0D8',
-                        color: '#4A3826', fontSize: '0.72rem',
-                        cursor: 'pointer', fontFamily: "'Sora',sans-serif", transition: 'all .2s',
-                      }}
-                      onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(251,146,60,0.4)'; e.currentTarget.style.color = '#fb923c'; }}
-                      onMouseLeave={e => { e.currentTarget.style.borderColor = '#E8E0D8'; e.currentTarget.style.color = '#4A3826'; }}
+                    <button
+                      key={p}
+                      onClick={() => send(p)}
+                      className="rounded-full border border-border bg-background px-3 py-1.5 text-xs text-foreground transition-all duration-200 hover:border-primary/40 hover:text-primary"
                     >{p}</button>
                   ))}
                 </div>
@@ -261,63 +226,37 @@ const AIChatbot = () => {
             )}
 
             {messages.map((m, i) => (
-              <div key={i} style={{
-                display: 'flex', gap: 8, marginBottom: 12,
-                flexDirection: m.role === 'user' ? 'row-reverse' : 'row',
-                alignItems: 'flex-start',
-              }}>
-                <div style={{
-                  width: 26, height: 26, borderRadius: '50%', flexShrink: 0,
-                  background: m.role === 'user'
-                    ? 'linear-gradient(135deg, rgba(56,189,248,0.2), rgba(56,189,248,0.4))'
-                    : 'linear-gradient(135deg, rgba(249,115,22,0.2), rgba(251,146,60,0.4))',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  {m.role === 'user' ? <User size={12} color="#38bdf8" /> : <Bot size={12} color="#fb923c" />}
+              <div key={i} className={`mb-3 flex items-start gap-2 ${m.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+                <div className={`flex h-[26px] w-[26px] flex-shrink-0 items-center justify-center rounded-full ${
+                  m.role === 'user' ? 'bg-muted' : 'bg-primary-soft'
+                }`}>
+                  {m.role === 'user' ? <User className="h-3 w-3 text-foreground" /> : <Bot className="h-3 w-3 text-primary" />}
                 </div>
-                <div style={{
-                  maxWidth: '75%', padding: '8px 12px',
-                  borderRadius: m.role === 'user' ? '14px 4px 14px 14px' : '4px 14px 14px 14px',
-                  background: m.role === 'user'
-                    ? 'linear-gradient(135deg, rgba(56,189,248,0.15), rgba(56,189,248,0.08))'
-                    : '#FFFFFF',
-                  border: `1px solid ${m.role === 'user' ? 'rgba(56,189,248,0.2)' : '#E8E0D8'}`,
-                }}>
-                  <p style={{
-                    fontSize: '0.82rem', lineHeight: 1.55, margin: 0,
-                    color: m.role === 'user' ? '#fff' : '#2D1F0E',
-                    whiteSpace: 'pre-wrap',
-                  }}>{m.content}</p>
+                <div className={`max-w-[75%] rounded-2xl px-3 py-2 ${
+                  m.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted text-foreground'
+                }`}>
+                  <p className="m-0 whitespace-pre-wrap text-sm leading-relaxed">{m.content}</p>
                 </div>
                 {/* Speak button for assistant messages */}
                 {m.role === 'assistant' && (
-                  <button onClick={() => speak(m.content)} style={{
-                    width: 22, height: 22, borderRadius: '50%', border: 'none', flexShrink: 0,
-                    background: '#F0E8DE', cursor: 'pointer',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: '#6B5744', marginTop: 4,
-                  }} title="Listen">
-                    <Volume2 size={10} />
+                  <button
+                    onClick={() => speak(m.content)}
+                    className="mt-1 flex h-[22px] w-[22px] flex-shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground"
+                    title="Listen"
+                  >
+                    <Volume2 className="h-2.5 w-2.5" />
                   </button>
                 )}
               </div>
             ))}
 
             {loading && messages[messages.length - 1]?.role !== 'assistant' && (
-              <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 12 }}>
-                <div style={{
-                  width: 26, height: 26, borderRadius: '50%', flexShrink: 0,
-                  background: 'linear-gradient(135deg, rgba(249,115,22,0.2), rgba(251,146,60,0.4))',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  <Bot size={12} color="#fb923c" />
+              <div className="mb-3 flex items-center gap-2">
+                <div className="flex h-[26px] w-[26px] flex-shrink-0 items-center justify-center rounded-full bg-primary-soft">
+                  <Bot className="h-3 w-3 text-primary" />
                 </div>
-                <div style={{
-                  padding: '10px 14px', borderRadius: '4px 14px 14px 14px',
-                  background: '#FFFFFF',
-                  border: '1px solid #E8E0D8',
-                }}>
-                  <Loader2 size={14} color="#6B5744" style={{ animation: 'spin 1s linear infinite' }} />
+                <div className="rounded-2xl border border-border bg-muted px-3.5 py-2.5">
+                  <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground" />
                 </div>
               </div>
             )}
@@ -325,73 +264,34 @@ const AIChatbot = () => {
           </div>
 
           {/* Input */}
-          <div style={{
-            padding: '10px 12px', display: 'flex', gap: 8,
-            borderTop: '1px solid #E8E0D8',
-            background: '#F7F2ED',
-          }}>
+          <div className="flex gap-2 border-t border-border bg-secondary/40 px-3 py-2.5">
             {/* Mic button */}
             <button
               onClick={toggleListening}
-              style={{
-                width: 38, height: 38, borderRadius: 10, flexShrink: 0, border: 'none',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                cursor: 'pointer',
-                background: isListening
-                  ? 'linear-gradient(135deg, #ef4444, #f87171)'
-                  : '#FFFFFF',
-                color: isListening ? '#fff' : '#6B5744',
-                transition: 'all .2s',
-                animation: isListening ? 'pulse-mic 1.5s ease-in-out infinite' : 'none',
-              }}
+              className={`flex h-[38px] w-[38px] flex-shrink-0 items-center justify-center rounded-xl transition-all duration-200 ${
+                isListening ? 'animate-pulse bg-destructive text-destructive-foreground' : 'bg-background text-muted-foreground border border-border'
+              }`}
               title={isListening ? t('stop_recording') : t('voice_input')}
             >
-              {isListening ? <MicOff size={15} /> : <Mic size={15} />}
+              {isListening ? <MicOff className="h-[15px] w-[15px]" /> : <Mic className="h-[15px] w-[15px]" />}
             </button>
             <input
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send(input)}
               placeholder={t('ask_anything')}
-              style={{
-                flex: 1, height: 38,
-                background: '#FFFFFF',
-                border: '1.5px solid #E8E0D8',
-                borderRadius: 10, padding: '0 12px',
-                color: '#2D1F0E', fontSize: '0.82rem',
-                fontFamily: "'Sora',sans-serif",
-                outline: 'none', transition: 'border-color .2s',
-              }}
-              onFocus={e => (e.currentTarget.style.borderColor = 'rgba(251,146,60,0.4)')}
-              onBlur={e => (e.currentTarget.style.borderColor = '#E8E0D8')}
+              className="uc-input h-[38px] flex-1"
             />
             <button
               onClick={() => send(input)}
               disabled={loading || !input.trim()}
-              style={{
-                width: 38, height: 38, borderRadius: 10, flexShrink: 0, border: 'none',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                cursor: loading || !input.trim() ? 'not-allowed' : 'pointer',
-                background: loading || !input.trim()
-                  ? '#FFFFFF'
-                  : 'linear-gradient(135deg, #f97316, #fb923c)',
-                color: loading || !input.trim() ? '#A89880' : '#fff',
-                transition: 'all .2s',
-              }}
+              className="flex h-[38px] w-[38px] flex-shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-all duration-200 hover:bg-primary/90 disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground"
             >
-              {loading ? <Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} /> : <Send size={15} />}
+              {loading ? <Loader2 className="h-[15px] w-[15px] animate-spin" /> : <Send className="h-[15px] w-[15px]" />}
             </button>
           </div>
         </div>
       )}
-
-      <style>{`
-        @keyframes spin { to { transform: rotate(360deg); } }
-        @keyframes pulse-mic {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); }
-          50% { box-shadow: 0 0 0 8px rgba(239,68,68,0); }
-        }
-      `}</style>
     </>
   );
 };

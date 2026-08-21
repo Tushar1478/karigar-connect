@@ -73,7 +73,7 @@ export default function OAuthConsent() {
   return (
     <main className="min-h-screen bg-secondary/40 flex items-center justify-center px-4 py-10">
       <div className="uc-card p-8 max-w-md w-full">
-        <div className="mx-auto mb-5 h-13 w-13 h-[52px] w-[52px] rounded-full bg-primary text-primary-foreground grid place-items-center font-bold text-xl">
+        <div className="mx-auto mb-5 h-[52px] w-[52px] rounded-full bg-primary text-primary-foreground grid place-items-center font-bold text-xl">
           K
         </div>
 
