@@ -18,52 +18,29 @@ const LanguageSelector = () => {
   const current = LANGUAGES.find(l => l.code === lang);
 
   return (
-    <div ref={ref} style={{ position: 'relative' }}>
+    <div ref={ref} className="relative">
       <button
         onClick={() => setOpen(o => !o)}
-        style={{
-          display: 'flex', alignItems: 'center', gap: 6,
-          padding: '6px 10px', borderRadius: 10,
-          border: '1.5px solid #D9CFC2',
-          background: open ? 'rgba(251,146,60,0.1)' : '#FFFFFF',
-          color: open ? '#fb923c' : '#4A3826',
-          cursor: 'pointer', fontSize: '0.78rem', fontWeight: 600,
-          fontFamily: "'Sora', sans-serif", transition: 'all .2s',
-        }}
+        className={`flex items-center gap-1.5 rounded-xl border px-2.5 py-1.5 text-xs font-semibold transition-all duration-200 ${
+          open ? 'border-primary/30 bg-primary/10 text-primary' : 'border-border bg-background text-foreground'
+        }`}
       >
-        <Globe size={14} />
+        <Globe className="h-3.5 w-3.5" />
         <span>{current?.native || 'EN'}</span>
       </button>
 
       {open && (
-        <div style={{
-          position: 'absolute', top: 'calc(100% + 8px)', right: 0,
-          width: 200, maxHeight: 320, overflowY: 'auto',
-          background: 'rgba(10,10,15,0.97)',
-          borderRadius: 14,
-          border: '1px solid #E8E0D8',
-          boxShadow: '0 18px 60px rgba(0,0,0,0.6)',
-          padding: 6, zIndex: 150,
-        }}>
+        <div className="absolute right-0 top-[calc(100%+8px)] z-[150] w-[200px] max-h-80 overflow-y-auto rounded-2xl border border-border bg-card p-1.5 shadow-lg">
           {LANGUAGES.map(l => (
             <button
               key={l.code}
               onClick={() => { setLang(l.code); setOpen(false); }}
-              style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                width: '100%', padding: '8px 12px', borderRadius: 10,
-                border: 'none', cursor: 'pointer',
-                background: lang === l.code ? 'rgba(251,146,60,0.12)' : 'transparent',
-                color: lang === l.code ? '#fb923c' : '#3D2E1F',
-                fontSize: '0.82rem', fontWeight: lang === l.code ? 600 : 400,
-                fontFamily: "'Sora', sans-serif", transition: 'all .15s',
-                textAlign: 'left',
-              }}
-              onMouseEnter={e => { if (lang !== l.code) e.currentTarget.style.background = '#FFFFFF'; }}
-              onMouseLeave={e => { if (lang !== l.code) e.currentTarget.style.background = 'transparent'; }}
+              className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-sm transition-colors duration-150 ${
+                lang === l.code ? 'bg-primary/10 font-semibold text-primary' : 'text-foreground hover:bg-secondary'
+              }`}
             >
               <span>{l.native}</span>
-              <span style={{ fontSize: '0.7rem', opacity: 0.5 }}>{l.label}</span>
+              <span className="text-xs text-muted-foreground">{l.label}</span>
             </button>
           ))}
         </div>

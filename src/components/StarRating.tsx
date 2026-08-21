@@ -6,7 +6,7 @@ const StarRating = ({ rating, size = 16 }: { rating: number; size?: number }) =>
       {[1, 2, 3, 4, 5].map(i => (
         <Star
           key={i}
-          className={`${i <= Math.round(rating) ? 'fill-accent text-accent' : 'text-muted-foreground/30'}`}
+          className={i <= Math.round(rating) ? 'fill-warning text-warning' : 'text-muted-foreground/30'}
           style={{ width: size, height: size }}
         />
       ))}

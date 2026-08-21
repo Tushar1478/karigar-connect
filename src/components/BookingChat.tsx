@@ -17,7 +17,6 @@ const BookingChat = ({ bookingId }: { bookingId: string }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMsg, setNewMsg]     = useState('');
   const [sending, setSending]   = useState(false);
-  const [focused, setFocused]   = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const userId = user?.authUser?.id;
 
@@ -64,28 +63,18 @@ const BookingChat = ({ bookingId }: { bookingId: string }) => {
     setSending(false);
   };
 
-  /* ── initials helper ── */
   const initials = (name: string) =>
     name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
 
   return (
-    <div style={{
-      display: 'flex', flexDirection: 'column',
-      fontFamily: "'Sora', sans-serif",
-      background: 'transparent',
-    }}>
-
-      {/* ── MESSAGE LIST ── */}
-      <ScrollArea style={{ height: 260, padding: '12px 16px' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-
+    <div className="flex flex-col bg-transparent">
+      {/* MESSAGE LIST */}
+      <ScrollArea className="h-[260px] px-4 py-3">
+        <div className="flex flex-col gap-2.5">
           {messages.length === 0 && (
-            <div style={{
-              display: 'flex', flexDirection: 'column', alignItems: 'center',
-              justifyContent: 'center', padding: '48px 0', gap: 8,
-            }}>
-              <div style={{ fontSize: '1.6rem' }}>💬</div>
-              <p style={{ fontSize: '0.75rem', color: '#8B7355', fontWeight: 300 }}>
+            <div className="flex flex-col items-center justify-center gap-2 py-12">
+              <div className="text-2xl">💬</div>
+              <p className="text-xs font-light text-muted-foreground">
                 No messages yet. Start the conversation!
               </p>
             </div>
@@ -99,80 +88,30 @@ const BookingChat = ({ bookingId }: { bookingId: string }) => {
             return (
               <div
                 key={m.id}
-                style={{
-                  display: 'flex',
-                  flexDirection: isMe ? 'row-reverse' : 'row',
-                  alignItems: 'flex-end',
-                  gap: 8,
-                  animation: 'msgPop .25s cubic-bezier(.22,1,.36,1) both',
-                  marginTop: prevSame ? 2 : 8,
-                }}
+                className={`flex items-end gap-2 animate-fade-in ${isMe ? 'flex-row-reverse' : 'flex-row'} ${prevSame ? 'mt-0.5' : 'mt-2'}`}
               >
-                {/* Avatar — only show on first of a group */}
                 {!prevSame ? (
-                  <div style={{
-                    width: 28, height: 28, borderRadius: '50%', flexShrink: 0,
-                    background: isMe
-                      ? 'linear-gradient(135deg,rgba(249,115,22,0.3),rgba(251,146,60,0.5))'
-                      : 'linear-gradient(135deg,rgba(56,189,248,0.2),rgba(56,189,248,0.4))',
-                    border: `1.5px solid ${isMe ? 'rgba(251,146,60,0.4)' : 'rgba(56,189,248,0.35)'}`,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '0.55rem', fontWeight: 700,
-                    color: isMe ? '#fb923c' : '#38bdf8',
-                    fontFamily: "'Space Mono',monospace",
-                    flexDirection: 'column',
-                  }}>
+                  <div className={`flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border text-[0.55rem] font-bold ${
+                    isMe ? 'border-primary/40 bg-primary-soft text-primary' : 'border-border bg-muted text-foreground'
+                  }`}>
                     {initials(m.sender_name)}
                   </div>
                 ) : (
-                  <div style={{ width: 28, flexShrink: 0 }} />
+                  <div className="w-7 flex-shrink-0" />
                 )}
 
-                {/* Bubble */}
-                <div style={{ maxWidth: '72%', display: 'flex', flexDirection: 'column', gap: 2, alignItems: isMe ? 'flex-end' : 'flex-start' }}>
-
-                  {/* Sender name — only on first of group */}
+                <div className={`flex max-w-[72%] flex-col gap-0.5 ${isMe ? 'items-end' : 'items-start'}`}>
                   {!prevSame && (
-                    <span style={{
-                      fontSize: '0.62rem', fontWeight: 600,
-                      color: isMe ? 'rgba(251,146,60,0.7)' : 'rgba(56,189,248,0.7)',
-                      paddingLeft: isMe ? 0 : 4,
-                      paddingRight: isMe ? 4 : 0,
-                    }}>
+                    <span className={`text-[0.62rem] font-semibold ${isMe ? 'pr-1 text-primary/70' : 'pl-1 text-muted-foreground'}`}>
                       {isMe ? 'You' : m.sender_name}
                     </span>
                   )}
 
-                  <div style={{
-                    padding: '8px 12px',
-                    borderRadius: isMe ? '16px 4px 16px 16px' : '4px 16px 16px 16px',
-                    background: isMe
-                      ? 'linear-gradient(135deg,rgba(249,115,22,0.25),rgba(251,146,60,0.18))'
-                      : '#F0E8DE',
-                    border: `1px solid ${isMe ? 'rgba(251,146,60,0.25)' : '#E8E0D8'}`,
-                    backdropFilter: 'blur(8px)',
-                    boxShadow: isMe
-                      ? '0 4px 16px rgba(249,115,22,0.1)'
-                      : '0 4px 16px rgba(0,0,0,0.2)',
-                    transition: 'box-shadow .2s',
-                  }}>
-                    <p style={{
-                      fontSize: '0.875rem', lineHeight: 1.5, fontWeight: 400,
-                      color: isMe ? '#fff' : '#2D1F0E',
-                      margin: 0,
-                    }}>
-                      {m.text}
-                    </p>
+                  <div className={`rounded-2xl px-3 py-2 ${isMe ? 'bg-primary text-primary-foreground' : 'bg-muted text-foreground'}`}>
+                    <p className="text-sm leading-relaxed">{m.text}</p>
                   </div>
 
-                  {/* Timestamp */}
-                  <span style={{
-                    fontSize: '0.6rem', fontWeight: 300,
-                    color: 'rgba(255,255,255,0.22)',
-                    paddingLeft: isMe ? 0 : 4,
-                    paddingRight: isMe ? 4 : 0,
-                    fontFamily: "'Space Mono',monospace",
-                  }}>
+                  <span className={`text-[0.6rem] font-light text-muted-foreground/60 ${isMe ? 'pr-1' : 'pl-1'}`}>
                     {time}
                   </span>
                 </div>
@@ -184,61 +123,27 @@ const BookingChat = ({ bookingId }: { bookingId: string }) => {
         </div>
       </ScrollArea>
 
-      {/* ── INPUT ROW ── */}
-      <div style={{
-        display: 'flex', gap: 8, padding: '10px 14px',
-        borderTop: '1px solid rgba(56,189,248,0.1)',
-        background: 'rgba(56,189,248,0.03)',
-      }}>
+      {/* INPUT ROW */}
+      <div className="flex gap-2 border-t border-border bg-secondary/40 px-3.5 py-2.5">
         <input
           placeholder="Type a message..."
           value={newMsg}
           onChange={e => setNewMsg(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && !e.shiftKey && handleSend()}
-          onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
-          style={{
-            flex: 1, height: 38,
-            background: '#FFFFFF',
-            border: `1.5px solid ${focused ? 'rgba(56,189,248,0.45)' : '#E8E0D8'}`,
-            borderRadius: 10, padding: '0 12px',
-            color: '#2D1F0E', fontSize: '0.875rem',
-            fontFamily: "'Sora',sans-serif",
-            outline: 'none',
-            transition: 'border-color .2s, box-shadow .2s',
-            boxShadow: focused ? '0 0 0 3px rgba(56,189,248,0.08)' : 'none',
-          }}
+          className="uc-input h-[38px] flex-1"
         />
 
         <button
           onClick={handleSend}
           disabled={sending || !newMsg.trim()}
-          style={{
-            width: 38, height: 38, borderRadius: 10, flexShrink: 0,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            border: 'none', cursor: sending || !newMsg.trim() ? 'not-allowed' : 'pointer',
-            background: sending || !newMsg.trim()
-              ? '#FFFFFF'
-              : 'linear-gradient(135deg,#f97316,#fb923c)',
-            color: sending || !newMsg.trim() ? '#A89880' : '#fff',
-            transition: 'all .2s',
-            boxShadow: !sending && newMsg.trim() ? '0 4px 16px rgba(249,115,22,0.35)' : 'none',
-          }}
-          onMouseEnter={e => { if (!sending && newMsg.trim()) (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1.08)'; }}
-          onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)'; }}
+          className="flex h-[38px] w-[38px] flex-shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-all duration-200 hover:bg-primary/90 disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground"
         >
           {sending
-            ? <Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} />
-            : <Send size={15} />
+            ? <Loader2 className="h-4 w-4 animate-spin" />
+            : <Send className="h-4 w-4" />
           }
         </button>
       </div>
-
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap');
-        @keyframes msgPop { from { opacity:0; transform:scale(.94) translateY(6px); } to { opacity:1; transform:scale(1) translateY(0); } }
-        @keyframes spin   { to { transform:rotate(360deg); } }
-      `}</style>
     </div>
   );
 };

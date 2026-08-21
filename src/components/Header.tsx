@@ -113,7 +113,7 @@ const Header = () => {
           className="flex items-center gap-2.5"
         >
           <span className="grid h-9 w-9 place-items-center rounded-xl bg-primary text-primary-foreground">
-            <Wrench className="h-4.5 w-4.5" strokeWidth={2.5} />
+            <Wrench className="h-5 w-5" strokeWidth={2.5} />
           </span>
           <span className="text-lg font-extrabold tracking-tight text-foreground">
             Karigar<span className="text-primary">Hub</span>
@@ -152,9 +152,9 @@ const Header = () => {
                 onClick={() => setNotifOpen(o => !o)}
                 className="relative grid h-10 w-10 place-items-center rounded-full border border-border bg-card text-muted-foreground transition-colors hover:text-foreground"
               >
-                <Bell className="h-4.5 w-4.5" />
+                <Bell className="h-5 w-5" />
                 {notifications.length > 0 && (
-                  <span className="absolute -right-0.5 -top-0.5 grid h-4.5 min-w-4.5 place-items-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
+                  <span className="absolute -right-0.5 -top-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
                     {notifications.length}
                   </span>
                 )}
@@ -199,7 +199,7 @@ const Header = () => {
                 <span className="max-w-28 truncate text-sm font-semibold text-foreground">{displayName}</span>
               </div>
               <Button variant="ghost" size="icon" aria-label="Log out" onClick={handleLogout}>
-                <LogOut className="h-4.5 w-4.5" />
+                <LogOut className="h-5 w-5" />
               </Button>
             </div>
           ) : (
@@ -219,7 +219,7 @@ const Header = () => {
             onClick={() => setMobileOpen(o => !o)}
             className="grid h-10 w-10 place-items-center rounded-full border border-border bg-card text-foreground md:hidden"
           >
-            {mobileOpen ? <X className="h-4.5 w-4.5" /> : <Menu className="h-4.5 w-4.5" />}
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
       </div>
