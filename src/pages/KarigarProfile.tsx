@@ -194,14 +194,14 @@ const KarigarProfile = () => {
     <div className="flex min-h-screen items-center justify-center bg-secondary/40">
       <div className="flex flex-col items-center gap-4">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <p className="text-muted-foreground">Loading profile...</p>
+        <p className="text-muted-foreground">{t('loading')}</p>
       </div>
     </div>
   );
 
   if (!karigar) return (
     <div className="flex min-h-screen items-center justify-center bg-secondary/40">
-      <p className="text-muted-foreground">Karigar not found</p>
+      <p className="text-muted-foreground">{t('no_results')}</p>
     </div>
   );
 
@@ -330,7 +330,7 @@ const KarigarProfile = () => {
         {/* ── REVIEWS ── */}
         <div>
           <div className="mb-5 flex items-center justify-between">
-            <h2 className="text-base font-bold tracking-tight">Customer Reviews</h2>
+            <h2 className="text-base font-bold tracking-tight">{t('reviews')}</h2>
             <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{reviews.length} total</span>
           </div>
 
