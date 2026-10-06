@@ -14,12 +14,12 @@ import {
 
 /* ─── STATUS CONFIG ─────────────────────────────────── */
 const STATUS_META = {
-  pending:    { label: 'Pending',    color: '#fbbf24', bg: 'rgba(251,191,36,0.12)',  border: 'rgba(251,191,36,0.3)',  step: 0 },
-  accepted:   { label: 'Accepted',   color: '#38bdf8', bg: 'rgba(56,189,248,0.12)', border: 'rgba(56,189,248,0.3)',  step: 1 },
-  on_the_way: { label: 'On the Way', color: '#a78bfa', bg: 'rgba(167,139,250,0.12)',border: 'rgba(167,139,250,0.3)', step: 2 },
-  completed:  { label: 'Completed',  color: '#34d399', bg: 'rgba(52,211,153,0.12)', border: 'rgba(52,211,153,0.3)',  step: 3 },
-  rejected:   { label: 'Rejected',   color: '#f87171', bg: 'rgba(248,113,113,0.12)',border: 'rgba(248,113,113,0.3)', step: -1 },
-  cancelled:  { label: 'Cancelled',  color: '#94a3b8', bg: 'rgba(148,163,184,0.1)', border: 'rgba(148,163,184,0.2)', step: -1 },
+  pending:    { label: 'Pending',    color: '#D97706', bg: 'rgba(251,191,36,0.12)',  border: 'rgba(251,191,36,0.3)',  step: 0 },
+  accepted:   { label: 'Accepted',   color: '#6B5744', bg: 'rgba(56,189,248,0.12)', border: 'rgba(56,189,248,0.3)',  step: 1 },
+  on_the_way: { label: 'On the Way', color: '#6B5744', bg: 'rgba(167,139,250,0.12)',border: 'rgba(167,139,250,0.3)', step: 2 },
+  completed:  { label: 'Completed',  color: '#0F6E56', bg: 'rgba(52,211,153,0.12)', border: 'rgba(52,211,153,0.3)',  step: 3 },
+  rejected:   { label: 'Rejected',   color: '#DC2626', bg: 'rgba(248,113,113,0.12)',border: 'rgba(248,113,113,0.3)', step: -1 },
+  cancelled:  { label: 'Cancelled',  color: '#6B5744', bg: 'rgba(148,163,184,0.1)', border: 'rgba(148,163,184,0.2)', step: -1 },
 };
 
 const STEPS = ['Pending', 'Accepted', 'On the Way', 'Completed'];
@@ -38,7 +38,7 @@ function Confetti({ active }) {
     canvas.width  = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
 
-    const COLORS = ['#fb923c','#fde68a','#34d399','#38bdf8','#a78bfa','#f472b6','#fff'];
+    const COLORS = ['#F4722B','#D97706','#0F6E56','#6B5744','#6B5744','#6B5744','#fff'];
     particles.current = Array.from({ length: 120 }, () => ({
       x: Math.random() * canvas.width,
       y: -10 - Math.random() * 80,
@@ -119,13 +119,13 @@ function ProgressBar({ status }) {
                 background: done || current
                   ? done ? 'rgba(52,211,153,0.2)' : `${meta.color}22`
                   : '#FFFFFF',
-                border: `2px solid ${done ? '#34d399' : current ? meta.color : '#E8E0D8'}`,
+                border: `2px solid ${done ? '#0F6E56' : current ? meta.color : '#E8E0D8'}`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 transition: 'all 0.4s ease',
                 boxShadow: current ? `0 0 10px ${meta.color}55` : 'none',
               }}>
                 {done
-                  ? <Check size={11} color="#34d399" />
+                  ? <Check size={11} color="#0F6E56" />
                   : current
                     ? <div style={{ width: 7, height: 7, borderRadius: '50%', background: meta.color, animation: 'pulse 1.5s infinite' }} />
                     : <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#D9CFC2' }} />
@@ -133,7 +133,7 @@ function ProgressBar({ status }) {
               </div>
               <span style={{
                 fontSize: '0.58rem', fontWeight: current ? 700 : 400,
-                color: done ? '#34d399' : current ? meta.color : '#A89880',
+                color: done ? '#0F6E56' : current ? meta.color : '#A89880',
                 transition: 'color 0.4s', textAlign: 'center', lineHeight: 1.2,
                 display: 'none',  // hide on small, show on md
               }}>{s}</span>
@@ -147,7 +147,7 @@ function ProgressBar({ status }) {
         <div style={{
           height: '100%', borderRadius: 999,
           background: status === 'completed'
-            ? 'linear-gradient(90deg,#34d399,#6ee7b7)'
+            ? 'linear-gradient(90deg,#0F6E56,#0F6E56)'
             : `linear-gradient(90deg,${meta.color}cc,${meta.color})`,
           width: `${pct}%`,
           transition: 'width 1.2s cubic-bezier(0.22,1,0.36,1)',
@@ -195,7 +195,7 @@ function RatingDialog({ open, onClose, onSubmit, rating, setRating, review, setR
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
           <div>
-            <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.6rem', letterSpacing: '0.18em', color: '#fb923c', textTransform: 'uppercase', display: 'block', marginBottom: 6 }}>Review</span>
+            <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.6rem', letterSpacing: '0.18em', color: '#F4722B', textTransform: 'uppercase', display: 'block', marginBottom: 6 }}>Review</span>
             <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#2D1F0E', letterSpacing: '-0.02em' }}>Rate this Service</h3>
           </div>
           <button onClick={onClose} style={{ background: '#F0E8DE', border: 'none', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#6B5744' }}>
@@ -231,7 +231,7 @@ function RatingDialog({ open, onClose, onSubmit, rating, setRating, review, setR
           }}>Cancel</button>
           <button onClick={onSubmit} disabled={rating === 0} style={{
             flex: 2, padding: 11, borderRadius: 12, border: 'none',
-            background: rating === 0 ? '#F0E8DE' : 'linear-gradient(90deg,#f97316,#fb923c,#fdba74,#fb923c,#f97316)',
+            background: rating === 0 ? '#F0E8DE' : 'linear-gradient(90deg,#F4722B,#F4722B,#F4722B,#F4722B,#F4722B)',
             backgroundSize: '200% auto',
             color: rating === 0 ? '#A89880' : '#FFFAF6',
             fontSize: '0.875rem', fontWeight: 700,
@@ -281,7 +281,7 @@ function BookingCard({ b, index, onRate, onCancel, expandedChat, setExpandedChat
       {isCompleted && (
         <div style={{
           position: 'absolute', top: 0, left: 0, right: 0, height: 2,
-          background: 'linear-gradient(90deg,transparent,#34d399,transparent)',
+          background: 'linear-gradient(90deg,transparent,#0F6E56,transparent)',
           borderRadius: '20px 20px 0 0',
         }} />
       )}
@@ -290,7 +290,7 @@ function BookingCard({ b, index, onRate, onCancel, expandedChat, setExpandedChat
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, marginBottom: 12 }}>
         <div>
           <h3 style={{ fontWeight: 700, fontSize: '1rem', color: '#2D1F0E', marginBottom: 4 }}>{b.karigar_name}</h3>
-          <span style={{ fontSize: '0.8rem', color: '#fb923c', fontWeight: 600 }}>{b.skill}</span>
+          <span style={{ fontSize: '0.8rem', color: '#F4722B', fontWeight: 600 }}>{b.skill}</span>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6 }}>
           <span style={{
@@ -340,13 +340,13 @@ function BookingCard({ b, index, onRate, onCancel, expandedChat, setExpandedChat
             display: 'flex', alignItems: 'center', gap: 6,
             padding: '8px 14px', borderRadius: 10,
             background: 'rgba(251,146,60,0.1)', border: '1px solid rgba(251,146,60,0.35)',
-            color: '#fb923c', fontSize: '0.8rem', fontWeight: 700,
+            color: '#F4722B', fontSize: '0.8rem', fontWeight: 700,
             cursor: 'pointer', transition: 'all .2s', fontFamily: "'Sora',sans-serif",
           }}
             onMouseEnter={e => { e.currentTarget.style.background = 'rgba(251,146,60,0.2)'; }}
             onMouseLeave={e => { e.currentTarget.style.background = 'rgba(251,146,60,0.1)'; }}
           >
-            <Star size={13} fill="#fb923c" />Rate Service<ChevronRight size={13} />
+            <Star size={13} fill="#F4722B" />Rate Service<ChevronRight size={13} />
           </button>
         )}
 
@@ -356,7 +356,7 @@ function BookingCard({ b, index, onRate, onCancel, expandedChat, setExpandedChat
             display: 'flex', alignItems: 'center', gap: 6,
             padding: '8px 14px', borderRadius: 10,
             background: 'rgba(248,113,113,0.08)', border: '1px solid rgba(248,113,113,0.25)',
-            color: '#f87171', fontSize: '0.8rem', fontWeight: 600,
+            color: '#DC2626', fontSize: '0.8rem', fontWeight: 600,
             cursor: 'pointer', transition: 'all .2s', fontFamily: "'Sora',sans-serif",
           }}
             onMouseEnter={e => { e.currentTarget.style.background = 'rgba(248,113,113,0.16)'; }}
@@ -373,7 +373,7 @@ function BookingCard({ b, index, onRate, onCancel, expandedChat, setExpandedChat
             padding: '8px 14px', borderRadius: 10,
             background: chatOpen ? 'rgba(56,189,248,0.12)' : '#FFFFFF',
             border: `1px solid ${chatOpen ? 'rgba(56,189,248,0.35)' : '#E8E0D8'}`,
-            color: chatOpen ? '#38bdf8' : '#6B5744',
+            color: chatOpen ? '#6B5744' : '#6B5744',
             fontSize: '0.8rem', fontWeight: 600,
             cursor: 'pointer', transition: 'all .2s', fontFamily: "'Sora',sans-serif",
           }}>
@@ -459,11 +459,11 @@ const MyBookings = () => {
 
         {/* ── PAGE TITLE ── */}
         <div className="fu-1" style={{ marginBottom: 28 }}>
-          <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.62rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#fb923c', display: 'block', marginBottom: 8 }}>
+          <span style={{ fontFamily: "'Space Mono',monospace", fontSize: '0.62rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#F4722B', display: 'block', marginBottom: 8 }}>
             Overview
           </span>
           <h1 style={{ fontSize: 'clamp(1.5rem,4vw,2rem)', fontWeight: 800, letterSpacing: '-0.025em' }}>
-            My <span style={{ color: '#fb923c' }}>Bookings</span>
+            My <span style={{ color: '#F4722B' }}>Bookings</span>
           </h1>
         </div>
 
@@ -471,9 +471,9 @@ const MyBookings = () => {
         {myBookings.length > 0 && (
           <div className="fu-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12, marginBottom: 28 }}>
             {[
-              { label: 'Total',     value: counts.total,     color: '#fb923c' },
-              { label: 'Active',    value: counts.active,    color: '#38bdf8' },
-              { label: 'Completed', value: counts.completed, color: '#34d399' },
+              { label: 'Total',     value: counts.total,     color: '#F4722B' },
+              { label: 'Active',    value: counts.active,    color: '#6B5744' },
+              { label: 'Completed', value: counts.completed, color: '#0F6E56' },
             ].map(s => (
               <div key={s.label} style={{
                 background: '#F7F2ED',
