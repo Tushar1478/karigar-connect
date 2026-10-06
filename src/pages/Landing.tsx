@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useLanguage } from '@/contexts/LanguageContext';
 import { useState, useEffect, useRef } from "react";
 import {
   Wrench, Zap, Droplets, Hammer, PaintRoller, Fan, Sparkles, Refrigerator,
@@ -46,6 +47,7 @@ const STATS = [
 ];
 
 function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+  const { t } = useLanguage();
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   useEffect(() => {
@@ -78,6 +80,7 @@ const SectionHead = ({ eyebrow, title, subtitle }: { eyebrow: string; title: str
 );
 
 const Landing = () => {
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
 
@@ -238,7 +241,7 @@ const Landing = () => {
                   <span className="text-xs text-muted-foreground">{k.jobs} jobs</span>
                 </div>
                 <div className="mt-3 inline-flex items-center gap-1 rounded-full bg-success/10 px-2.5 py-1 text-xs font-semibold text-success">
-                  <ShieldCheck className="h-3.5 w-3.5" /> Verified
+                  <ShieldCheck className="h-3.5 w-3.5" /> {t('verified')}
                 </div>
               </div>
             </Reveal>
