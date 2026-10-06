@@ -98,7 +98,7 @@ const Landing = () => {
             <h1 className="mt-5 text-4xl font-extrabold leading-[1.08] tracking-tight text-foreground sm:text-5xl">
               Home services,
               <br />
-              <span className="text-gradient-primary">{t('landing_subtitle')}</span>
+              <span className="text-gradient-primary">delivered by experts</span>
             </h1>
             <p className="mt-4 max-w-md text-base text-muted-foreground">
               Book trusted electricians, plumbers, carpenters and cleaners in minutes. Upfront pricing, on-time arrival and a service guarantee.
@@ -127,7 +127,7 @@ const Landing = () => {
 
           {/* Search card */}
           <div className="uc-card p-6 shadow-lg sm:p-7">
-            <p className="text-sm font-bold text-foreground">{t('landing_title')}</p>
+            <p className="text-sm font-bold text-foreground">What do you need help with?</p>
             <div className="mt-3 flex items-center gap-2 rounded-xl border border-input bg-background px-3 py-2.5 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20">
               <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
               <input
