@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import Header from '@/components/Header';
 import StarRating from '@/components/StarRating';
 import BookingChat from '@/components/BookingChat';
@@ -51,6 +52,7 @@ function AvailSelect({ value, onChange }: { value: string; onChange: (v: string)
 
 /* ─── STAT CARD ─────────────────────────────────────── */
 function StatCard({ icon: Icon, label, value }: { icon: any; label: string; value: string | number }) {
+  const { t } = useLanguage();
   return (
     <div className="uc-card text-center p-5 animate-fade-in">
       <div className="mx-auto mb-3 grid h-10 w-10 place-items-center rounded-xl bg-primary-soft text-primary">
@@ -112,7 +114,7 @@ function ActiveCard({ b, expandedChat, setExpandedChat, onComplete }: { b: any; 
 
       <div className="flex flex-wrap gap-2">
         <Button onClick={onComplete} className="rounded-xl bg-success text-success-foreground font-semibold hover:bg-success/90">
-          <CheckCircle size={14} className="mr-1.5" /> Mark Completed
+          <CheckCircle size={14} className="mr-1.5" /> {t('mark_completed')}
         </Button>
 
         <Button
@@ -139,6 +141,7 @@ function ActiveCard({ b, expandedChat, setExpandedChat, onComplete }: { b: any; 
 
 /* ─── COMPLETED JOB CARD ────────────────────────────── */
 function CompletedCard({ b }: { b: any }) {
+  const { t } = useLanguage();
   return (
     <div className="uc-card flex items-center justify-between gap-3 border-success/20 bg-success/5 px-5 py-4 animate-fade-in">
       <div>
@@ -157,6 +160,7 @@ function CompletedCard({ b }: { b: any }) {
 
 /* ─── SECTION WRAPPER ───────────────────────────────── */
 function Section({ label, count, badgeClass, children, emptyMsg }: { label: string; count: number; badgeClass: string; children: React.ReactNode; emptyMsg: string }) {
+  const { t } = useLanguage();
   return (
     <section className="mb-9">
       <div className="mb-4 flex items-center gap-2.5">
@@ -180,6 +184,7 @@ function Section({ label, count, badgeClass, children, emptyMsg }: { label: stri
    MAIN COMPONENT
 ══════════════════════════════════════════════════════ */
 const KarigarDashboard = () => {
+  const { t } = useLanguage();
   const { user } = useAuth();
   const { bookings, updateBookingStatus } = useBookings();
   const karigar = user?.karigar;
@@ -205,7 +210,7 @@ const KarigarDashboard = () => {
 
   if (!karigar) return (
     <div className="grid min-h-screen place-items-center bg-secondary/40">
-      <p className="text-muted-foreground">Loading dashboard...</p>
+      <p className="text-muted-foreground">{t('loading')}</p>
     </div>
   );
 
@@ -224,7 +229,7 @@ const KarigarDashboard = () => {
               <AvatarFallback className="bg-primary-soft font-bold text-primary">{initials}</AvatarFallback>
             </Avatar>
             <div>
-              <span className="uc-eyebrow mb-1 block">Karigar Dashboard</span>
+              <span className="uc-eyebrow mb-1 block">{t('worker')} {t('dashboard')}</span>
               <h1 className="mb-1 text-xl font-extrabold tracking-tight leading-tight sm:text-2xl">
                 Welcome, <span className="text-primary">{karigar.name}</span>!
               </h1>

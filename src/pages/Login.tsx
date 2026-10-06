@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
@@ -11,6 +12,7 @@ import { Label } from '@/components/ui/label';
    MAIN COMPONENT
 ══════════════════════════════════════════════════════ */
 const Login = () => {
+  const { t } = useLanguage();
   const { role } = useParams<{ role: string }>();
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -51,7 +53,7 @@ const Login = () => {
           <div className="mx-auto mb-5 h-14 w-14 rounded-full bg-primary text-primary-foreground grid place-items-center font-extrabold text-xl shadow-md">
             K
           </div>
-          <span className="uc-eyebrow block mb-2">{isCustomer ? 'Customer' : 'Karigar'} Portal</span>
+          <span className="uc-eyebrow block mb-2">{isCustomer ? t('customer') : t('worker')} Portal</span>
           <h1 className="text-3xl font-extrabold tracking-tight mb-2">Welcome Back</h1>
           <p className="text-sm text-muted-foreground">Enter your credentials to continue</p>
         </div>
@@ -88,7 +90,7 @@ const Login = () => {
                   <Loader2 className="h-4 w-4 animate-spin" /> Logging in...
                 </>
               ) : (
-                'Login'
+                t('login')
               )}
             </Button>
           </form>

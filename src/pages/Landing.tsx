@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useLanguage } from '@/contexts/LanguageContext';
 import { useState, useEffect, useRef } from "react";
 import {
   Wrench, Zap, Droplets, Hammer, PaintRoller, Fan, Sparkles, Refrigerator,
@@ -46,6 +47,7 @@ const STATS = [
 ];
 
 function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+  const { t } = useLanguage();
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   useEffect(() => {
@@ -78,6 +80,7 @@ const SectionHead = ({ eyebrow, title, subtitle }: { eyebrow: string; title: str
 );
 
 const Landing = () => {
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
 
@@ -90,7 +93,7 @@ const Landing = () => {
         <div className="uc-container grid items-center gap-10 py-14 lg:grid-cols-2 lg:py-20">
           <div>
             <span className="uc-chip bg-card">
-              <ShieldCheck className="h-3.5 w-3.5 text-success" /> Verified karigars near you
+              <ShieldCheck className="h-3.5 w-3.5 text-success" /> {t('verified')} karigars near you
             </span>
             <h1 className="mt-5 text-4xl font-extrabold leading-[1.08] tracking-tight text-foreground sm:text-5xl">
               Home services,
@@ -103,7 +106,7 @@ const Landing = () => {
 
             <div className="mt-7 flex flex-wrap gap-3">
               <Button size="lg" className="rounded-xl font-semibold" onClick={() => navigate("/login/customer")}>
-                Book a service <ArrowRight className="ml-1 h-4 w-4" />
+                {t('book_now')} <ArrowRight className="ml-1 h-4 w-4" />
               </Button>
               <Button size="lg" variant="outline" className="rounded-xl font-semibold" onClick={() => navigate("/login/karigar")}>
                 I'm a karigar
@@ -113,7 +116,7 @@ const Landing = () => {
             <p className="mt-5 text-sm text-muted-foreground">
               New here?{" "}
               <button onClick={() => navigate("/signup/customer")} className="font-semibold text-primary hover:underline">
-                Sign up as customer
+                {t('signup')} {t('customer')}
               </button>{" "}
               ·{" "}
               <button onClick={() => navigate("/signup/karigar")} className="font-semibold text-primary hover:underline">
@@ -238,7 +241,7 @@ const Landing = () => {
                   <span className="text-xs text-muted-foreground">{k.jobs} jobs</span>
                 </div>
                 <div className="mt-3 inline-flex items-center gap-1 rounded-full bg-success/10 px-2.5 py-1 text-xs font-semibold text-success">
-                  <ShieldCheck className="h-3.5 w-3.5" /> Verified
+                  <ShieldCheck className="h-3.5 w-3.5" /> {t('verified')}
                 </div>
               </div>
             </Reveal>

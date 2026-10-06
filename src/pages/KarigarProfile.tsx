@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { useParams } from 'react-router-dom';
 import { MapPin, Clock, IndianRupee, Briefcase, Navigation, Loader2 } from 'lucide-react';
 import Header from '@/components/Header';
@@ -44,6 +45,7 @@ const getISTHour = () => {
 
 /* ─── STAT PILL ─────────────────────────────────────── */
 function StatPill({ icon, value }) {
+  const { t } = useLanguage();
   return (
     <div className="uc-chip">
       {icon}
@@ -54,6 +56,7 @@ function StatPill({ icon, value }) {
 
 /* ─── BOOKING DIALOG ─────────────────────────────────── */
 function BookingDialog({ open, onClose, karigar, date, setDate, time, setTime, description, setDescription, availableSlots, todayIST, maxDate, onConfirm }) {
+  const { t } = useLanguage();
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
       <DialogContent className="max-w-md rounded-2xl">
@@ -111,9 +114,9 @@ function BookingDialog({ open, onClose, karigar, date, setDate, time, setTime, d
         </div>
 
         <DialogFooter className="mt-2 flex-row gap-2 sm:justify-stretch">
-          <Button variant="outline" className="flex-1 rounded-xl" onClick={onClose}>Cancel</Button>
+          <Button variant="outline" className="flex-1 rounded-xl" onClick={onClose}>{t('cancel')}</Button>
           <Button className="flex-[2] rounded-xl font-semibold" disabled={!date || !time} onClick={onConfirm}>
-            Confirm Booking
+            {t('confirm_booking')}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -125,6 +128,7 @@ function BookingDialog({ open, onClose, karigar, date, setDate, time, setTime, d
    MAIN COMPONENT
 ══════════════════════════════════════════════════════ */
 const KarigarProfile = () => {
+  const { t } = useLanguage();
   const { id } = useParams();
   const { user } = useAuth();
   const { addBooking } = useBookings();
@@ -190,14 +194,14 @@ const KarigarProfile = () => {
     <div className="flex min-h-screen items-center justify-center bg-secondary/40">
       <div className="flex flex-col items-center gap-4">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <p className="text-muted-foreground">Loading profile...</p>
+        <p className="text-muted-foreground">{t('loading')}</p>
       </div>
     </div>
   );
 
   if (!karigar) return (
     <div className="flex min-h-screen items-center justify-center bg-secondary/40">
-      <p className="text-muted-foreground">Karigar not found</p>
+      <p className="text-muted-foreground">{t('no_results')}</p>
     </div>
   );
 
@@ -243,7 +247,7 @@ const KarigarProfile = () => {
         <div className="mb-7 animate-fade-in">
           <span className="uc-eyebrow mb-2 block">Karigar</span>
           <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
-            Service <span className="text-primary">Profile</span>
+            Service <span className="text-primary">{t('profile')}</span>
           </h1>
         </div>
 
@@ -326,7 +330,7 @@ const KarigarProfile = () => {
         {/* ── REVIEWS ── */}
         <div>
           <div className="mb-5 flex items-center justify-between">
-            <h2 className="text-base font-bold tracking-tight">Customer Reviews</h2>
+            <h2 className="text-base font-bold tracking-tight">{t('reviews')}</h2>
             <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{reviews.length} total</span>
           </div>
 
@@ -368,6 +372,7 @@ const KarigarProfile = () => {
 
 /* ─── REVIEW CARD ────────────────────────────────────── */
 function ReviewCard({ r }) {
+  const { t } = useLanguage();
   return (
     <div className="uc-card uc-card-hover p-5">
       <div className="mb-2.5 flex items-center justify-between">

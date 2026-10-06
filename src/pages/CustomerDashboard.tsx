@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { useSearchParams } from 'react-router-dom';
 import { Search, SlidersHorizontal, Zap, Droplets, Hammer, Home, Wind, Brush, X } from 'lucide-react';
 import Header from '@/components/Header';
@@ -23,6 +24,7 @@ const CATEGORIES = [
 
 /* ─── CATEGORY TILE ─────────────────────────────────── */
 function CategoryCard({ label, icon: Icon, desc, active, onClick }) {
+  const { t } = useLanguage();
   return (
     <button
       onClick={onClick}
@@ -41,6 +43,7 @@ function CategoryCard({ label, icon: Icon, desc, active, onClick }) {
    MAIN COMPONENT
 ══════════════════════════════════════════════════════ */
 const CustomerDashboard = () => {
+  const { t } = useLanguage();
   const [searchParams] = useSearchParams();
   const searchFromUrl = searchParams.get('search') || '';
   const [search, setSearch] = useState(searchFromUrl);
@@ -83,7 +86,7 @@ const CustomerDashboard = () => {
       <main className="uc-container py-8">
         {/* PAGE TITLE */}
         <div className="mb-7 animate-fade-in">
-          <span className="uc-eyebrow mb-2 block">Customer Dashboard</span>
+          <span className="uc-eyebrow mb-2 block">{t('customer')} {t('dashboard')}</span>
           <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
             Find a <span className="text-primary">Karigar</span> Near You
           </h1>
@@ -94,7 +97,7 @@ const CustomerDashboard = () => {
           <Search className="ml-2 h-5 w-5 shrink-0 text-muted-foreground" />
           <Input
             className="h-11 flex-1 rounded-xl border-none bg-transparent shadow-none focus-visible:ring-0"
-            placeholder="Search for electrician, plumber, carpenter..."
+            placeholder={t("search_placeholder")}
             value={search}
             onChange={e => setSearch(e.target.value)}
           />
@@ -142,7 +145,7 @@ const CustomerDashboard = () => {
             <div className="h-5 w-px bg-border" />
 
             <Select value={skillFilter} onValueChange={setSkillFilter}>
-              <SelectTrigger className="w-[150px] rounded-xl"><SelectValue placeholder="All Skills" /></SelectTrigger>
+              <SelectTrigger className="w-[150px] rounded-xl"><SelectValue placeholder={t("skills")} /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Skills</SelectItem>
                 {['Electrician','Plumber','Carpenter','AC Repair','Mason','Painter'].map(s => (
@@ -195,7 +198,7 @@ const CustomerDashboard = () => {
           ) : filtered.length === 0 ? (
             <div className="uc-card p-16 text-center">
               <div className="mb-4 text-4xl">🔍</div>
-              <p className="text-sm text-foreground">No karigars found.</p>
+              <p className="text-sm text-foreground">{t('no_results')}</p>
               <p className="mt-1.5 text-sm text-muted-foreground">Try adjusting your search or filters.</p>
             </div>
           ) : (
