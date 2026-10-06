@@ -53,16 +53,16 @@ const Login = () => {
           <div className="mx-auto mb-5 h-14 w-14 rounded-full bg-primary text-primary-foreground grid place-items-center font-extrabold text-xl shadow-md">
             K
           </div>
-          <span className="uc-eyebrow block mb-2">{isCustomer ? 'Customer' : 'Karigar'} Portal</span>
-          <h1 className="text-3xl font-extrabold tracking-tight mb-2">Welcome Back</h1>
-          <p className="text-sm text-muted-foreground">Enter your credentials to continue</p>
+          <span className="uc-eyebrow block mb-2">{isCustomer ? t('customer') : t('worker')} Portal</span>
+          <h1 className="text-3xl font-extrabold tracking-tight mb-2">{t('login')}</h1>
+          <p className="text-sm text-muted-foreground">{t('landing_subtitle')}</p>
         </div>
 
         {/* Form card */}
         <div className="uc-card p-8">
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             <div className="flex flex-col gap-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{t('login')}</Label>
               <Input
                 id="email"
                 type="email"
@@ -73,7 +73,7 @@ const Login = () => {
               />
             </div>
             <div className="flex flex-col gap-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{t('profile')}</Label>
               <Input
                 id="password"
                 type="password"
@@ -90,7 +90,7 @@ const Login = () => {
                   <Loader2 className="h-4 w-4 animate-spin" /> Logging in...
                 </>
               ) : (
-                'Login'
+                t('login')
               )}
             </Button>
           </form>
