@@ -199,7 +199,7 @@ const KarigarProfileEdit = () => {
           >
             {saving
               ? <><Loader2 size={16} className="mr-2 animate-spin" />Saving...</>
-              : <><Check size={16} className="mr-2" />Save Profile</>
+              : <><Check size={16} className="mr-2" />{t('my_profile')}</>
             }
           </Button>
         </div>
