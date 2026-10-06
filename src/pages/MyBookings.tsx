@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import Header from '@/components/Header';
 import StarRating from '@/components/StarRating';
 import StarRatingInput from '@/components/StarRatingInput';
@@ -26,6 +27,7 @@ const STEPS = ['Pending', 'Accepted', 'On the Way', 'Completed'];
 
 /* ─── CONFETTI ──────────────────────────────────────── */
 function Confetti({ active }) {
+  const { t } = useLanguage();
   const canvasRef = useRef(null);
   const animRef   = useRef(null);
   const particles = useRef([]);
@@ -101,6 +103,7 @@ function Confetti({ active }) {
 
 /* ─── PROGRESS BAR ──────────────────────────────────── */
 function ProgressBar({ status }) {
+  const { t } = useLanguage();
   const meta = STATUS_META[status];
   if (!meta || meta.step < 0) return null;
   const pct = (meta.step / (STEPS.length - 1)) * 100;
@@ -178,6 +181,7 @@ function ProgressBar({ status }) {
 
 /* ─── RATING DIALOG ─────────────────────────────────── */
 function RatingDialog({ open, onClose, onSubmit, rating, setRating, review, setReview }) {
+  const { t } = useLanguage();
   if (!open) return null;
   return (
     <div style={{
@@ -228,7 +232,7 @@ function RatingDialog({ open, onClose, onSubmit, rating, setRating, review, setR
             background: 'transparent', color: '#6B5744',
             fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer',
             fontFamily: "'Sora',sans-serif",
-          }}>Cancel</button>
+          }}>{t('cancel')}</button>
           <button onClick={onSubmit} disabled={rating === 0} style={{
             flex: 2, padding: 11, borderRadius: 12, border: 'none',
             background: rating === 0 ? '#F0E8DE' : 'linear-gradient(90deg,#f97316,#fb923c,#fdba74,#fb923c,#f97316)',
@@ -247,6 +251,7 @@ function RatingDialog({ open, onClose, onSubmit, rating, setRating, review, setR
 
 /* ─── BOOKING CARD ──────────────────────────────────── */
 function BookingCard({ b, index, onRate, onCancel, expandedChat, setExpandedChat }) {
+  const { t } = useLanguage();
   const meta = STATUS_META[b.status] || STATUS_META.pending;
   const [hov, setHov] = useState(false);
   const isCompleted = b.status === 'completed';
@@ -401,6 +406,7 @@ function BookingCard({ b, index, onRate, onCancel, expandedChat, setExpandedChat
    MAIN COMPONENT
 ══════════════════════════════════════════════════════ */
 const MyBookings = () => {
+  const { t } = useLanguage();
   const { user } = useAuth();
   const { bookings, rateBooking, updateBookingStatus } = useBookings();
   const [ratingDialog, setRatingDialog] = useState(null);
