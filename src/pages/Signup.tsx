@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
@@ -19,6 +20,7 @@ const SKILLS = ['Electrician', 'Plumber', 'Carpenter', 'AC Repair', 'Mason', 'Pa
 
 /* ─── PAGE SHELL ─────────────────────────────────────── */
 function PageShell({ children }) {
+  const { t } = useLanguage();
   return (
     <main className="min-h-screen bg-secondary/40 flex items-center justify-center px-4 py-10 animate-fade-in">
       <div className="w-full max-w-md">{children}</div>
@@ -28,6 +30,7 @@ function PageShell({ children }) {
 
 /* ─── HEADER ─────────────────────────────────────────── */
 function PageHeader({ tag, headline, accent }) {
+  const { t } = useLanguage();
   return (
     <div className="text-center mb-8">
       <div className="mx-auto mb-5 h-14 w-14 rounded-full bg-primary text-primary-foreground grid place-items-center font-extrabold text-xl shadow-md">
@@ -45,11 +48,13 @@ function PageHeader({ tag, headline, accent }) {
 
 /* ─── FORM CARD ─────────────────────────────────────── */
 function FormCard({ children }) {
+  const { t } = useLanguage();
   return <div className="uc-card p-8">{children}</div>;
 }
 
 /* ─── LOGIN LINK ─────────────────────────────────────── */
 function LoginLink({ text, onClick }) {
+  const { t } = useLanguage();
   return (
     <p className="text-center text-sm text-muted-foreground">
       {text}{' '}
@@ -58,7 +63,7 @@ function LoginLink({ text, onClick }) {
         onClick={onClick}
         className="text-primary font-semibold hover:text-primary/80 transition-colors"
       >
-        Login
+        {t('login')}
       </button>
     </p>
   );
@@ -68,6 +73,7 @@ function LoginLink({ text, onClick }) {
    CUSTOMER SIGNUP
 ══════════════════════════════════════════════════════ */
 const SignupCustomer = () => {
+  const { t } = useLanguage();
   const { signupCustomer } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: '', email: '', password: '', phone: '', location: '' });
@@ -106,7 +112,7 @@ const SignupCustomer = () => {
             <Input id="c-phone" value={form.phone} onChange={set('phone')} placeholder="+91 00000 00000" required />
           </div>
           <div className="flex flex-col gap-2">
-            <Label htmlFor="c-location">Location</Label>
+            <Label htmlFor="c-location">{t('location')}</Label>
             <Input id="c-location" value={form.location} onChange={set('location')} placeholder="City, Area" required />
           </div>
 
@@ -132,6 +138,7 @@ const SignupCustomer = () => {
    KARIGAR SIGNUP
 ══════════════════════════════════════════════════════ */
 const SignupKarigar = () => {
+  const { t } = useLanguage();
   const { signupKarigar } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: '', email: '', password: '', phone: '', skill: '', experience: '', location: '', price: '', description: '' });
@@ -200,7 +207,7 @@ const SignupKarigar = () => {
           </div>
 
           <div className="flex flex-col gap-2">
-            <Label htmlFor="k-location">Location</Label>
+            <Label htmlFor="k-location">{t('location')}</Label>
             <Input id="k-location" value={form.location} onChange={set('location')} placeholder="City, Area" required />
           </div>
 
