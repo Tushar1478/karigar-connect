@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
@@ -11,6 +12,7 @@ import { Label } from '@/components/ui/label';
    MAIN COMPONENT
 ══════════════════════════════════════════════════════ */
 const Login = () => {
+  const { t } = useLanguage();
   const { role } = useParams<{ role: string }>();
   const { login } = useAuth();
   const navigate = useNavigate();
