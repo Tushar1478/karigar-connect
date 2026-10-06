@@ -469,7 +469,7 @@ const MyBookings = () => {
             Overview
           </span>
           <h1 style={{ fontSize: 'clamp(1.5rem,4vw,2rem)', fontWeight: 800, letterSpacing: '-0.025em' }}>
-            My <span style={{ color: '#fb923c' }}>Bookings</span>
+            My <span style={{ color: '#fb923c' }}>{t('my_bookings')}</span>
           </h1>
         </div>
 
@@ -504,7 +504,7 @@ const MyBookings = () => {
             animation: 'fadeUp .5s ease both',
           }}>
             <div style={{ fontSize: '2.5rem', marginBottom: 14 }}>📋</div>
-            <p style={{ color: '#6B5744', fontSize: '0.95rem', fontWeight: 300 }}>No bookings yet.</p>
+            <p style={{ color: '#6B5744', fontSize: '0.95rem', fontWeight: 300 }}>{t('no_results')}</p>
             <p style={{ color: '#A89880', fontSize: '0.82rem', marginTop: 6 }}>Book a karigar to get started.</p>
           </div>
         ) : (
