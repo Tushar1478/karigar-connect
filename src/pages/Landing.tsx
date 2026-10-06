@@ -93,12 +93,12 @@ const Landing = () => {
         <div className="uc-container grid items-center gap-10 py-14 lg:grid-cols-2 lg:py-20">
           <div>
             <span className="uc-chip bg-card">
-              <ShieldCheck className="h-3.5 w-3.5 text-success" /> Verified karigars near you
+              <ShieldCheck className="h-3.5 w-3.5 text-success" /> {t('verified')} karigars near you
             </span>
             <h1 className="mt-5 text-4xl font-extrabold leading-[1.08] tracking-tight text-foreground sm:text-5xl">
               Home services,
               <br />
-              <span className="text-gradient-primary">delivered by experts</span>
+              <span className="text-gradient-primary">{t('landing_subtitle')}</span>
             </h1>
             <p className="mt-4 max-w-md text-base text-muted-foreground">
               Book trusted electricians, plumbers, carpenters and cleaners in minutes. Upfront pricing, on-time arrival and a service guarantee.
@@ -106,7 +106,7 @@ const Landing = () => {
 
             <div className="mt-7 flex flex-wrap gap-3">
               <Button size="lg" className="rounded-xl font-semibold" onClick={() => navigate("/login/customer")}>
-                Book a service <ArrowRight className="ml-1 h-4 w-4" />
+                {t('book_now')} <ArrowRight className="ml-1 h-4 w-4" />
               </Button>
               <Button size="lg" variant="outline" className="rounded-xl font-semibold" onClick={() => navigate("/login/karigar")}>
                 I'm a karigar
@@ -116,7 +116,7 @@ const Landing = () => {
             <p className="mt-5 text-sm text-muted-foreground">
               New here?{" "}
               <button onClick={() => navigate("/signup/customer")} className="font-semibold text-primary hover:underline">
-                Sign up as customer
+                {t('signup')} {t('customer')}
               </button>{" "}
               ·{" "}
               <button onClick={() => navigate("/signup/karigar")} className="font-semibold text-primary hover:underline">
@@ -127,7 +127,7 @@ const Landing = () => {
 
           {/* Search card */}
           <div className="uc-card p-6 shadow-lg sm:p-7">
-            <p className="text-sm font-bold text-foreground">What do you need help with?</p>
+            <p className="text-sm font-bold text-foreground">{t('landing_title')}</p>
             <div className="mt-3 flex items-center gap-2 rounded-xl border border-input bg-background px-3 py-2.5 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20">
               <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
               <input
