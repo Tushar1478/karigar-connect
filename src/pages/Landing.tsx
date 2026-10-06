@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
+import heroImg from "@/assets/hero-karigar.jpg";
 
 const CATEGORIES = [
   { label: "Electrician", icon: Zap, note: "From ₹199" },
@@ -122,18 +123,28 @@ const Landing = () => {
             </p>
           </div>
 
-          {/* Search card */}
-          <div className="uc-card p-6 shadow-lg sm:p-7">
+          {/* Image + Search card */}
+          <div className="relative">
+          <img src={heroImg} alt="Verified karigar fixing a switchboard" width={1280} height={896}
+            className="hidden aspect-[4/3] w-full rounded-3xl object-cover shadow-xl lg:block" />
+          <div className="uc-card p-6 shadow-lg sm:p-7 lg:absolute lg:-bottom-10 lg:-left-10 lg:w-[88%]">
             <p className="text-sm font-bold text-foreground">What do you need help with?</p>
             <div className="mt-3 flex items-center gap-2 rounded-xl border border-input bg-background px-3 py-2.5 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20">
               <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
               <input
                 value={query}
                 onChange={e => setQuery(e.target.value)}
+                onKeyDown={e => e.key === "Enter" && navigate("/login/customer")}
                 placeholder="Try 'fan not working' or 'leaking tap'"
                 className="w-full bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground/70"
               />
             </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {["Fan repair", "Tap leakage", "AC service", "Switchboard"].map(s => (
+                <button key={s} onClick={() => setQuery(s)} className="uc-chip hover:border-primary/40 hover:text-primary">{s}</button>
+              ))}
+            </div>
+
 
             <div className="mt-5 grid grid-cols-4 gap-3">
               {CATEGORIES.slice(0, 8).map(c => (
