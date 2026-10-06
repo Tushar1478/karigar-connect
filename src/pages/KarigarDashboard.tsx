@@ -210,7 +210,7 @@ const KarigarDashboard = () => {
 
   if (!karigar) return (
     <div className="grid min-h-screen place-items-center bg-secondary/40">
-      <p className="text-muted-foreground">Loading dashboard...</p>
+      <p className="text-muted-foreground">{t('loading')}</p>
     </div>
   );
 
@@ -229,7 +229,7 @@ const KarigarDashboard = () => {
               <AvatarFallback className="bg-primary-soft font-bold text-primary">{initials}</AvatarFallback>
             </Avatar>
             <div>
-              <span className="uc-eyebrow mb-1 block">Karigar Dashboard</span>
+              <span className="uc-eyebrow mb-1 block">{t('worker')} {t('dashboard')}</span>
               <h1 className="mb-1 text-xl font-extrabold tracking-tight leading-tight sm:text-2xl">
                 Welcome, <span className="text-primary">{karigar.name}</span>!
               </h1>
