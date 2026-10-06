@@ -96,15 +96,15 @@ const SignupCustomer = () => {
       <FormCard>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
-            <Label htmlFor="c-name">Name</Label>
+            <Label htmlFor="c-name">{t('my_profile')}</Label>
             <Input id="c-name" value={form.name} onChange={set('name')} placeholder="Full name" required />
           </div>
           <div className="flex flex-col gap-2">
-            <Label htmlFor="c-email">Email</Label>
+            <Label htmlFor="c-email">{t('login')}</Label>
             <Input id="c-email" type="email" value={form.email} onChange={set('email')} placeholder="you@example.com" required />
           </div>
           <div className="flex flex-col gap-2">
-            <Label htmlFor="c-password">Password</Label>
+            <Label htmlFor="c-password">{t('profile')}</Label>
             <Input id="c-password" type="password" value={form.password} onChange={set('password')} placeholder="Min. 6 characters" required minLength={6} />
           </div>
           <div className="flex flex-col gap-2">
