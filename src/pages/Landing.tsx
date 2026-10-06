@@ -165,6 +165,7 @@ const Landing = () => {
               Find karigars near me
             </Button>
           </div>
+          </div>
         </div>
       </section>
 
