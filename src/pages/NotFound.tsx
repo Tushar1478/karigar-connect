@@ -1,4 +1,5 @@
 import { useLocation } from "react-router-dom";
+import { useLanguage } from '@/contexts/LanguageContext';
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 
@@ -16,6 +17,7 @@ function randomFood(snake: number[][]) {
 }
 
 function SnakeGame() {
+  const { t } = useLanguage();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const stateRef = useRef({
     snake: [[10,8],[9,8],[8,8]],
@@ -184,6 +186,7 @@ function SnakeGame() {
    NOT FOUND PAGE
 ══════════════════════════════════════════════════════ */
 const NotFound = () => {
+  const { t } = useLanguage();
   const location = useLocation();
   const [dots, setDots] = useState('.');
 
