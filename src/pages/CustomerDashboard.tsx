@@ -113,7 +113,7 @@ const CustomerDashboard = () => {
           <section className="mb-10">
             <div className="mb-5 flex items-center justify-between">
               <div>
-                <h2 className="text-lg font-bold tracking-tight">{t('skills')}</h2>
+                <h2 className="text-lg font-bold tracking-tight">Service Categories</h2>
                 <p className="text-xs text-muted-foreground">Tap a category to filter karigars</p>
               </div>
               <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{CATEGORIES.length} Trades</span>
@@ -137,7 +137,7 @@ const CustomerDashboard = () => {
           <div className="uc-card flex flex-wrap items-center gap-3 p-4">
             <div className="mr-1 flex items-center gap-2">
               <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm font-semibold text-muted-foreground">{t('profile')}</span>
+              <span className="text-sm font-semibold text-muted-foreground">Filters</span>
               {activeFiltersCount > 0 && (
                 <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-bold text-primary">{activeFiltersCount}</span>
               )}
