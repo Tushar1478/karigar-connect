@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import Header from '@/components/Header';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -14,6 +15,7 @@ import { Textarea } from '@/components/ui/textarea';
    MAIN COMPONENT
 ══════════════════════════════════════════════════════ */
 const KarigarProfileEdit = () => {
+  const { t } = useLanguage();
   const { user } = useAuth();
   const karigar = user?.karigar;
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -97,7 +99,7 @@ const KarigarProfileEdit = () => {
     <div className="grid min-h-screen place-items-center bg-secondary/40">
       <div className="flex flex-col items-center gap-4">
         <Loader2 size={32} className="animate-spin text-primary" />
-        <p className="text-muted-foreground">Loading...</p>
+        <p className="text-muted-foreground">{t('loading')}</p>
       </div>
     </div>
   );
@@ -113,7 +115,7 @@ const KarigarProfileEdit = () => {
         <div className="mb-7 animate-fade-in">
           <span className="uc-eyebrow mb-2 block">Account</span>
           <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">
-            Edit <span className="text-primary">Profile</span>
+            Edit <span className="text-primary">{t('profile')}</span>
           </h1>
         </div>
 
@@ -180,11 +182,11 @@ const KarigarProfileEdit = () => {
               <Input type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: Number(e.target.value) }))} className="rounded-xl" />
             </div>
             <div className="col-span-2 space-y-1.5">
-              <Label>Location</Label>
+              <Label>{t('location')}</Label>
               <Input value={form.location} onChange={e => setForm(f => ({ ...f, location: e.target.value }))} className="rounded-xl" />
             </div>
             <div className="col-span-2 space-y-1.5">
-              <Label>Description</Label>
+              <Label>{t('description')}</Label>
               <Textarea rows={3} value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} className="rounded-xl resize-none" />
             </div>
           </div>
