@@ -54,15 +54,15 @@ const Login = () => {
             K
           </div>
           <span className="uc-eyebrow block mb-2">{isCustomer ? t('customer') : t('worker')} Portal</span>
-          <h1 className="text-3xl font-extrabold tracking-tight mb-2">{t('login')}</h1>
-          <p className="text-sm text-muted-foreground">{t('landing_subtitle')}</p>
+          <h1 className="text-3xl font-extrabold tracking-tight mb-2">Welcome Back</h1>
+          <p className="text-sm text-muted-foreground">Enter your credentials to continue</p>
         </div>
 
         {/* Form card */}
         <div className="uc-card p-8">
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             <div className="flex flex-col gap-2">
-              <Label htmlFor="email">{t('login')}</Label>
+              <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
@@ -73,7 +73,7 @@ const Login = () => {
               />
             </div>
             <div className="flex flex-col gap-2">
-              <Label htmlFor="password">{t('profile')}</Label>
+              <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
                 type="password"
