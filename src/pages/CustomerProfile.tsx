@@ -158,7 +158,7 @@ const CustomerProfile = () => {
     <div className="flex min-h-screen items-center justify-center bg-secondary/40">
       <div className="flex flex-col items-center gap-4">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <p className="text-muted-foreground">Loading profile...</p>
+        <p className="text-muted-foreground">{t('loading')}</p>
       </div>
     </div>
   );
@@ -244,7 +244,7 @@ const CustomerProfile = () => {
           {myBookings.length === 0 ? (
             <div className="uc-card p-14 text-center">
               <div className="mb-3.5 text-4xl">📋</div>
-              <p className="text-sm text-foreground">No bookings yet.</p>
+              <p className="text-sm text-foreground">{t('no_results')}</p>
               <p className="mt-1.5 text-sm text-muted-foreground">Book a karigar to get started.</p>
             </div>
           ) : (
