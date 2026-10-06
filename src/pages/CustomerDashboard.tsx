@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { useSearchParams } from 'react-router-dom';
 import { Search, SlidersHorizontal, Zap, Droplets, Hammer, Home, Wind, Brush, X } from 'lucide-react';
 import Header from '@/components/Header';
@@ -23,6 +24,7 @@ const CATEGORIES = [
 
 /* ─── CATEGORY TILE ─────────────────────────────────── */
 function CategoryCard({ label, icon: Icon, desc, active, onClick }) {
+  const { t } = useLanguage();
   return (
     <button
       onClick={onClick}
@@ -41,6 +43,7 @@ function CategoryCard({ label, icon: Icon, desc, active, onClick }) {
    MAIN COMPONENT
 ══════════════════════════════════════════════════════ */
 const CustomerDashboard = () => {
+  const { t } = useLanguage();
   const [searchParams] = useSearchParams();
   const searchFromUrl = searchParams.get('search') || '';
   const [search, setSearch] = useState(searchFromUrl);
