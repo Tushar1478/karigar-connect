@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import Header from '@/components/Header';
 import StarRating from '@/components/StarRating';
 import StarRatingInput from '@/components/StarRatingInput';
@@ -29,6 +30,7 @@ const STATUS_META = {
 
 /* ─── PROFILE FIELD ROW ─────────────────────────────── */
 function ProfileField({ icon, label, value }) {
+  const { t } = useLanguage();
   return (
     <div className="flex items-center gap-3.5 rounded-xl border border-border bg-secondary/60 px-4 py-3">
       <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-primary-soft text-primary">
@@ -44,6 +46,7 @@ function ProfileField({ icon, label, value }) {
 
 /* ─── BOOKING CARD ──────────────────────────────────── */
 function BookingCard({ b, onRate }) {
+  const { t } = useLanguage();
   const meta = STATUS_META[b.status] || STATUS_META.pending;
   return (
     <div className="uc-card uc-card-hover p-5">
@@ -88,6 +91,7 @@ function BookingCard({ b, onRate }) {
 
 /* ─── RATING DIALOG ─────────────────────────────────── */
 function RatingDialog({ open, onClose, onSubmit, rating, setRating, review, setReview }) {
+  const { t } = useLanguage();
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
       <DialogContent className="max-w-md rounded-2xl">
@@ -106,7 +110,7 @@ function RatingDialog({ open, onClose, onSubmit, rating, setRating, review, setR
           />
         </div>
         <DialogFooter className="mt-2 flex-row gap-2 sm:justify-stretch">
-          <Button variant="outline" className="flex-1 rounded-xl" onClick={onClose}>Cancel</Button>
+          <Button variant="outline" className="flex-1 rounded-xl" onClick={onClose}>{t('cancel')}</Button>
           <Button className="flex-[2] rounded-xl font-semibold" disabled={rating === 0} onClick={onSubmit}>Submit Rating</Button>
         </DialogFooter>
       </DialogContent>
@@ -118,6 +122,7 @@ function RatingDialog({ open, onClose, onSubmit, rating, setRating, review, setR
    MAIN COMPONENT
 ══════════════════════════════════════════════════════ */
 const CustomerProfile = () => {
+  const { t } = useLanguage();
   const { user } = useAuth();
   const { bookings, rateBooking } = useBookings();
   const profile = user?.profile;
@@ -169,7 +174,7 @@ const CustomerProfile = () => {
         <div className="mb-7 animate-fade-in">
           <span className="uc-eyebrow mb-2 block">Account</span>
           <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
-            My <span className="text-primary">Profile</span>
+            My <span className="text-primary">{t('profile')}</span>
           </h1>
         </div>
 
@@ -195,7 +200,7 @@ const CustomerProfile = () => {
               className={`gap-1.5 rounded-xl ${editing ? 'border-destructive/40 text-destructive hover:bg-destructive/10' : ''}`}
               onClick={() => { setEditing(!editing); setForm({ name: profile.name, phone: profile.phone, location: profile.location }); }}
             >
-              {editing ? <><X className="h-3.5 w-3.5" />Cancel</> : <><Pencil className="h-3.5 w-3.5" />Edit</>}
+              {editing ? <><X className="h-3.5 w-3.5" />{t('cancel')}</> : <><Pencil className="h-3.5 w-3.5" />Edit</>}
             </Button>
           </div>
 
@@ -212,7 +217,7 @@ const CustomerProfile = () => {
                 <Input className="rounded-xl" value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} />
               </div>
               <div className="flex flex-col gap-1.5">
-                <Label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Location</Label>
+                <Label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t('location')}</Label>
                 <Input className="rounded-xl" value={form.location} onChange={e => setForm(f => ({ ...f, location: e.target.value }))} />
               </div>
               <Button className="mt-1 gap-2 rounded-xl font-semibold" disabled={saving} onClick={handleSave}>
@@ -232,7 +237,7 @@ const CustomerProfile = () => {
         {/* ── BOOKINGS ── */}
         <div>
           <div className="mb-5 flex items-center justify-between">
-            <h2 className="text-base font-bold tracking-tight">My Bookings</h2>
+            <h2 className="text-base font-bold tracking-tight">{t('my_bookings')}</h2>
             <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{myBookings.length} total</span>
           </div>
 
